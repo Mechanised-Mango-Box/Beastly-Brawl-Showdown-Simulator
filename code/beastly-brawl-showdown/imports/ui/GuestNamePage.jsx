@@ -56,7 +56,7 @@ export const GuestNamePage = () => {
     return (
 
         <div className="page-container">
-            <h1 className="textbox" id="guest-header">Guest</h1>
+            <h1>Guest</h1>
             <form className="task-form userForm" onSubmit={handleSubmit}>
                 <input className="form-textbox"
                     type="text"
@@ -65,6 +65,7 @@ export const GuestNamePage = () => {
                     onChange={(e) => setName(e.target.value)}
                 />
                     <div className="buttons-container">
+                        <button className="glb-btn" type="submit">Continue</button>
                         <button className="glb-btn" type="submit">Continue</button>
                     </div>
             </form>
