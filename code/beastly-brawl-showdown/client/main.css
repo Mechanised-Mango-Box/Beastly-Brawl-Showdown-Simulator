@@ -928,6 +928,12 @@ progress::-moz-progress-bar {
   border-color: #936049;
 }
 
+.join-buttons-container{
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
 /* Settings page styling */
 .settings-container {
   padding: 3rem;
