@@ -30,11 +30,13 @@ export const UserForm = () => {
   return (
     <form className="userForm" onSubmit={handleSubmit}>
       <input className="form-textbox"
+      <input className="form-textbox"
         type="text"
         placeholder="username"
         value={userName}
         onChange={(e) => setUserName(e.target.value)}
       />
+      <input className="form-textbox"
       <input className="form-textbox"
         type="text"
         placeholder="password"
@@ -42,9 +44,9 @@ export const UserForm = () => {
         onChange={(e) => setPassWord(e.target.value)}
       />
       
-      <button className="glb-btn" type="submit">Login</button>
-      <button className="glb-btn" type="button">Sign Up</button>
-      <button className="glb-btn" type="button" onClick = {handleGuestLogin}>Login As Guest</button>
+      <button className="form-button" type="submit">Login</button>
+      <button className="form-button" type="button">Sign Up</button>
+      <button className="form-button" type="button" onClick = {handleGuestLogin}>Login As Guest</button>
     </form>
   );
 };
