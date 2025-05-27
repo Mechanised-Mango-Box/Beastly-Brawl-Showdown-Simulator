@@ -723,92 +723,31 @@ body {
   border-radius: 0;
 }
 
-/* Player count */
-.participants-count {
-  color: white;
-  font-weight: bold;
-  font-size: 16px;
+/*Component that displays the participants names dynamically*/
+.participants-display-box {
+  max-width: 1085px;
+  max-height: 500px;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  background-color: #f0f0f0;
+  border: 2px solid #333;
+  border-radius: 15px; /* This creates the curved corners */
 }
 
-/* Start game btn */
-.start-game-btn {
-  background: linear-gradient(to bottom, #FF8C42, #E67E22);
-  color: white;
-  border: none;
-  padding: 8px 20px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.start-btn:hover {
-  background: linear-gradient(to bottom, #E67E22, #D35400);
-}
-
-/* Grid for the players */
-.participants-grid {
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 0 15px 0;
-  background: #8B4513;
-  padding: 10px 15px;
-  border-radius: 0;
-}
-
-/* Player count */
-.participants-count {
-  color: white;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-/* Start game btn */
-.start-game-btn {
-  background: linear-gradient(to bottom, #FF8C42, #E67E22);
-  color: white;
-  border: none;
-  padding: 8px 20px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.start-btn:hover {
-  background: linear-gradient(to bottom, #E67E22, #D35400);
-}
-
-/* Grid for the players */
-.participants-grid {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 8px;
-  padding: 0 15px 15px 15px;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 8px;
-  padding: 0 15px 15px 15px;
-}
-
-/* participants-name-box */
-.participants-name-box {
-  background: linear-gradient(to bottom, #A0522D, #8B4513);
-  color: white;
-  border: 2px solid #654321;
-  padding: 10px 8px;
-  border-radius: 6px;
-/* participants-name-box */
-.participants-name-box {
-  background: linear-gradient(to bottom, #A0522D, #8B4513);
-  color: white;
-  border: 2px solid #654321;
-  padding: 10px 8px;
-  border-radius: 6px;
+/*For the participants name*/
+.participants-box {
+  min-width: 90px;
+  height: 40px;
   text-align: center;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 13px;
+  vertical-align: middle;
+  line-height: 40px;
+  background-color: #f0f0f0;
+  border: 2px solid #333;
+  border-radius: 15px; /* This creates the curved corners */
+  white-space: nowrap;
 }
 
 /* Shared container for full-page layout */
