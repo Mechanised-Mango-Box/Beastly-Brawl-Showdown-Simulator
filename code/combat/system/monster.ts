@@ -1,6 +1,8 @@
 import { ActionId, ActionData } from "./action";
 import { Component } from "./component";
 
+export type MonsterId = number & { __brand: "MonsterId" };
+
 /**
  * Holds a set of the common stats
  */

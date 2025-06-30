@@ -1,7 +1,7 @@
+import { Player } from "../../game-server/user";
 import { Monster } from "./monster";
 
-
-export type SideId = number & { __brand: "SideId"; };
+export type SideId = number & { __brand: "SideId" };
 export function asSideId(value: number): SideId {
   if (!Number.isInteger(value) || value < 0) {
     throw new Error(`Invalid SideId: ${value}`);
@@ -10,7 +10,8 @@ export function asSideId(value: number): SideId {
 }
 export type Side = {
   id: SideId;
-  
-  controllingPlayerId: undefined; // TODO
+
+  controllingPlayer: Player;
   monster: Monster;
 };
+

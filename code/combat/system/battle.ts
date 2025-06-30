@@ -1,3 +1,4 @@
+import { Namespace, Server, Socket } from "socket.io";
 import { Side } from "./side";
 
 export type BattleId = number & { __brand: "BattleId" };
@@ -9,6 +10,5 @@ export function asBattleId(value: number): BattleId {
 }
 export type Battle = {
   battleId: BattleId;
-
   sides: Side[];
 };
