@@ -424,6 +424,7 @@ body {
   background-position: center;
   image-rendering: pixelated;
   background-color: transparent;
+  border: none;
   color: white;
 }
 
@@ -442,6 +443,7 @@ body {
   background-position: center;
   image-rendering: pixelated;
   background-color: transparent;
+  border: none;
   color: white;
 }
 
@@ -844,6 +846,7 @@ body {
 .logo-container {
   margin-bottom: 2rem;
 }
+
 .logo-image {
   width: 150px;
   height: auto;
@@ -866,7 +869,7 @@ body {
   height: 100%;
 }
 
-.battleScreen{
+.battleScreen {
   display: flex;
   flex-direction: column;
   height: 100vh;

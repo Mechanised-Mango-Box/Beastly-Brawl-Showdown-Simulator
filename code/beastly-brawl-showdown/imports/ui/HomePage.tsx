@@ -1,7 +1,5 @@
-import { Meteor } from "meteor/meteor";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-// import "/imports/ui/global.css";
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -14,14 +12,14 @@ export const HomePage = () => {
     <div className="homepage-container">
       <div className="logo"></div>
       <div className="buttons-container">
-        <button className="glb-btn" onClick={handleGuestHostName}>
+        <button className="glb-btn btn-brown" onClick={handleGuestHostName}>
           HOST
         </button>
-        <button className="glb-btn join-btn" onClick={() => navigate("/join")}>
+        <button className="glb-btn btn-dark-brown" onClick={() => navigate("/join")}>
           JOIN
         </button>
         <button
-          className="glb-btn"
+          className="glb-btn btn-brown"
           onClick={() => navigate("/settings")}
         >
           SETTINGS
