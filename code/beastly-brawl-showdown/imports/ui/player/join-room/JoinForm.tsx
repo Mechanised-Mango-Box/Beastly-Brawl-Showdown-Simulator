@@ -98,7 +98,7 @@ export const JoinForm = () => {
             onChange={(e) => setInputJoinCode(e.target.value)}
           />
           <div className="buttons-container">
-            <button className="glb-btn" type="submit">
+            <button className="glb-btn btn-dark-brown" type="submit">
               Continue
             </button>
           </div>

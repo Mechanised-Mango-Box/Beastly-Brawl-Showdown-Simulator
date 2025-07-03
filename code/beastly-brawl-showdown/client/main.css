@@ -70,8 +70,8 @@ body {
 }
 
 .form-textbox {
-  background-color: #8B4513;
-  color: #d4a574;
+  background-color: #b17745;
+  color: rgb(47, 46, 46);
   border: none;
   padding: 15px 20px;
   font-size: 16px;
@@ -80,8 +80,12 @@ body {
   cursor: pointer;
   border-radius: 5px;
   transition: all 0.3s ease;
-  border: 2px solid #654321;
+  border: 2px solid #ab5e1a;
   text-transform: capitalize;
+}
+
+input:focus {
+  outline: none;
 }
 
 /* Top Row */
@@ -425,7 +429,7 @@ body {
   image-rendering: pixelated;
   background-color: transparent;
   border: none;
-  color: white;
+  color: rgb(47, 46, 46);
 }
 
 .btn-dark-brown:hover {
@@ -434,7 +438,7 @@ body {
   background-position: center;
   image-rendering: pixelated;
   background-color: transparent;
-  color: white
+  color: rgb(47, 46, 46)
 }
 
 .btn-brown {
@@ -444,7 +448,7 @@ body {
   image-rendering: pixelated;
   background-color: transparent;
   border: none;
-  color: white;
+  color: rgb(47, 46, 46);
 }
 
 .btn-brown:hover {
@@ -453,7 +457,7 @@ body {
   background-position: center;
   image-rendering: pixelated;
   background-color: transparent;
-  color: white;
+  color: rgb(47, 46, 46);
 }
 
 .btn-light-brown {
@@ -462,7 +466,7 @@ body {
   background-position: center;
   image-rendering: pixelated;
   background-color: transparent;
-  color: white;
+  color: rgb(47, 46, 46);
 }
 
 .btn-light-brown:hover {
@@ -471,7 +475,7 @@ body {
   background-position: center;
   image-rendering: pixelated;
   background-color: transparent;
-  color: white;
+  color: rgb(47, 46, 46);
 }
 
 .btn-default {
@@ -480,7 +484,7 @@ body {
   background-position: center;
   image-rendering: pixelated;
   background-color: transparent;
-  color: white;
+  color: rgb(47, 46, 46);
 }
 
 .btn-default:hover {
@@ -489,7 +493,7 @@ body {
   background-position: center;
   image-rendering: pixelated;
   background-color: transparent;
-  color: white;
+  color: rgb(47, 46, 46);
 }
 
 .small-btn {
