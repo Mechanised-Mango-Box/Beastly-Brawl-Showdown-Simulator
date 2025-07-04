@@ -1,4 +1,5 @@
 import { Battle } from "../combat/system/battle";
+import { MonsterPool } from "../combat/data/monster_pool";
 import { Host, Player } from "./user";
 import { LobbyId, JoinCode, ServerId } from "../shared/types";
 import { Socket } from "socket.io";
@@ -23,7 +24,7 @@ export class Lobby {
     this.joinCode = joinCode;
 
     this.host = host;
-    this.setupHost()
+    this.setupHost();
   }
 
   hasPlayer(displayName: string): boolean {
@@ -43,11 +44,19 @@ export class Lobby {
   }
 
   private setupHost() {
-    this.host.socket.on("requestStartGame", () => {
-      // if the given host has a room
-      // host.room.beginGame()
-      // foreach player in room -> enter monster selection scene
-      // await start round
+    this.host.socket.on("requestStartGame", async () => {
+      const results = await Promise.allSettled(Array.from(this.players.values()).map((player) => player.socket.emitWithAck("requestMonsterSelection")));
+
+      // Assign results back to players
+      Array.from(this.players.values()).forEach((player, index) => {
+        const result = results[index];
+        if (result.status === "fulfilled") {
+          player.monsterTemplate = MonsterPool[result.value]; // Assign the returned ID
+        } else {
+          console.warn(`Player ${player.displayName} failed to select a monster:`, result.reason);
+          // TODO server should assign one if the player fails to do so
+        }
+      });
     });
 
     this.host.socket.on("requestStartRound", () => {
