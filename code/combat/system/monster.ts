@@ -36,6 +36,7 @@ export type Monster = {
   template: MonsterTemplate;
   health: number;
   queuedActionData: ActionData | null; //? Turn into an actual queue if needed
+  defendActionCharges: number; //? How many times can the monster defend in a round
 
   //* Non-default components
   components: Array<Component>;
@@ -47,5 +48,6 @@ export function makeMonster(template: MonsterTemplate): Monster {
     health: 0,
     queuedActionData: null,
     components: [],
+    defendActionCharges: template.baseDefendActionCharges,
   };
 }
