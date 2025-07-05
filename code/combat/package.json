@@ -1,13 +1,26 @@
 {
   "dependencies": {
-    "@types/socket.io": "^3.0.1",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "mongoose": "^8.15.0",
     "sqids": "^0.3.0"
   },
   "devDependencies": {
-    "@types/express": "^5.0.2",
+    "@types/body-parser": "^1.19.6",
+    "@types/connect": "^3.4.38",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/express-serve-static-core": "^5.0.6",
+    "@types/http-errors": "^2.0.5",
+    "@types/mime": "^3.0.4",
+    "@types/node": "^24.0.10",
+    "@types/qs": "^6.14.0",
+    "@types/range-parser": "^1.2.7",
+    "@types/send": "^0.17.5",
+    "@types/serve-static": "^1.15.8",
+    "@types/socket.io": "^3.0.1",
+    "@types/webidl-conversions": "^7.0.3",
+    "@types/whatwg-url": "^13.0.0",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "ts-node": "^10.9.2",

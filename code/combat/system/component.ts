@@ -67,7 +67,7 @@ export function createStunComponent(): Component {
   return {
     name: "stun",
     description: "Stuns the monster, preventing it from taking actions for one turn.",
-    duration: 1, // Stun lasts for one turn
+    duration: 2, // Stun lasts for two turn
     onTurnStart: function () {
       if (this.duration > 0) {
         this.duration--;

@@ -37,6 +37,7 @@ export type Monster = {
   health: number;
   queuedActionData: ActionData | null; //? Turn into an actual queue if needed
   defendActionCharges: number; //? How many times can the monster defend in a round
+  currentArmorClass: number; //? The current armor class, which can change during the battle
 
   //* Non-default components
   components: Array<Component>;
@@ -49,5 +50,10 @@ export function makeMonster(template: MonsterTemplate): Monster {
     queuedActionData: null,
     components: [],
     defendActionCharges: template.baseDefendActionCharges,
+    currentArmorClass: template.baseStats.armorClass,
   };
+}
+
+export function resetMonsterArmorClass(monster: Monster): void {
+  monster.currentArmorClass = monster.template.baseStats.armorClass;
 }
