@@ -19,12 +19,12 @@ export const HomePage = () => {
           <button className="glb-btn " onClick={() => navigate("/join")}>
             JOIN
           </button>
-          <button
+          {/* <button
             className="glb-btn"
             onClick={() => navigate("/settings")}
           >
             SETTINGS
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
