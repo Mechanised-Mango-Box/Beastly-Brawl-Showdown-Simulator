@@ -9,21 +9,23 @@ export const HomePage = () => {
   };
 
   return (
-    <div className="homepage-container">
-      <div className="logo"></div>
-      <div className="buttons-container">
-        <button className="glb-btn btn-brown" onClick={handleGuestHostName}>
-          HOST
-        </button>
-        <button className="glb-btn btn-dark-brown" onClick={() => navigate("/join")}>
-          JOIN
-        </button>
-        <button
-          className="glb-btn btn-brown"
-          onClick={() => navigate("/settings")}
-        >
-          SETTINGS
-        </button>
+    <div className="homepage-body">
+      <div className="homepage-container">
+        <div className="logo"></div>
+        <div className="buttons-container">
+          <button className="glb-btn" onClick={handleGuestHostName}>
+            HOST
+          </button>
+          <button className="glb-btn " onClick={() => navigate("/join")}>
+            JOIN
+          </button>
+          <button
+            className="glb-btn"
+            onClick={() => navigate("/settings")}
+          >
+            SETTINGS
+          </button>
+        </div>
       </div>
     </div>
   );
