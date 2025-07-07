@@ -1,3 +1,4 @@
+import { ActionOptions, ActionId } from "../combat/system/action";
 import { MonsterId } from "../combat/system/monster";
 
 export type Result<T> = { success: true; value: T } | { success: false; error: Error };
@@ -14,12 +15,13 @@ type BasicServerToClientEvents = {
 export type PlayerClientToServerEvents = BasicClientToServerEvents & {
   submitMonsterChoice: () => void;
   submitGameReadyState: () => void;
-  submitMove: () => void;
+  submitMove: (actionData:ActionOptions) => void;
   submitMoveLockState: () => void;
 };
 export type PlayerServerToClientEvents = BasicServerToClientEvents & {
   refreshPlayerList: (list: string[]) => void;
   requestMonsterSelection: (setMonsterId: (monsterId: MonsterId) => void) => void;
+  requestMoveSelection: (responseDeadline: number) => void;
 };
 
 export type PlayerSocketData = {};

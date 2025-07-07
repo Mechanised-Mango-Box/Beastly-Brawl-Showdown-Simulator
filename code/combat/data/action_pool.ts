@@ -1,5 +1,5 @@
 import { Action, ActionId } from "../system/action";
-import { getComponent } from "../system/component";
+import { getComponent } from "../system/monster";
 import { Component } from "../system/component";
 import { Battle } from "../system/battle";
 import { SideId } from "../system/side";
@@ -13,7 +13,7 @@ export function GetAction(actionId: ActionId): Action | null {
 }
 
 export const TIMEOUT_OPTION_MINOR = 1000; //10000; // TODO move to proper config area
-export const TIMEOUT_OPTION_MAJOR = 30000; // TODO move to proper config area
+export const TIMEOUT_OPTION_CHOOSE_MOVE = 1000;// 30000; // TODO move to proper config area
 
 const ActionPool: Action[] = [
   {

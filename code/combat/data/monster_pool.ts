@@ -1,4 +1,4 @@
-import { asActionId } from "../system/action";
+import { ActionId } from "../system/action";
 import { MonsterTemplate } from "../system/monster";
 
 export const MonsterPool: MonsterTemplate[] = [
@@ -11,10 +11,10 @@ export const MonsterPool: MonsterTemplate[] = [
       armorClass: 15,
       attack: 2,
     },
-    attackActionId: asActionId(1),
-    defendActionId: asActionId(2),
+    attackActionId: 1 as ActionId,
+    defendActionId: 2 as ActionId,
     baseDefendActionCharges: 3,
-    abilityActionId: asActionId(0),
+    abilityActionId: 0 as ActionId,
     baseAbilityActionCharges: 0,
   },
 
@@ -27,10 +27,10 @@ export const MonsterPool: MonsterTemplate[] = [
       armorClass: 14,
       attack: 2,
     },
-    attackActionId: asActionId(1),
-    defendActionId: asActionId(2),
+    attackActionId: 1 as ActionId,
+    defendActionId: 2 as ActionId,
     baseDefendActionCharges: 3,
-    abilityActionId: asActionId(0),
+    abilityActionId: 0 as ActionId,
     baseAbilityActionCharges: 0,
   },
 
@@ -43,26 +43,26 @@ export const MonsterPool: MonsterTemplate[] = [
       armorClass: 12,
       attack: 4,
     },
-    attackActionId: asActionId(1),
-    defendActionId: asActionId(2),
+    attackActionId: 1 as ActionId,
+    defendActionId: 2 as ActionId,
     baseDefendActionCharges: 3,
-    abilityActionId: asActionId(3),
+    abilityActionId: 3 as ActionId,
     baseAbilityActionCharges: 0,
   },
 
   {
     name: "Stone Hide Guardian",
     description: "A sturdy and resilient protector. A Defense Monster.",
-    imageUrl: "/img/monster-selection-images/placeholder_monster_3.png", 
+    imageUrl: "/img/monster-selection-images/placeholder_monster_3.png",
     baseStats: {
       health: 30,
       armorClass: 16,
       attack: 1,
     },
-    attackActionId: asActionId(1),
-    defendActionId: asActionId(2),
+    attackActionId: 1 as ActionId,
+    defendActionId: 2 as ActionId,
     baseDefendActionCharges: 4,
-    abilityActionId: asActionId(4),
+    abilityActionId: 4 as ActionId,
     baseAbilityActionCharges: 0,
   },
 ] as const;

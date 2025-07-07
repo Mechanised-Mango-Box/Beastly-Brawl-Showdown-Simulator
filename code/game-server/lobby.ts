@@ -2,7 +2,6 @@ import { Battle } from "../combat/system/battle";
 import { MonsterPool } from "../combat/data/monster_pool";
 import { Host, Player } from "./user";
 import { LobbyId, JoinCode, ServerId } from "../shared/types";
-import { Socket } from "socket.io";
 
 /**
  * Represents a lobby and the data within it.

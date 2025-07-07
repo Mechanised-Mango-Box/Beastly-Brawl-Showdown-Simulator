@@ -1,4 +1,4 @@
-import { ActionId, ActionData } from "./action";
+import { ActionId, ActionOptions } from "./action";
 import { Component } from "./component";
 
 export type MonsterId = number & { __brand: "MonsterId" };
@@ -32,28 +32,32 @@ export type MonsterTemplate = {
   baseAbilityActionCharges: number;
 };
 
-export type Monster = {
+export class Monster {
   template: MonsterTemplate;
   health: number;
-  queuedActionData: ActionData | null; //? Turn into an actual queue if needed
   defendActionCharges: number; //? How many times can the monster defend in a round
   currentArmorClass: number; //? The current armor class, which can change during the battle
 
   //* Non-default components
-  components: Array<Component>;
-};
+  components: Array<Component>; //{ [id: string]: Component };
 
-export function makeMonster(template: MonsterTemplate): Monster {
-  return {
-    template: template,
-    health: 0,
-    queuedActionData: null,
-    components: [],
-    defendActionCharges: template.baseDefendActionCharges,
-    currentArmorClass: template.baseStats.armorClass,
-  };
+  constructor(template: MonsterTemplate) {
+    this.template = template;
+    this.health = template.baseStats.health;
+    this.components = [];
+    this.defendActionCharges = template.baseDefendActionCharges;
+    this.currentArmorClass = template.baseStats.armorClass;
+  }
 }
 
-export function resetMonsterArmorClass(monster: Monster): void {
-  monster.currentArmorClass = monster.template.baseStats.armorClass;
+export function getComponent(entity: Monster, name: string): Component | null {
+  for (const component of entity.components) {
+    if (component.name === name) {
+      return component;
+    }
+  }
+  return null;
+}
+export function getComponentAll(entity: Monster, name: string): Component[] {
+  return entity.components.filter((component) => component.name === name);
 }

@@ -6,6 +6,7 @@
     "sqids": "^0.3.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.30.1",
     "@types/body-parser": "^1.19.6",
     "@types/connect": "^3.4.38",
     "@types/cors": "^2.8.19",
@@ -21,9 +22,12 @@
     "@types/socket.io": "^3.0.1",
     "@types/webidl-conversions": "^7.0.3",
     "@types/whatwg-url": "^13.0.0",
+    "eslint": "^9.30.1",
+    "globals": "^16.3.0",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.36.0"
   }
 }
