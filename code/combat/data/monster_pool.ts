@@ -1,3 +1,4 @@
+// TODO: make swappable instead of a global
 import { ActionId } from "../system/action";
 import { MonsterTemplate } from "../system/monster";
 

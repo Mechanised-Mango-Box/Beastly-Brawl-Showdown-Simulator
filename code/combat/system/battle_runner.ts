@@ -73,7 +73,7 @@ export async function battle_runner(battle: Battle): Promise<void> {
         }
 
         console.log(`▶️ Executing action [id=${queuedActionSpecifier.actionId}] for side [id=${side.id}].`);
-        return queuedAction.Perform(battle, side.id);
+        return queuedAction.perform(battle, side.id);
       })
     );
 

@@ -1,4 +1,3 @@
-import { Player } from "../../game-server/user";
 import { ActionOptions } from "./action";
 import { Monster } from "./monster";
 
@@ -8,5 +7,5 @@ export type Side = {
 
   monster: Monster;
 
-  pendingActions: ActionOptions[]
+  pendingActions: ActionOptions[] | null
 };

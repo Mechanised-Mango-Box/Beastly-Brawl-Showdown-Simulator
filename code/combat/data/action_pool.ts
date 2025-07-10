@@ -1,10 +1,10 @@
+// TODO: make swappable instead of a global
 import { Action, ActionId } from "../system/action";
 import { getComponent } from "../system/monster";
 import { Component } from "../system/component";
 import { Battle } from "../system/battle";
 import { SideId } from "../system/side";
 import { roll } from "../system/roll";
-import { resetMonsterArmorClass } from "../system/monster";
 
 export function GetAction(actionId: ActionId): Action | null {
   /// If action exists
@@ -19,7 +19,7 @@ const ActionPool: Action[] = [
   {
     name: "Nothing",
     description: "Do nothing...",
-    Perform: function (battle: Battle, sourceSideId: SideId): Promise<void> {
+    perform: function (battle: Battle, sourceSideId: SideId): Promise<void> {
       throw new Error("Function not implemented.");
     },
   },
@@ -27,7 +27,7 @@ const ActionPool: Action[] = [
   {
     name: "Normal Attack",
     description: "Perform a regular attack.",
-    async Perform(battle: Battle, sourceSideId: SideId): Promise<void> {
+    async perform(battle: Battle, sourceSideId: SideId): Promise<void> {
       const monster = battle.sides[sourceSideId].monster;
       const actionData = monster.queuedActionData;
 
@@ -116,7 +116,7 @@ const ActionPool: Action[] = [
   {
     name: "Defend",
     description: "Increase your armor class temporarily.",
-    async Perform(battle: Battle, sourceSideId: SideId): Promise<void> {
+    async perform(battle: Battle, sourceSideId: SideId): Promise<void> {
       const monster = battle.sides[sourceSideId].monster;
 
       // Check for available defend charges
@@ -149,7 +149,7 @@ const ActionPool: Action[] = [
   {
     name: "Dodge",
     description: "Dodge an attack, avoid it completely.",
-    async Perform(battle: Battle, sourceSideId: SideId): Promise<void> {
+    async perform(battle: Battle, sourceSideId: SideId): Promise<void> {
       const monster = battle.sides[sourceSideId].monster;
 
       // Check for available dodge charges
@@ -173,7 +173,7 @@ const ActionPool: Action[] = [
   {
     name: "Stun",
     description: "Stun the monster, preventing it from taking actions for one turn.",
-    async Perform(battle: Battle, sourceSideId: SideId): Promise<void> {
+    async perform(battle: Battle, sourceSideId: SideId): Promise<void> {
       const monster = battle.sides[sourceSideId].monster;
       const stunComponent = getComponent(monster, "stun");
       if (!stunComponent || !stunComponent.use()) {
