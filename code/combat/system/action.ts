@@ -10,9 +10,16 @@ export type ActionOptions = {
 };
 
 export type Action = {
-  name: string;
-  description: string;
+  readonly name: string;
+  readonly description: string;
+
+  /**
+   * Ordered as follows:
+   * - Highest  =   First
+   * - Default  =   0
+   * - Lowest   =   Last
+   */
+  readonly priortyClass: number;
 
   perform(world: Battle, source: SideId, target: SideId): Promise<void>; // NOTE: potentially make return success or error
-  // OnEndTurn(world: Battle, sourceSideId: SideId): void; // NOTE: potentially make return success or error
 };

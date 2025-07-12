@@ -1,185 +1,239 @@
 // TODO: make swappable instead of a global
 import { Action, ActionId } from "../system/action";
-import { getComponent } from "../system/monster";
-import { Component } from "../system/component";
+import { Monster } from "../system/monster/monster";
 import { Battle } from "../system/battle";
+import { BlockedEvent, BuffEvent, DamageEvent, MoveEvadedEvent, MoveFailedEvent, MoveSuccessEvent, RerollEvent, RollEvent, StartMoveEvent } from "../system/history/events";
 import { SideId } from "../system/side";
 import { roll } from "../system/roll";
+import { AbilityChargeStunComponent, DefendComponent, DodgeChargeComponent, DodgeStateComponent, RerollChargeComponent, StunnedStateComponent } from "../system/monster/component";
 
-export function GetAction(actionId: ActionId): Action | null {
+export function getAction(actionId: ActionId): Action | null {
   /// If action exists
   if (0 <= actionId && actionId < ActionPool.length) return ActionPool[actionId];
   return null;
 }
 
-export const TIMEOUT_OPTION_MINOR = 1000; //10000; // TODO move to proper config area
-export const TIMEOUT_OPTION_CHOOSE_MOVE = 1000;// 30000; // TODO move to proper config area
-
 const ActionPool: Action[] = [
   {
     name: "Nothing",
     description: "Do nothing...",
-    perform: function (battle: Battle, sourceSideId: SideId): Promise<void> {
-      throw new Error("Function not implemented.");
+    perform: function (): Promise<void> {
+      throw new Error("This action should not be used EVER.");
     },
+    priortyClass: 0,
   },
 
   {
     name: "Normal Attack",
     description: "Perform a regular attack.",
-    async perform(battle: Battle, sourceSideId: SideId): Promise<void> {
-      const monster = battle.sides[sourceSideId].monster;
-      const actionData = monster.queuedActionData;
+    perform: async function (world: Battle, source: SideId, target: SideId): Promise<void> {
+      const sourceMonster: Monster = world.sides[source].monster;
+      const targetMonster: Monster = world.sides[target].monster;
 
-      if (!actionData) {
-        throw new Error("This action was triggered without an existing action data.");
-      }
-
-      //First Roll
-      console.log(`${sourceSideId} EMIT: Tell the player to roll a d20`); //TODO: placeholder
-      const playerRolled = await new Promise((resolve) => setTimeout(resolve, TIMEOUT_OPTION_MINOR)); //TODO: placeholder - either the response or a timeout
-
-      let rollResult = roll(20);
-      console.log(`${sourceSideId} EMIT: the roll is ${rollResult}`); //TODO: placeholder
-
-      // Check if the monster has dodge component
-      const dodgeComponent = getComponent(monster, "dodge");
-      if (dodgeComponent && dodgeComponent.used === false) {
-        console.log(`${actionData.targetSideId} has dodged the attack.`);
-        dodgeComponent.used = true; // Mark the dodge as used
-        return; // Exit early, the attack is dodged
-      }
-        // Monster has a dodge component, increase armor 
-
-      // Check if the attack hits
-      if (rollResult <= monster.currentArmorClass) {
-        console.log(`${sourceSideId} EMIT: missed the attack on ${actionData.targetSideId}.`);
-        return; // Attack missed
-      }
-
-      // Determine if this is a critical hit
-      const greaterCritComponent = getComponent(monster, "greaterCrit");
-      const isCrit = greaterCritComponent ? rollResult >= 18 : rollResult === 20;
-
-      // Base damage roll
-      const baseDamage = roll(4) + monster.template.baseStats.attack;
-
-      // Apply critical multiplier
-      const damageToTake = isCrit ? baseDamage * 2 : baseDamage;
-
-      // Logging
-      console.log(`${sourceSideId} ${isCrit ? "scored a CRITICAL HIT" : "hit"} ${actionData.targetSideId}.`);
-
-
-      // Give the player an option of rerolling if they can once they ACK the roll
-      const rerollComponent = getComponent(monster, "rerollAttack");
-      let usedReroll = false;
-
-      if (rerollComponent && rerollComponent.charges > 0) {
-        // Ask player if they want to reroll
-        console.log(`${sourceSideId} EMIT: Ask player if they want to reroll.`);
-
-        const playerWantsReroll = await new Promise((resolve) => {
-          // Simulate player input or timeout
-          setTimeout(() => resolve(true), TIMEOUT_OPTION_MINOR); // Replace true with actual input handling
-        });
-
-        if (playerWantsReroll) {
-          const success = rerollComponent.use(); // Consume charge only after player accepts
-          if (success) {
-            rollResult = roll(20);
-            usedReroll = true;
-            console.log(`${sourceSideId} the reroll is ${rollResult}`);
-          } else {
-            console.log(`${sourceSideId} tried to reroll, but had no charges left.`);
-          }
-        }
-      }
-
-
-      const damageComponent: Component = {
-        name: "damage",
-        damage: damageToTake,
-        OnOutcome: (battle: Battle) => {
-          battle.sides[actionData.targetSideId].monster.health -= damageToTake;
-          console.log(`${actionData.targetSideId} took ${damageToTake} damage from ${sourceSideId}`);
-        },
+      const startMoveEvent: StartMoveEvent = {
+        name: "startMove",
+        source: source,
+        target: target,
+        moveActionId: 1 as ActionId, // TODO this is a hack - find a better way of getting the id
       };
-      monster.components.push(damageComponent);
+      world.eventHistory.events.push(startMoveEvent);
 
-      if (usedReroll) {
-        console.log(`${sourceSideId} used a reroll for the attack.`);
+      //# Evade check
+      const dodgeState: DodgeStateComponent | null = targetMonster.getComponent("dodging");
+      if (dodgeState) {
+        const moveEvadedEvent: MoveEvadedEvent = {
+          name: "evaded",
+          source: source,
+          target: target,
+          moveActionId: 1 as ActionId,
+        };
+        world.eventHistory.events.push(moveEvadedEvent);
+        return;
       }
+
+      //# Roll
+      console.log(`${source} EMIT: Tell the player to roll a d20`); //TODO: placeholder
+      await new Promise<void>((resolve) => {
+        world.noticeBoard.postNotice(source, {
+          kind: "roll",
+          data: { diceFaces: 20 },
+          callback: function (): void {
+            world.noticeBoard.removeNotice(source, "roll");
+            resolve();
+          },
+        });
+      });
+      let rollResult: number = roll(20);
+      const rollEvent: RollEvent = {
+        name: "roll",
+        source: source,
+        faces: 20,
+        result: rollResult,
+      };
+      world.eventHistory.events.push(rollEvent);
+
+      // # Reroll
+      const rerollComponent: RerollChargeComponent | null = sourceMonster.getComponent("reroll");
+      if (rerollComponent && rerollComponent.charges > 0) {
+        await new Promise<void>((resolve) => {
+          world.noticeBoard.postNotice(source, {
+            kind: "rerollOption",
+            data: { diceFaces: 20 },
+            callback: function (shouldReroll: boolean): void {
+              if (shouldReroll) {
+                rerollComponent.charges--;
+                rollResult = roll(20);
+                const rerollEvent: RerollEvent = {
+                  name: "reroll",
+                  source: source,
+                  faces: 20,
+                  result: rollResult,
+                };
+                world.eventHistory.events.push(rerollEvent);
+              }
+              world.noticeBoard.removeNotice(source, "rerollOption");
+              resolve();
+            },
+          });
+        });
+      }
+
+      //# Armour Check
+      if (rollResult <= targetMonster.getArmourBonus()) {
+        const blockedEvent: BlockedEvent = {
+          name: "blocked",
+          source: source,
+          target: target,
+        };
+        world.eventHistory.events.push(blockedEvent);
+        return;
+      }
+
+      const moveSuccessEvent: MoveSuccessEvent = {
+        name: "moveSuccess",
+        source: source,
+        target: target,
+        moveActionId: 1 as ActionId, // TODO this is a hack
+      };
+      world.eventHistory.events.push(moveSuccessEvent);
+
+      //# Base damage roll
+      const baseDamage: number = roll(4) + sourceMonster.template.baseStats.attack;
+
+      //# Crit Check
+      const critChanceBonus: number = sourceMonster.getCritChanceBonus();
+      const critRollResult: number = roll(20);
+      const critRollEvent: RollEvent = {
+        name: "roll",
+        source: source,
+        faces: 20,
+        result: critRollResult,
+      };
+      world.eventHistory.events.push(critRollEvent);
+      //TODO -> change threshold (15) to something based on action / monster
+      const critDamage: number = critChanceBonus + rollResult > 15 ? baseDamage : 0;
+
+      const damageToTake: number = baseDamage + critDamage;
+      targetMonster.health -= damageToTake;
+      const damageEvent: DamageEvent = {
+        name: "damage",
+        source: source,
+        target: target,
+        amount: damageToTake,
+      };
+      world.eventHistory.events.push(damageEvent);
     },
+    priortyClass: 0,
   },
 
   {
     name: "Defend",
     description: "Increase your armor class temporarily.",
-    async perform(battle: Battle, sourceSideId: SideId): Promise<void> {
-      const monster = battle.sides[sourceSideId].monster;
+    async perform(battle: Battle, source: SideId): Promise<void> {
+      const sourceMonster: Monster = battle.sides[source].monster;
 
-      // Check for available defend charges
-      if (monster.defendActionCharges <= 0) {
-        console.log(`${sourceSideId} has no defend charges left.`);
+      if (sourceMonster.defendActionCharges <= 0) {
+        const failedEvent: MoveFailedEvent = {
+          name: "moveFailed",
+          source: source,
+          target: source,
+          moveActionId: 2 as ActionId,
+          reason: undefined,
+        };
+        battle.eventHistory.events.push(failedEvent);
         return;
       }
+      sourceMonster.defendActionCharges -= 1;
 
-      // Consume one defend charge
-      monster.defendActionCharges -= 1;
-
-      // Increase the monster's armor class by 2 for this turn
-      monster.currentArmorClass += 2;
-      console.log(`${sourceSideId}'s AC increased by 2 for this turn.`);
-
-      // Create a component to increase AC
-      const defenseComponent: Component = {
-        name: "defense",
-        OnOutcome: (battle: Battle) => {
-          // Reset the monster's armor class to its base value at the end of the turn
-          resetMonsterArmorClass(monster);
-        },
+      const defenseComponent: DefendComponent = new DefendComponent(1, 2);
+      sourceMonster.components.push(defenseComponent);
+      const buffEvent: BuffEvent = {
+        name: "buff",
+        source: source,
+        target: source,
+        buffs: { armour: defenseComponent.bonusArmour },
       };
-
-      // Add the defense component to the monster
-      monster.components.push(defenseComponent);
+      battle.eventHistory.events.push(buffEvent);
     },
+    priortyClass: 5,
   },
 
   {
     name: "Dodge",
     description: "Dodge an attack, avoid it completely.",
-    async perform(battle: Battle, sourceSideId: SideId): Promise<void> {
-      const monster = battle.sides[sourceSideId].monster;
+    priortyClass: 5,
+    async perform(world: Battle, source: SideId, target: SideId): Promise<void> {
+      const sourceMonster: Monster = world.sides[source].monster;
 
-      // Check for available dodge charges
-      const dodgeComponent = getComponent(monster, "dodge");
-      if (!dodgeComponent || !dodgeComponent.use()) {
-        console.log(`${sourceSideId} has no dodge charges left.`);
+      const dodgeChargeComponent: DodgeChargeComponent | null = sourceMonster.getComponent("dodgeCharges");
+      if (!dodgeChargeComponent) {
+        const failedEvent: MoveFailedEvent = {
+          name: "moveFailed",
+          source: source,
+          target: source,
+          moveActionId: 3 as ActionId,
+          reason: undefined,
+        };
+        world.eventHistory.events.push(failedEvent);
         return;
-      };
+      }
 
-      // Create a component to increase AC temporarily
-      const dodgeDefenseComponent: Component = {
-        name: "dodgeDefense",
-        used: false,
-      };
-
-      // Add the dodge defense component to the monster
-      monster.components.push(dodgeDefenseComponent);
-    }
+      const dodgeComponent: DodgeStateComponent | null = sourceMonster.getComponent("dodging");
+      if (!dodgeComponent) {
+        sourceMonster.components.push(new DodgeStateComponent(1));
+      } else {
+        dodgeComponent.remainingDuration++;
+      }
+    },
   },
 
   {
     name: "Stun",
     description: "Stun the monster, preventing it from taking actions for one turn.",
-    async perform(battle: Battle, sourceSideId: SideId): Promise<void> {
-      const monster = battle.sides[sourceSideId].monster;
-      const stunComponent = getComponent(monster, "stun");
-      if (!stunComponent || !stunComponent.use()) {
-        console.log(`${sourceSideId} has no stun charges left.`);
+    priortyClass: 3,
+    async perform(world: Battle, source: SideId, target: SideId): Promise<void> {
+      const sourceMonster: Monster = world.sides[source].monster;
+      const targetMonster: Monster = world.sides[target].monster;
+
+      const abilityChargeStunComponent: AbilityChargeStunComponent | null = sourceMonster.getComponent("abilityChargeStun");
+      if (!abilityChargeStunComponent) {
+        const failedEvent: MoveFailedEvent = {
+          name: "moveFailed",
+          source: source,
+          target: source,
+          moveActionId: 4 as ActionId,
+          reason: undefined,
+        };
+        world.eventHistory.events.push(failedEvent);
         return;
       }
-    }
+
+      const stunnedComponent: StunnedStateComponent | null = targetMonster.getComponent("stunned");
+      if (!stunnedComponent) {
+        sourceMonster.components.push(new StunnedStateComponent(1));
+      } else {
+        stunnedComponent.remainingDuration++;
+      }
+    },
   },
 ];

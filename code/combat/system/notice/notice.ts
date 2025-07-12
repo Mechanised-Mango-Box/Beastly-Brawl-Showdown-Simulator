@@ -1,9 +1,15 @@
 import { ActionId } from "../action";
 import { SideId } from "../side";
-import { BaseNotice } from "./base_notice";
 
-export type Notice = ChooseAction | Roll;
+interface BaseNotice<TKind extends string = string, TData = unknown, TCallback = (...args: unknown[]) => void> {
+  readonly kind: TKind;
+  data: TData;
+  callback: TCallback;
+}
+
+export type Notice = ChooseMove | Roll | RerollOption;
 export type NoticeKind = Notice["kind"];
 
-export type ChooseAction = BaseNotice<"chooseAction", { possibleActionIds: ActionId[] }, (actionId: ActionId, target: SideId) => void>;
+export type ChooseMove = BaseNotice<"chooseMove", { moveActionIds: ActionId[] }, (moveActionId: ActionId, target: SideId) => void>;
 export type Roll = BaseNotice<"roll", { diceFaces: number }, () => void>;
+export type RerollOption = BaseNotice<"rerollOption", { diceFaces: number }, (shouldReroll: boolean) => void>;

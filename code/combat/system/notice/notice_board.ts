@@ -10,7 +10,6 @@ export class NoticeBoard {
 
   postNotice(target: number, notice: Notice): void {
     this.noticeMaps[target].set(notice.kind, notice);
-    console.log(`${target} >>> Start listen for: ${notice.kind}, ${JSON.stringify(notice.data)}`);
   }
   removeNotice(target: number, noticeKind: NoticeKind): Notice | null {
     const notice: Notice | null = this.noticeMaps[target].get(noticeKind) || null;

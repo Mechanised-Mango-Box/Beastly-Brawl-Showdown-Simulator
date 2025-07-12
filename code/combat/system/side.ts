@@ -1,5 +1,5 @@
 import { ActionOptions } from "./action";
-import { Monster } from "./monster";
+import { Monster } from "./monster/monster";
 
 export type SideId = number & { __brand: "SideId" };
 export type Side = {

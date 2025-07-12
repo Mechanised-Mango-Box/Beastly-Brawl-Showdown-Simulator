@@ -1,10 +1,12 @@
 import { Side, SideId } from "./side";
-import { Monster, MonsterTemplate } from "./monster";
+import { Monster, MonsterTemplate } from "./monster/monster";
 // import { GetAction } from "../data/action_pool";
-import { ChooseAction } from "./notice/notice";
+import { ChooseMove as chooseMove } from "./notice/notice";
 import { NoticeBoard } from "./notice/notice_board";
-import { ActionId, ActionOptions } from "./action";
-import { GetAction as getAction } from "../data/action_pool";
+import { Action, ActionId, ActionOptions } from "./action";
+import { getAction as getAction } from "../data/action_pool";
+import { EventHistory } from "./history/event_history";
+import { SnapshotEvent } from "./history/events";
 export interface PlayerOptions {
   name: string;
   /**
@@ -17,23 +19,18 @@ export type BattleOptions = {
   seed: number;
 
   playerOptionSet: PlayerOptions[];
+
+  player_option_timeout: number;
 };
-
-export interface BattleEvent {
-  name: string;
-}
-
-interface SnapshotEvent extends BattleEvent {
-  name: "snapshot";
-  sides: Side[];
-}
 
 export class Battle {
   readonly seed: number;
   readonly sides: Side[];
-  readonly eventHistory: BattleEvent[];
+  readonly eventHistory: EventHistory;
 
   readonly noticeBoard: NoticeBoard;
+
+  readonly player_option_timeout: number;
 
   constructor(options: BattleOptions) {
     this.seed = options.seed;
@@ -47,11 +44,14 @@ export class Battle {
       return side;
     });
 
-    this.eventHistory = [];
+    this.eventHistory = new EventHistory();
 
     this.noticeBoard = new NoticeBoard(options.playerOptionSet.length);
+
+    this.player_option_timeout = options.player_option_timeout;
   }
 
+  // TODO ? make the battle director a swappable component
   async run(): Promise<void> {
     console.log("Battle: Start");
 
@@ -59,12 +59,26 @@ export class Battle {
       name: "snapshot",
       sides: JSON.parse(JSON.stringify(this.sides)),
     };
-    this.eventHistory.push(initialState);
+    this.eventHistory.events.push(initialState);
 
     // TODO exit
-    while (true) {
-      //# Gather Actions
-      console.log(`Gathered moves: Start`);
+    while (this.sides.every((side) => side.monster.health > 0)) {
+      //#########################
+      //# Start of turn trigger #
+      //#########################
+      this.sides.forEach((side) => {
+        side.monster.components.forEach((component) => {
+          if (component.onStartTurn === undefined) {
+            return;
+          }
+          component.onStartTurn(this, side.id);
+        });
+      });
+
+      //##################
+      //# Gather Actions #
+      //##################
+      console.log(`Gather moves: Start`);
       await new Promise<void>((resolve) => {
         this.sides.forEach((side) => {
           const callback: (actionId: ActionId, target: SideId) => void = (actionId: ActionId, target: SideId): void => {
@@ -76,37 +90,81 @@ export class Battle {
                 actionId: actionId,
               },
             ]; //# Save to data
-            this.noticeBoard.removeNotice(side.id, "chooseAction");
+            this.noticeBoard.removeNotice(side.id, "chooseMove");
 
             //# All if all sides ready -> move to next stage
             if (this.sides.every((side) => side.pendingActions)) {
               resolve();
             }
           };
-          const notice: ChooseAction = {
-            kind: "chooseAction",
-            data: { possibleActionIds: [0, 1, 2] as ActionId[] }, // TODO choose based on monster (state)
+          const notice: chooseMove = {
+            kind: "chooseMove",
+            data: { moveActionIds: [0, 1, 2] as ActionId[] }, // TODO choose based on monster (i.e. special attack)
             callback: callback,
           };
           this.noticeBoard.postNotice(side.id, notice);
         });
       });
-      console.log(`Gathered moves: Complete`);
+      console.log(`Gather moves: Complete`);
 
-      //# Order Actions
+      //#################
+      //# Order Actions #
+      //#################
       console.error("TODO: Order Actions");
-      const actionQueue: ActionOptions[] = this.sides
+      const allActionsUnsorted: ActionOptions[] = this.sides
         .map((side) => side.pendingActions)
         .filter((actions) => actions !== null)
         .flat();
-      this.sides.forEach((side) => (side.pendingActions = [])); // # Remove from pending
-      // actionQueue.sort()
-      console.log(`Acton Queue:\n${JSON.stringify(actionQueue)}`);
-      //# Resolve Actions
-      console.error("TODO: Resolve Actions");
-      actionQueue.forEach(action => {
-        getAction(action.actionId)?.perform(this, action.source, action.target)
+      this.sides.forEach((side) => (side.pendingActions = null)); // # Remove from pending
+      const actionOptionsQueue: ActionOptions[] = allActionsUnsorted.sort((a, b) => {
+        //# Sort by move priority class
+        const actionA: Action = getAction(a.actionId)!;
+        const actionB: Action = getAction(b.actionId)!;
+        if (actionA.priortyClass !== actionB.priortyClass) {
+          return actionB.priortyClass - actionA.priortyClass;
+        }
+
+        //# Sort by source monster speed
+        return this.sides[b.source].monster.template.baseStats.speed - this.sides[a.source].monster.template.baseStats.speed; // TODO get speed rather than use base
       });
+      console.log(`Acton Queue:\n${JSON.stringify(actionOptionsQueue)}`);
+
+      //###################
+      //# Resolve Actions #
+      //###################
+      console.log("Resolve Actions");
+      for (const action of actionOptionsQueue) {
+        const actionHandler: Action | null = getAction(action.actionId);
+        if (!actionHandler) {
+          throw new Error(`Action of this id=${action.actionId} does not exist.`);
+        }
+
+        if (this.sides[action.source].monster.getIsBlockedFromAction()) {
+          console.log(`Monster could not perform action right now (probs status).`);
+          break;
+        }
+
+        await actionHandler.perform(this, action.source, action.target);
+        console.log(`Resolved action id=${action.actionId}`);
+      }
+
+      //#######################
+      //# End of turn trigger #
+      //#######################
+      this.sides.forEach((side) => {
+        side.monster.components.forEach((component) => {
+          if (component.onEndTurn === undefined) {
+            return;
+          }
+          component.onEndTurn(this, side.id);
+        });
+      });
+
+      const endOfTurnSnapshotEvent: SnapshotEvent = {
+        name: "snapshot",
+        sides: JSON.parse(JSON.stringify(this.sides)),
+      };
+      this.eventHistory.events.push(endOfTurnSnapshotEvent);
     }
     console.log("Battle: Complete");
   }

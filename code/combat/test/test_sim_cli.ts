@@ -11,14 +11,15 @@ const battleOptions: BattleOptions = {
     },
     {
       name: "Greg",
-      monsterTemplate: MonsterPool[0],
+      monsterTemplate: MonsterPool[1],
     },
   ],
+  player_option_timeout: 1000,
 };
 const battle: Battle = new Battle(battleOptions);
 console.log(`Battle: Run`);
 battle.run();
 
 console.log(`CLI: Listen`);
-const cli: CliAdapter = new CliAdapter(battle.noticeBoard);
+const cli: CliAdapter = new CliAdapter(battle.noticeBoard, battle.eventHistory);
 cli.listen();

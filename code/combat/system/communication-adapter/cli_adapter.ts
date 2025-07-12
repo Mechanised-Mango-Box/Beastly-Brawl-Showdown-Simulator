@@ -1,27 +1,42 @@
 import * as readline from "readline";
-import { CommunicationAdapter } from "./communication_adapter";
 import { Notice, NoticeKind } from "../notice/notice";
 import { NoticeBoard } from "../notice/notice_board";
 import { ActionId } from "../action";
 import { SideId } from "../side";
+import { EventHistory } from "../history/event_history";
 
-export class CliAdapter implements CommunicationAdapter {
+export class CliAdapter {
   noticeBoard: NoticeBoard;
+  eventHistory: EventHistory;
 
-  constructor(noticeBoard: NoticeBoard) {
+  constructor(noticeBoard: NoticeBoard, eventHistory: EventHistory) {
     this.noticeBoard = noticeBoard;
+
+    this.eventHistory = eventHistory;
   }
 
   listen(): void {
     const rl: readline.Interface = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
-      prompt: "Enter cmd (target|cmd|arg1|arg2|...):\n",
+      prompt: "<<< Enter cmd (target|cmd|arg1|arg2|...):\n> ",
     });
 
     rl.prompt();
 
     rl.on("line", (line: string) => {
+      switch (line.trim().toLowerCase()) {
+        case "history":
+          console.log(`History (events count = ${this.eventHistory.events.length}):\n${JSON.stringify(this.eventHistory.events)}`);
+          return;
+        case "notice":
+          console.log(`Notices (player count = ${this.noticeBoard.noticeMaps.length}):\n${JSON.stringify(this.noticeBoard.noticeMaps.map((map) => Object.fromEntries(map)))}`); //* Hacky print
+          return;
+
+        default:
+          break;
+      }
+
       const [targetStr, eventNameStr, ...args] = line.trim().split("|");
 
       const target: number = parseInt(targetStr);
@@ -40,7 +55,7 @@ export class CliAdapter implements CommunicationAdapter {
 
       try {
         switch (notice.kind) {
-          case "chooseAction": {
+          case "chooseMove": {
             if (args.length < 2) {
               console.log("❌ onChooseMove requires moveId and moveTarget");
               break;
@@ -51,6 +66,22 @@ export class CliAdapter implements CommunicationAdapter {
           }
           case "roll": {
             notice.callback();
+            break;
+          }
+          case "rerollOption": {
+            if (args.length < 1) {
+              console.log("❌ rerollOption requires shouldReroll");
+              break;
+            }
+
+            if (args[0].toLowerCase() === "y") {
+              notice.callback(true);
+            }
+            if (args[0].toLowerCase() === "n") {
+              notice.callback(false);
+            }
+
+            console.log("❌ rerollOption - shouldReroll should be y/n");
             break;
           }
           default:

@@ -15,7 +15,11 @@ export default defineConfig([
       "@typescript-eslint/typedef": ["error", { "variableDeclaration": true }],
       "eqeqeq": "error",
       "block-scoped-var": "error",
-      "no-var": "error"
+      "no-var": "error",
+      '@typescript-eslint/no-unused-vars': ['warn', {
+        args: 'after-used', // only warn for unused parameters
+        vars: 'none'        // ignore unused variables
+      }]
     },
   }
 ]);
