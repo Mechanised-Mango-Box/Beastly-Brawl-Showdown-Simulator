@@ -6,6 +6,10 @@ export interface BattleEvent {
 }
 
 // TODO extract as plugin
+export interface BattleOverEvent extends BattleEvent {
+  name: "battleOver";
+}
+
 export interface SnapshotEvent extends BattleEvent {
   name: "snapshot";
   sides: Side[];

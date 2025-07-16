@@ -1,12 +1,11 @@
 import { Side, SideId } from "./side";
 import { Monster, MonsterTemplate } from "./monster/monster";
-// import { GetAction } from "../data/action_pool";
 import { ChooseMove as chooseMove } from "./notice/notice";
 import { NoticeBoard } from "./notice/notice_board";
 import { Action, ActionId, ActionOptions } from "./action";
 import { getAction as getAction } from "../data/action_pool";
 import { EventHistory } from "./history/event_history";
-import { SnapshotEvent } from "./history/events";
+import { BattleOverEvent, SnapshotEvent } from "./history/events";
 export interface PlayerOptions {
   name: string;
   /**
@@ -166,6 +165,10 @@ export class Battle {
       };
       this.eventHistory.events.push(endOfTurnSnapshotEvent);
     }
-    console.log("Battle: Complete");
+
+    const battleOverEvent: BattleOverEvent = {
+      name: "battleOver",
+    };
+    this.eventHistory.events.push(battleOverEvent);
   }
 }
