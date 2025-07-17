@@ -26,6 +26,7 @@ const ActionPool: Action[] = [
   {
     name: "Normal Attack",
     description: "Perform a regular attack.",
+    icon: "wolverine-claws.svg",
     perform: async function (world: Battle, source: SideId, target: SideId): Promise<void> {
       const sourceMonster: Monster = world.sides[source].monster;
       const targetMonster: Monster = world.sides[target].monster;
@@ -36,7 +37,7 @@ const ActionPool: Action[] = [
         target: target,
         moveActionId: 1 as ActionId, // TODO this is a hack - find a better way of getting the id
       };
-      world.eventHistory.events.push(startMoveEvent);
+      world.eventHistory.addEvent(startMoveEvent);
 
       //# Evade check
       const dodgeState: DodgeStateComponent | null = targetMonster.getComponent("dodging");
@@ -47,7 +48,7 @@ const ActionPool: Action[] = [
           target: target,
           moveActionId: 1 as ActionId,
         };
-        world.eventHistory.events.push(moveEvadedEvent);
+        world.eventHistory.addEvent(moveEvadedEvent);
         return;
       }
 
@@ -70,7 +71,7 @@ const ActionPool: Action[] = [
         faces: 20,
         result: rollResult,
       };
-      world.eventHistory.events.push(rollEvent);
+      world.eventHistory.addEvent(rollEvent);
 
       // # Reroll
       const rerollComponent: RerollChargeComponent | null = sourceMonster.getComponent("reroll");
@@ -89,7 +90,7 @@ const ActionPool: Action[] = [
                   faces: 20,
                   result: rollResult,
                 };
-                world.eventHistory.events.push(rerollEvent);
+                world.eventHistory.addEvent(rerollEvent);
               }
               world.noticeBoard.removeNotice(source, "rerollOption");
               resolve();
@@ -105,7 +106,7 @@ const ActionPool: Action[] = [
           source: source,
           target: target,
         };
-        world.eventHistory.events.push(blockedEvent);
+        world.eventHistory.addEvent(blockedEvent);
         return;
       }
 
@@ -115,7 +116,7 @@ const ActionPool: Action[] = [
         target: target,
         moveActionId: 1 as ActionId, // TODO this is a hack
       };
-      world.eventHistory.events.push(moveSuccessEvent);
+      world.eventHistory.addEvent(moveSuccessEvent);
 
       //# Base damage roll
       const baseDamage: number = roll(4) + sourceMonster.template.baseStats.attack;
@@ -129,7 +130,7 @@ const ActionPool: Action[] = [
         faces: 20,
         result: critRollResult,
       };
-      world.eventHistory.events.push(critRollEvent);
+      world.eventHistory.addEvent(critRollEvent);
       //TODO -> change threshold (15) to something based on action / monster
       const critDamage: number = critChanceBonus + rollResult > 15 ? baseDamage : 0;
 
@@ -141,7 +142,7 @@ const ActionPool: Action[] = [
         target: target,
         amount: damageToTake,
       };
-      world.eventHistory.events.push(damageEvent);
+      world.eventHistory.addEvent(damageEvent);
     },
     priortyClass: 0,
   },
@@ -149,6 +150,7 @@ const ActionPool: Action[] = [
   {
     name: "Defend",
     description: "Increase your armor class temporarily.",
+    icon: "vibrating-shield.svg",
     async perform(battle: Battle, source: SideId): Promise<void> {
       const sourceMonster: Monster = battle.sides[source].monster;
 
@@ -160,7 +162,7 @@ const ActionPool: Action[] = [
           moveActionId: 2 as ActionId,
           reason: undefined,
         };
-        battle.eventHistory.events.push(failedEvent);
+        battle.eventHistory.addEvent(failedEvent);
         return;
       }
       sourceMonster.defendActionCharges -= 1;
@@ -173,7 +175,7 @@ const ActionPool: Action[] = [
         target: source,
         buffs: { armour: defenseComponent.bonusArmour },
       };
-      battle.eventHistory.events.push(buffEvent);
+      battle.eventHistory.addEvent(buffEvent);
     },
     priortyClass: 5,
   },
@@ -194,7 +196,7 @@ const ActionPool: Action[] = [
           moveActionId: 3 as ActionId,
           reason: undefined,
         };
-        world.eventHistory.events.push(failedEvent);
+        world.eventHistory.addEvent(failedEvent);
         return;
       }
 
@@ -224,7 +226,7 @@ const ActionPool: Action[] = [
           moveActionId: 4 as ActionId,
           reason: undefined,
         };
-        world.eventHistory.events.push(failedEvent);
+        world.eventHistory.addEvent(failedEvent);
         return;
       }
 

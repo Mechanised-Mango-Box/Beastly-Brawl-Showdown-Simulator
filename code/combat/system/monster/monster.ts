@@ -74,10 +74,6 @@ export class Monster {
   }
 
   getIsBlockedFromAction() {
-    //# For now only check stunned
-    return this.components
-      .filter((component) => component.getIsBlockedFromAction !== undefined)
-      .map((component) => component.getIsBlockedFromAction!())
-      .every((isBlocked) => !isBlocked);
+    return this.components.filter((component) => component.getIsBlockedFromAction !== undefined).some((component) => component.getIsBlockedFromAction!());
   }
 }

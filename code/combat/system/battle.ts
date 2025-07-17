@@ -58,7 +58,7 @@ export class Battle {
       name: "snapshot",
       sides: JSON.parse(JSON.stringify(this.sides)),
     };
-    this.eventHistory.events.push(initialState);
+    this.eventHistory.addEvent(initialState);
 
     // TODO exit
     while (this.sides.every((side) => side.monster.health > 0)) {
@@ -88,10 +88,10 @@ export class Battle {
                 target: target,
                 actionId: actionId,
               },
-            ]; //# Save to data
+            ]; /// Save to data
             this.noticeBoard.removeNotice(side.id, "chooseMove");
 
-            //# All if all sides ready -> move to next stage
+            /// All if all sides ready -> move to next stage
             if (this.sides.every((side) => side.pendingActions)) {
               resolve();
             }
@@ -114,16 +114,16 @@ export class Battle {
         .map((side) => side.pendingActions)
         .filter((actions) => actions !== null)
         .flat();
-      this.sides.forEach((side) => (side.pendingActions = null)); // # Remove from pending
+      this.sides.forEach((side) => (side.pendingActions = null)); /// Remove from pending
       const actionOptionsQueue: ActionOptions[] = allActionsUnsorted.sort((a, b) => {
-        //# Sort by move priority class
+        /// Sort by move priority class
         const actionA: Action = getAction(a.actionId)!;
         const actionB: Action = getAction(b.actionId)!;
         if (actionA.priortyClass !== actionB.priortyClass) {
           return actionB.priortyClass - actionA.priortyClass;
         }
 
-        //# Sort by source monster speed
+        /// Sort by source monster speed
         return this.sides[b.source].monster.template.baseStats.speed - this.sides[a.source].monster.template.baseStats.speed; // TODO get speed rather than use base
       });
       console.log(`Acton Queue:\n${JSON.stringify(actionOptionsQueue)}`);
@@ -140,7 +140,7 @@ export class Battle {
 
         if (this.sides[action.source].monster.getIsBlockedFromAction()) {
           console.log(`Monster could not perform action right now (probs status).`);
-          break;
+          continue;
         }
 
         await actionHandler.perform(this, action.source, action.target);
@@ -163,12 +163,12 @@ export class Battle {
         name: "snapshot",
         sides: JSON.parse(JSON.stringify(this.sides)),
       };
-      this.eventHistory.events.push(endOfTurnSnapshotEvent);
+      this.eventHistory.addEvent(endOfTurnSnapshotEvent);
     }
 
     const battleOverEvent: BattleOverEvent = {
       name: "battleOver",
     };
-    this.eventHistory.events.push(battleOverEvent);
+    this.eventHistory.addEvent(battleOverEvent);
   }
 }

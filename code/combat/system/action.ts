@@ -22,4 +22,6 @@ export type Action = {
   readonly priortyClass: number;
 
   perform(world: Battle, source: SideId, target: SideId): Promise<void>; // NOTE: potentially make return success or error
+
+  readonly icon?: string;
 };
