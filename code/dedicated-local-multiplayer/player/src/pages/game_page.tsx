@@ -100,17 +100,20 @@ const GamePage: React.FC = () => {
       }
       case "roll": {
         return (
-          <button
-            onClick={() => {
-              console.log("Roll triggered.");
-              const params: Parameters<typeof currentNotice.callback> = [];
-              socketContext?.socket?.emit("resolveNotice", currentNotice.kind, params);
+          <>
+            <img src={"src/assets/rolling-dice-cup.svg"} />
+            <button
+              onClick={() => {
+                console.log("Roll triggered.");
+                const params: Parameters<typeof currentNotice.callback> = [];
+                socketContext?.socket?.emit("resolveNotice", currentNotice.kind, params);
 
-              pendingNotices.pop();
-            }}
-          >
-            Roll
-          </button>
+                pendingNotices.pop();
+              }}
+            >
+              Roll
+            </button>
+          </>
         );
       }
       case "rerollOption": {
