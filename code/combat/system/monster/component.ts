@@ -8,7 +8,7 @@ export interface BaseComponent<TKind extends string = string> {
   getCritChanceBonus?: () => number;
   getAttackBonus?: () => number;
   getHealthBonus?: () => number;
-  getIsBlockedFromAction?: () => boolean;
+  getIsBlockedFromMove?: () => boolean;
 
   onStartTurn?(battle: Battle, selfSide: SideId): void;
   onEndTurn?(battle: Battle, selfSide: SideId): void;
@@ -80,7 +80,7 @@ export class StunnedStateComponent implements BaseComponent<"stunned"> {
     this.remainingDuration = duration;
   }
 
-  getIsBlockedFromAction = () => true;
+  getIsBlockedFromMove = () => true;
 
   onEndTurn(battle: Battle, selfSide: SideId): void {
     this.remainingDuration--;

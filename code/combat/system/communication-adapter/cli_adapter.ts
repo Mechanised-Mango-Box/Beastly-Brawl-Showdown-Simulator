@@ -1,9 +1,9 @@
 import * as readline from "readline";
 import { Notice, NoticeKind } from "../notice/notice";
 import { NoticeBoard } from "../notice/notice_board";
-import { ActionId } from "../action";
 import { SideId } from "../side";
 import { EventHistory } from "../history/event_history";
+import { EntryID } from "../types";
 
 export class CliAdapter {
   noticeBoard: NoticeBoard;
@@ -61,7 +61,7 @@ export class CliAdapter {
               break;
             }
 
-            notice.callback(parseInt(args[0], 10) as ActionId, parseInt(args[1], 10) as SideId);
+            notice.callback(args[0].toLowerCase() as EntryID, parseInt(args[1], 10) as SideId);
             break;
           }
           case "roll": {

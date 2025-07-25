@@ -1,5 +1,6 @@
-import { Action, ActionId } from "../action";
-import { BaseComponent as Component, ComponentKindMap } from "./component";
+import { SpawnAction } from "../action/spawn_action";
+import { EntryID } from "../types";
+import { BaseComponent, ComponentKindMap } from "./component";
 
 export type MonsterId = number & { __brand: "MonsterId" };
 
@@ -26,23 +27,26 @@ export type MonsterTemplate = {
   baseStats: MonsterStats;
 
   //# Action
-  attackActionId: ActionId;
-  defendActionId: ActionId;
+  attackActionId: EntryID;
+  defendActionId: EntryID;
   baseDefendActionCharges: number;
-  abilityActionId: ActionId | null;
-  onSpawnActions: Action[];
+  abilityActionId?: EntryID;
+  onSpawnActions: SpawnAction[];
 };
 
 export class Monster {
-  template: MonsterTemplate;
+  /**
+   * The template that this monster is based on
+   */
+  base: MonsterTemplate;
   health: number;
-  defendActionCharges: number; //? How many times can the monster defend in a round
+  defendActionCharges: number; /// How many times can the monster defend in a round
 
   //* Non-default components
-  components: Array<Component>;
+  components: Array<BaseComponent>;
 
   constructor(template: MonsterTemplate) {
-    this.template = template;
+    this.base = template;
     this.health = template.baseStats.health;
     this.components = [];
     this.defendActionCharges = template.baseDefendActionCharges;
@@ -59,7 +63,7 @@ export class Monster {
   //# Component Checks
   getArmourBonus(): number {
     return (
-      this.template.baseStats.armour +
+      this.base.baseStats.armour +
       this.components
         .filter((component) => component.getArmourBonus !== undefined)
         .map((component) => component.getArmourBonus!())
@@ -73,7 +77,7 @@ export class Monster {
       .reduce((totalBonus, bonus) => totalBonus + bonus, 0);
   }
 
-  getIsBlockedFromAction() {
-    return this.components.filter((component) => component.getIsBlockedFromAction !== undefined).some((component) => component.getIsBlockedFromAction!());
+  getIsBlockedFromMove() {
+    return this.components.filter((component) => component.getIsBlockedFromMove !== undefined).some((component) => component.getIsBlockedFromMove!());
   }
 }

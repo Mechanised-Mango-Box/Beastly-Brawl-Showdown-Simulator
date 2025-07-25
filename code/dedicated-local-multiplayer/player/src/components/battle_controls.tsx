@@ -1,11 +1,11 @@
 import React from "react";
 import type { ChooseMove } from "../../../../combat/system/notice/notice";
-import type { ActionId } from "../../../../combat/system/action";
-import { getAction } from "../../../../combat/data/action_pool";
+import type { EntryID } from "../../../../combat/system/types";
+import { movePool } from "../../../../combat/data/move_pool";
 
 interface BattleControlsProps {
   chooseMove: ChooseMove;
-  onSelectedMoveId: (actionId: ActionId) => void;
+  onSelectedMoveId: (moveId: EntryID) => void;
 }
 
 const BattleControls: React.FC<BattleControlsProps> = ({ chooseMove, onSelectedMoveId }) => {
@@ -18,16 +18,16 @@ const BattleControls: React.FC<BattleControlsProps> = ({ chooseMove, onSelectedM
         alignItems: "center",
       }}
     >
-      {chooseMove.data.moveActionIds.map((actionId) => {
-        const action = getAction(actionId);
+      {chooseMove.data.moveIdOptions.map((moveId) => {
+        const action = movePool[moveId];
         if (!action) {
-          console.error(`Invalid action ID (${actionId})`);
+          console.error(`Invalid action ID (${moveId})`);
           return;
         }
         return (
           <img
             src={`src/assets/${action.icon}`}
-            onClick={() => onSelectedMoveId(actionId)}
+            onClick={() => onSelectedMoveId(moveId)}
             style={{
               width: "150px",
               height: "150px",

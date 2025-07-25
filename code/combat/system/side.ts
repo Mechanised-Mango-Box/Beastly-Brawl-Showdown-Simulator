@@ -1,4 +1,4 @@
-import { ActionOptions } from "./action";
+import { MoveRequest } from "./action/move";
 import { Monster } from "./monster/monster";
 
 export type SideId = number & { __brand: "SideId" };
@@ -7,5 +7,5 @@ export type Side = {
 
   monster: Monster;
 
-  pendingActions: ActionOptions[] | null
+  pendingActions: MoveRequest[] | null;
 };

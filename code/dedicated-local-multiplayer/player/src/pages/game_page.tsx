@@ -5,7 +5,6 @@ import BattleControls from "../components/battle_controls";
 import { type BattleEvent } from "../../../../combat/system/history/events";
 import type { Notice } from "../../../../combat/system/notice/notice";
 import { useRef } from "react";
-import type { ActionId } from "../../../../combat/system/action";
 import type { SideId } from "../../../../combat/system/side";
 
 const GamePage: React.FC = () => {
@@ -86,9 +85,9 @@ const GamePage: React.FC = () => {
         return (
           <>
             <BattleControls
-              onSelectedMoveId={(actionId) => {
-                console.log(`Action pressed: ${actionId}`);
-                const params: Parameters<typeof currentNotice.callback> = [1 as ActionId, 1 as SideId];
+              onSelectedMoveId={(moveId) => {
+                console.log(`Action pressed: ${moveId}`);
+                const params: Parameters<typeof currentNotice.callback> = [moveId, 1 as SideId];
                 socketContext?.socket?.emit("resolveNotice", currentNotice.kind, params);
 
                 pendingNotices.pop();
@@ -101,18 +100,31 @@ const GamePage: React.FC = () => {
       case "roll": {
         return (
           <>
-            <img src={"src/assets/rolling-dice-cup.svg"} />
-            <button
-              onClick={() => {
-                console.log("Roll triggered.");
-                const params: Parameters<typeof currentNotice.callback> = [];
-                socketContext?.socket?.emit("resolveNotice", currentNotice.kind, params);
-
-                pendingNotices.pop();
+            <div
+              style={{
+                backgroundColor: "cornsilk",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              Roll
-            </button>
+              <img
+                src={"src/assets/rolling-dice-cup.svg"}
+                onClick={() => {
+                  console.log("Roll triggered.");
+                  const params: Parameters<typeof currentNotice.callback> = [];
+                  socketContext?.socket?.emit("resolveNotice", currentNotice.kind, params);
+
+                  pendingNotices.pop();
+                }}
+                style={{
+                  width: "150px",
+                  height: "150px",
+                  objectFit: "cover",
+                  cursor: "pointer",
+                }}
+              />
+            </div>
           </>
         );
       }

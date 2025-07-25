@@ -1,5 +1,6 @@
 import { BattleEvent } from "./events";
 
+// TODO rename to action history???
 type EventHistoryListener = {
   onNewEvent(event: BattleEvent): void;
 };

@@ -2,10 +2,12 @@ import { Side, SideId } from "./side";
 import { Monster, MonsterTemplate } from "./monster/monster";
 import { ChooseMove as chooseMove } from "./notice/notice";
 import { NoticeBoard } from "./notice/notice_board";
-import { Action, ActionId, ActionOptions } from "./action";
-import { getAction as getAction } from "../data/action_pool";
 import { EventHistory } from "./history/event_history";
 import { BattleOverEvent, SnapshotEvent } from "./history/events";
+import { movePool } from "../data/move_pool";
+import { MoveData, MoveRequest } from "./action/move";
+import { SingleEnemyTargeting } from "./action/targeting";
+import { EntryID } from "./types";
 export interface PlayerOptions {
   name: string;
   /**
@@ -80,13 +82,14 @@ export class Battle {
       console.log(`Gather moves: Start`);
       await new Promise<void>((resolve) => {
         this.sides.forEach((side) => {
-          const callback: (actionId: ActionId, target: SideId) => void = (actionId: ActionId, target: SideId): void => {
+          const callback: (moveId: EntryID, target: SideId) => void = (moveId: EntryID, target: SideId): void => {
             // TODO validate move
+            // TODO allow selecting of other targeting methods
             side.pendingActions = [
               {
+                moveId: moveId,
                 source: side.id,
-                target: target,
-                actionId: actionId,
+                targetingData: { targetingMethod: "single-enemy", target: target },
               },
             ]; /// Save to data
             this.noticeBoard.removeNotice(side.id, "chooseMove");
@@ -98,7 +101,9 @@ export class Battle {
           };
           const notice: chooseMove = {
             kind: "chooseMove",
-            data: { moveActionIds: [0, 1, 2] as ActionId[] }, // TODO choose based on monster (i.e. special attack)
+            data: {
+              moveIdOptions: [side.monster.base.attackActionId, ...(side.monster.defendActionCharges > 0 ? [side.monster.base.defendActionId] : [])],
+            }, // TODO select special attack
             callback: callback,
           };
           this.noticeBoard.postNotice(side.id, notice);
@@ -109,42 +114,41 @@ export class Battle {
       //#################
       //# Order Actions #
       //#################
-      console.error("TODO: Order Actions");
-      const allActionsUnsorted: ActionOptions[] = this.sides
+      const allMovesUnsorted: MoveRequest[] = this.sides
         .map((side) => side.pendingActions)
         .filter((actions) => actions !== null)
         .flat();
       this.sides.forEach((side) => (side.pendingActions = null)); /// Remove from pending
-      const actionOptionsQueue: ActionOptions[] = allActionsUnsorted.sort((a, b) => {
+      const moveRequestQueue: MoveRequest[] = allMovesUnsorted.sort((a, b) => {
         /// Sort by move priority class
-        const actionA: Action = getAction(a.actionId)!;
-        const actionB: Action = getAction(b.actionId)!;
-        if (actionA.priortyClass !== actionB.priortyClass) {
-          return actionB.priortyClass - actionA.priortyClass;
+        const moveA: MoveData = movePool[a.moveId];
+        const moveB: MoveData = movePool[b.moveId];
+        if (moveA.priorityClass !== moveB.priorityClass) {
+          return moveB.priorityClass - moveA.priorityClass;
         }
 
         /// Sort by source monster speed
-        return this.sides[b.source].monster.template.baseStats.speed - this.sides[a.source].monster.template.baseStats.speed; // TODO get speed rather than use base
+        return this.sides[b.source].monster.base.baseStats.speed - this.sides[a.source].monster.base.baseStats.speed; // TODO get speed rather than use base
       });
-      console.log(`Acton Queue:\n${JSON.stringify(actionOptionsQueue)}`);
+      console.log(`Acton Queue:\n${JSON.stringify(moveRequestQueue)}`);
 
       //###################
       //# Resolve Actions #
       //###################
       console.log("Resolve Actions");
-      for (const action of actionOptionsQueue) {
-        const actionHandler: Action | null = getAction(action.actionId);
-        if (!actionHandler) {
-          throw new Error(`Action of this id=${action.actionId} does not exist.`);
-        }
+      for (const moveRequest of moveRequestQueue) {
+        const move: MoveData = movePool[moveRequest.moveId];
+        // if (!actionHandler) {
+        //   throw new Error(`Action of this id=${action.actionId} does not exist.`);
+        // }
 
-        if (this.sides[action.source].monster.getIsBlockedFromAction()) {
-          console.log(`Monster could not perform action right now (probs status).`);
+        if (this.sides[moveRequest.source].monster.getIsBlockedFromMove()) {
+          console.log(`Monster could not perform move right now (probs status).`);
           continue;
         }
 
-        await actionHandler.perform(this, action.source, action.target);
-        console.log(`Resolved action id=${action.actionId}`);
+        await move.perform(this, moveRequest.source, moveRequest.targetingData);
+        console.log(`Resolved move id=${moveRequest.moveId}`);
       }
 
       //#######################

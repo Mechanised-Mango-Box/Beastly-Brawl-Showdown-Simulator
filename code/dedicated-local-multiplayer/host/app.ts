@@ -1,6 +1,6 @@
 import { DefaultEventsMap, Server, Socket } from "socket.io";
 import { MonsterPool } from "../../combat/data/monster_pool";
-import { Battle, BattleOptions, PlayerOptions } from "../../combat/system/battle";
+import { Battle } from "../../combat/system/battle";
 import express from "express";
 import { createServer } from "node:http";
 import * as readline from "readline";
@@ -136,16 +136,14 @@ function startSimulator() {
       switch (noticeKind) {
         // TODO make generic
         case "chooseMove": {
-          const notice = battle.noticeBoard.noticeMaps[index].get(noticeKind)!;
-          const chooseMove = notice as ChooseMove;
+          const chooseMove = battle.noticeBoard.noticeMaps[index].get(noticeKind)! as ChooseMove;
           const chooseMoveParams = params as Parameters<ChooseMove["callback"]>;
           chooseMove.callback(...chooseMoveParams);
           break;
         }
 
         case "roll": {
-          const notice = battle.noticeBoard.noticeMaps[index].get(noticeKind)!;
-          const roll = notice as Roll;
+          const roll = battle.noticeBoard.noticeMaps[index].get(noticeKind)! as Roll;
           const rollParams = params as Parameters<Roll["callback"]>;
           roll.callback(...rollParams);
           break;

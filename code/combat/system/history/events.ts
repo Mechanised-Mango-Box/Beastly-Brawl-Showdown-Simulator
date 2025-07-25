@@ -1,4 +1,3 @@
-import { ActionId } from "../action";
 import { Side, SideId } from "../side";
 
 export interface BattleEvent {
@@ -45,27 +44,27 @@ export interface StartMoveEvent extends BattleEvent {
   name: "startMove";
   source: SideId;
   target: SideId;
-  moveActionId: ActionId;
+  moveId: EntryID;
 }
 
 export interface MoveSuccessEvent extends BattleEvent {
   name: "moveSuccess";
   source: SideId;
   target: SideId;
-  moveActionId: ActionId;
+  moveId: EntryID;
 }
 
 export interface MoveEvadedEvent extends BattleEvent {
   name: "evaded";
   source: SideId;
   target: SideId;
-  moveActionId: ActionId;
+  moveId: EntryID;
 }
 export interface MoveFailedEvent extends BattleEvent {
   name: "moveFailed";
   source: SideId;
   target: SideId;
-  moveActionId: ActionId;
+  moveId: EntryID;
   reason: unknown; // TODO
 }
 export interface BuffEvent extends BattleEvent {
