@@ -7,7 +7,7 @@ export const InvalidCodeWarning = ({ enabled }: { enabled: boolean }) => {
   if (enabled) {
     return <b>Invalid room code.</b>;
   } else {
-    return <b></b>;
+    return ;
   }
 };
 
@@ -44,7 +44,7 @@ export const JoinForm = () => {
 
     return (
       <>
-        <p>Connectng to servers...</p>
+        <p>Connecting to servers...</p>
       </>
     );
   }
@@ -93,12 +93,12 @@ export const JoinForm = () => {
           <input
             className="form-textbox"
             type="text"
-            placeholder="Add Room Code"
+            placeholder="Enter Code"
             value={inputJoinCode}
             onChange={(e) => setInputJoinCode(e.target.value)}
           />
           <div className="buttons-container">
-            <button className="glb-btn btn-dark-brown" type="submit">
+            <button className="glb-btn" type="submit">
               Continue
             </button>
           </div>
