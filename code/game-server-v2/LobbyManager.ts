@@ -2,7 +2,7 @@ import { RoomId, JoinCode, AccountId } from "./types";
 import { Player } from "./Player";
 import { GameSettings } from "./GameSettings";
 
-export class Room {
+export class LobbyManager {
   readonly hostSocketId: string;
 
   readonly roomId: RoomId;
