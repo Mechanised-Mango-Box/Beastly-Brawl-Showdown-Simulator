@@ -9,7 +9,6 @@
 body {
   background: linear-gradient(135deg, #d4a574 0%, #c8956a 100%);
   min-height: 100vh;
-  display: flex;
   background-color: #f0f0f0;
   justify-content: center;
   align-items: center;
@@ -89,15 +88,15 @@ button {
 }
 
 .form-textbox {
-  width: 15vw;
-  background-color: #8B4513;
-  color: #d4a574;
+  width: 20vw;
+  background-color: #f6e0c8;
+  color: black;
   border: none;
   padding: 15px 20px;
   font-size: 1.1rem;
   font-weight: bold;
   text-align: center;
-  cursor: pointer;
+  cursor: pointer;  
   transition: all 0.3s ease;
   text-transform: capitalize;
 
@@ -704,8 +703,7 @@ input:focus {
 
 /*This shows everything related to the waiting room*/
 .waiting-room-box {
-  width: 1000px;
-  margin: 60px auto 0;
+  width: auto;
 }
 
 /*This shows and arranges the link and qr code components*/
@@ -718,7 +716,7 @@ input:focus {
 }
 
 /* For the room code */
-.room-code, .code-link {
+/* .room-code, .code-link {
   height: 80px;
   background: #8B4513;
   color: white;
@@ -729,7 +727,7 @@ input:focus {
   align-items: center;
   align-content: center;
   flex: 1;
-}
+} */
 
 /*The box to show the qr code*/
 .qr-box {
@@ -756,11 +754,11 @@ input:focus {
 }
 
 /*This shows everything related to the waiting room*/
-/* .waiting-room-box {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-} */
+#waiting-room-body {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
 
 /*Component that displays the participants names dynamically*/
 .participants-display-box {
@@ -852,7 +850,6 @@ input:focus {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -879,6 +876,10 @@ input:focus {
     0 -4px 0 #c26130;    /* top edge */
 }
 
+#homepage {
+  display: flex;
+}
+
 .joinpage-container {
   background-color: #ffcc9c;
   display: flex;
@@ -897,6 +898,10 @@ input:focus {
     4px 0 0 #773519,     /* right edge */
     -4px 0 0 #773519,    /* left edge */
     0 -4px 0 #c26130;    /* top edge */
+}
+
+#joinpage {
+  display: flex;
 }
 
 /* Logo styling (optional image) */

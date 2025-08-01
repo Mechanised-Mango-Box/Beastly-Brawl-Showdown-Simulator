@@ -85,11 +85,19 @@ export default function ProjectorPage() {
   //#region Host App
 
   return (
-    <div className="waiting-room-box">
-      <h1 className="lobby-title">Game Lobby</h1>
-      <h2 >Room ID: {joinCode}</h2>
-      <WaitingRoomInfoBox joinUrl={getJoinUrl()} />
-      <ParticipantDisplayBox name={playerList.toString()} />
+    <div className="canvas-body" id="waiting-room-body">
+      {/* <div className="waiting-room-box">
+        <h1 className="lobby-title">Game Lobby</h1>
+        <h2 >Room ID: {joinCode}</h2>
+        <WaitingRoomInfoBox joinUrl={getJoinUrl()} />
+        <ParticipantDisplayBox name={playerList.toString()} />
+      </div> */}
+      <div className="waiting-room-header">
+        <div className="join-info">
+          Join the game with your phone!
+        </div>
+        <WaitingRoomInfoBox joinUrl="{getJoinUrl()}" />
+      </div>
     </div>
   );
   //#endregion

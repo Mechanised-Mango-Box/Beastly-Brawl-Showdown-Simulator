@@ -9,7 +9,7 @@ export const HomePage = () => {
   };
 
   return (
-    <div className="canvas-body">
+    <div className="canvas-body" id="homepage">
       <div className="homepage-container">
         <div className="logo"></div>
         <div className="buttons-container">
