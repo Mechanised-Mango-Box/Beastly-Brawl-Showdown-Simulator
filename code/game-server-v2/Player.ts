@@ -19,8 +19,20 @@ export class Player {
     this.spectators = [];
   }
 
+  getSpectators(): AccountId[] {
+    return this.spectators;
+  }
+
   addSpectator(id: AccountId) {
     this.spectators.push(id);
+  }
+
+  hasMonster(): boolean {
+  return this.monster !== undefined;
+  }
+  
+  getMonster(): Monsters | undefined {
+    return this.monster;
   }
 
   setMonster(monster: Monsters) {
