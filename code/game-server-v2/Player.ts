@@ -1,23 +1,29 @@
+import Monsters from "../../data/monsters/Monsters"
 import { AccountId } from "./types";
 
 export class Player {
   socketId: string;
   displayName: string;
-  linkedAcccountId?: AccountId;
+  linkedAccountId?: AccountId;
   spectators: AccountId[];
+  monster?: Monsters;
 
   constructor(
     socketId: string,
     displayName: string,
-    linkedAcccountId: AccountId | undefined
+    linkedAccountId: AccountId | undefined
   ) {
     this.socketId = socketId;
     this.displayName = displayName;
-    this.linkedAcccountId = linkedAcccountId;
+    this.linkedAccountId = linkedAccountId;
     this.spectators = [];
   }
 
   addSpectator(id: AccountId) {
     this.spectators.push(id);
+  }
+
+  setMonster(monster: Monsters) {
+    this.monster  = monster;
   }
 }
