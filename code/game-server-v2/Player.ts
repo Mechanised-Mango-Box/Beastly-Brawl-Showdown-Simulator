@@ -8,11 +8,7 @@ export class Player {
   spectators: AccountId[];
   monster?: Monsters;
 
-  constructor(
-    socketId: string,
-    displayName: string,
-    linkedAccountId: AccountId | undefined
-  ) {
+  constructor(socketId: string, displayName: string, linkedAccountId: AccountId | undefined) {
     this.socketId = socketId;
     this.displayName = displayName;
     this.linkedAccountId = linkedAccountId;
