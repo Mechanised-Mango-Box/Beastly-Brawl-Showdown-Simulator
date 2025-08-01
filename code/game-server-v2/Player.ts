@@ -4,7 +4,7 @@ export class Player {
   socketId: string;
   displayName: string;
   linkedAcccountId?: AccountId;
-  spectators: Player[];
+  spectators: AccountId[];
 
   constructor(
     socketId: string,
@@ -17,7 +17,7 @@ export class Player {
     this.spectators = [];
   }
 
-  addSpectator(player: Player) {
-    this.spectators.push(player);
+  addSpectator(id: AccountId) {
+    this.spectators.push(id);
   }
 }
