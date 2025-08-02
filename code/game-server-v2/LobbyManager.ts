@@ -1,6 +1,7 @@
 import { RoomId, JoinCode, AccountId } from "./types";
 import { Player } from "./Player";
 import { GameSettings } from "./GameSettings";
+import { Battle } from "./Battle";
 
 export class LobbyManager {
   readonly hostSocketId: string;
@@ -14,6 +15,7 @@ export class LobbyManager {
   readonly joinCode: JoinCode;
 
   players: Map<string, Player> = new Map<string, Player>();
+  battles: Battle[] = [];
   gameState: any = undefined;
   settings: GameSettings = new GameSettings();
 
@@ -21,6 +23,18 @@ export class LobbyManager {
     this.hostSocketId = hostSocketId;
     this.roomId = roomId;
     this.joinCode = joinCode;
+  }
+
+  createBattles() {
+    const playerArray = Array.from(this.players.values());
+
+    for (let i = 0; i < playerArray.length; i += 2) {
+      if (i + 1 < playerArray.length) {
+        this.battles.push(new Battle(playerArray[i], playerArray[i + 1]));
+      } else {
+        this.battles.push(new Battle(playerArray[i]))
+      }
+    }
   }
 
   hasPlayer(displayName: string) {
