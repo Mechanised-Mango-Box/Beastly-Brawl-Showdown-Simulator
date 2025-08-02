@@ -1,6 +1,6 @@
 // TODO: make swappable instead of a global
 import { Battle } from "../core/battle";
-import { DodgeChargeComponent, RerollChargeComponent } from "../core/monster/component";
+import { DodgeChargeComponent, RerollChargeComponent } from "../core/monster/core_components";
 import { MonsterTemplate } from "../core/monster/monster";
 import { SideId } from "../core/side";
 

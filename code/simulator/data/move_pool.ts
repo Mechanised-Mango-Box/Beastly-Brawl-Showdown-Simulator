@@ -4,7 +4,7 @@ import { Battle } from "../core/battle";
 import { BlockedEvent, BuffEvent, DamageEvent, MoveEvadedEvent, MoveFailedEvent, MoveSuccessEvent, RerollEvent, RollEvent, StartMoveEvent } from "../core/event/core_events";
 import { SideId } from "../core/side";
 import { roll } from "../core/roll";
-import { AbilityChargeStunComponent, DefendComponent, DodgeChargeComponent, DodgeStateComponent, RerollChargeComponent, StunnedStateComponent } from "../core/monster/component";
+import { AbilityChargeStunComponent, DefendComponent, DodgeChargeComponent, DodgeStateComponent, RerollChargeComponent, StunnedStateComponent } from "../core/monster/core_components";
 import { TargetingData, SingleEnemyTargeting, SelfTargeting } from "../core/action/targeting";
 import { defineMove, getMoveId, MoveData } from "../core/action/move";
 import { EntryID } from "../core/types";

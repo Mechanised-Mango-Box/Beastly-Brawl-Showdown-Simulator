@@ -6,7 +6,6 @@ import { EventHistory } from "./event/event_history";
 import { BattleOverEvent, SnapshotEvent } from "./event/core_events";
 import { movePool } from "../data/move_pool";
 import { MoveData, MoveRequest } from "./action/move";
-import { SingleEnemyTargeting } from "./action/targeting";
 import { EntryID } from "./types";
 export interface PlayerOptions {
   name: string;

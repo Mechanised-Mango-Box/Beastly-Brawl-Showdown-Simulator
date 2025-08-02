@@ -1,8 +1,7 @@
 import { SpawnAction } from "../action/spawn_action";
 import { EntryID } from "../types";
-import { BaseComponent, ComponentKindMap } from "./component";
-
-export type MonsterId = number & { __brand: "MonsterId" };
+import { BaseComponent } from "./component";
+import { ComponentKindMap } from "./core_components";
 
 /**
  * Holds a set of the common stats
