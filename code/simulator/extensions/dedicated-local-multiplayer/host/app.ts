@@ -41,7 +41,11 @@ const rl: readline.Interface = readline.createInterface({
 /// Setup server
 const app = express();
 const server = createServer(app);
-const io = new Server<PlayerToServerEvents, ServerToPlayerEvents, never, PlayerSocketData>(server);
+const io = new Server<PlayerToServerEvents, ServerToPlayerEvents, never, PlayerSocketData>(server, {
+  cors: {
+    origin: "http://localhost:5173/"
+  }
+});
 
 /// Middleware
 io.use((socket, next) => {

@@ -31,6 +31,7 @@ const PlayerConnectionPage: React.FC = () => {
 
     const newSocket = io(`http://${serverAddress}`, {
       auth: { name: playerName, monsterTempalteId: 1 },
+      transports: ["websocket"],
     });
     socketContext.setSocket(newSocket);
 
