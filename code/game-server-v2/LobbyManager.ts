@@ -30,10 +30,11 @@ export class LobbyManager {
     const playerArray = Array.from(this.players.values());
 
     for (let i = 0; i < playerArray.length; i += 2) {
+      let matchID: number = i/2 + 1;
       if (i + 1 < playerArray.length) {
-        this.battles.push(new Battle(playerArray[i], playerArray[i + 1]));
+        this.battles.push(new Battle(playerArray[i], matchID, playerArray[i + 1]));
       } else {
-        this.battles.push(new Battle(playerArray[i]))
+        this.battles.push(new Battle(playerArray[i], matchID));
       }
     }
   }
