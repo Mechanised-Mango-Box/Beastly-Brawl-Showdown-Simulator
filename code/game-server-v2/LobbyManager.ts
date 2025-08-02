@@ -26,6 +26,7 @@ export class LobbyManager {
   }
 
   createBattles() {
+    this.battles = [];
     const playerArray = Array.from(this.players.values());
 
     for (let i = 0; i < playerArray.length; i += 2) {
