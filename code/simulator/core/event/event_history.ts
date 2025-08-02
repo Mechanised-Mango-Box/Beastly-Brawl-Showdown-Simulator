@@ -1,15 +1,14 @@
-import { BattleEvent } from "./events";
+import { BaseEvent } from "./base_event";
 
-// TODO rename to action history???
 type EventHistoryListener = {
-  onNewEvent(event: BattleEvent): void;
+  onNewEvent(event: BaseEvent): void;
 };
 
 export class EventHistory {
   /**
    * Do not modify this directly
    */
-  readonly events: BattleEvent[];
+  readonly events: BaseEvent[];
   listeners: EventHistoryListener[];
 
   constructor() {
@@ -17,7 +16,7 @@ export class EventHistory {
     this.listeners = [];
   }
 
-  addEvent(event: BattleEvent) {
+  addEvent(event: BaseEvent) {
     this.events.push(event);
     this.emitOnNewEvent(event);
   }
@@ -29,7 +28,7 @@ export class EventHistory {
     this.listeners = this.listeners.filter((l) => l !== listener);
   }
 
-  private emitOnNewEvent(event: BattleEvent) {
+  private emitOnNewEvent(event: BaseEvent) {
     this.listeners.forEach((listener) => {
       listener.onNewEvent(event);
     });

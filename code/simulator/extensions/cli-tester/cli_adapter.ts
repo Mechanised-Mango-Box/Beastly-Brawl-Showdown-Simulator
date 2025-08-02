@@ -2,7 +2,7 @@ import * as readline from "readline";
 import { Notice, NoticeKind } from "../../core/notice/notice";
 import { NoticeBoard } from "../../core/notice/notice_board";
 import { SideId } from "../../core/side";
-import { EventHistory } from "../../core/history/event_history";
+import { EventHistory } from "../../core/event/event_history";
 import { EntryID } from "../../core/types";
 
 export class CliAdapter {

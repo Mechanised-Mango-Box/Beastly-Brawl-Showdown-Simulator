@@ -1,7 +1,7 @@
 // TODO: make swappable instead of a global
 import { Monster } from "../core/monster/monster";
 import { Battle } from "../core/battle";
-import { BlockedEvent, BuffEvent, DamageEvent, MoveEvadedEvent, MoveFailedEvent, MoveSuccessEvent, RerollEvent, RollEvent, StartMoveEvent } from "../core/history/events";
+import { BlockedEvent, BuffEvent, DamageEvent, MoveEvadedEvent, MoveFailedEvent, MoveSuccessEvent, RerollEvent, RollEvent, StartMoveEvent } from "../core/event/core_events";
 import { SideId } from "../core/side";
 import { roll } from "../core/roll";
 import { AbilityChargeStunComponent, DefendComponent, DodgeChargeComponent, DodgeStateComponent, RerollChargeComponent, StunnedStateComponent } from "../core/monster/component";
