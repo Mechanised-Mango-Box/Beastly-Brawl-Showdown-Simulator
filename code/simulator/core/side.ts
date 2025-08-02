@@ -1,4 +1,4 @@
-import { MoveRequest } from "./action/move";
+import { MoveRequest } from "./action/move/move";
 import { Monster } from "./monster/monster";
 
 export type SideId = number & { __brand: "SideId" };

@@ -1,8 +1,8 @@
-import { Battle } from "../battle";
-import { SideId } from "../side";
-import { EntryID } from "../types";
-import { Action } from "./action";
-import { TargetingData, TargetingMethod } from "./targeting";
+import { Battle } from "../../battle";
+import { SideId } from "../../side";
+import { EntryID } from "../../types";
+import { Action } from "../action";
+import { TargetingData, TargetingMethod } from "../targeting";
 
 interface MoveEvents {
   perform(battle: Battle, source: SideId, targetingData: TargetingData): Promise<void>;

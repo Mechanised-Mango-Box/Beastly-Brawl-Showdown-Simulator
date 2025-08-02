@@ -4,8 +4,8 @@ import { ChooseMove as chooseMove } from "./notice/notice";
 import { NoticeBoard } from "./notice/notice_board";
 import { EventHistory } from "./event/event_history";
 import { BattleOverEvent, SnapshotEvent } from "./event/core_events";
-import { movePool } from "../data/move_pool";
-import { MoveData, MoveRequest } from "./action/move";
+import { commonMovePool } from "../data/common_move_pool";
+import { MoveData, MoveRequest } from "./action/move/move";
 import { EntryID } from "./types";
 export interface PlayerOptions {
   name: string;
@@ -120,8 +120,8 @@ export class Battle {
       this.sides.forEach((side) => (side.pendingActions = null)); /// Remove from pending
       const moveRequestQueue: MoveRequest[] = allMovesUnsorted.sort((a, b) => {
         /// Sort by move priority class
-        const moveA: MoveData = movePool[a.moveId];
-        const moveB: MoveData = movePool[b.moveId];
+        const moveA: MoveData = commonMovePool[a.moveId];
+        const moveB: MoveData = commonMovePool[b.moveId];
         if (moveA.priorityClass !== moveB.priorityClass) {
           return moveB.priorityClass - moveA.priorityClass;
         }
@@ -136,7 +136,7 @@ export class Battle {
       //###################
       console.log("Resolve Actions");
       for (const moveRequest of moveRequestQueue) {
-        const move: MoveData = movePool[moveRequest.moveId];
+        const move: MoveData = commonMovePool[moveRequest.moveId];
         // if (!actionHandler) {
         //   throw new Error(`Action of this id=${action.actionId} does not exist.`);
         // }

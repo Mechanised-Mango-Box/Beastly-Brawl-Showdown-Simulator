@@ -6,19 +6,10 @@ import { SideId } from "../core/side";
 import { roll } from "../core/roll";
 import { AbilityChargeStunComponent, DefendComponent, DodgeChargeComponent, DodgeStateComponent, RerollChargeComponent, StunnedStateComponent } from "../core/monster/core_components";
 import { TargetingData, SingleEnemyTargeting, SelfTargeting } from "../core/action/targeting";
-import { defineMove, getMoveId, MoveData } from "../core/action/move";
-import { EntryID } from "../core/types";
+import { defineMove, getMoveId } from "../core/action/move/move";
+import { MovePool, createMovePool } from "../core/action/move/move_pool";
 
-/**
- * A move pool is a collection of moves accessable by ID
- */
-type MovePool = Readonly<Record<EntryID, MoveData>>;
-
-function createMovePool<T extends readonly [EntryID, MoveData][]>(entries: T): MovePool {
-  return Object.fromEntries(entries) as MovePool;
-}
-
-export const movePool = createMovePool([
+export const commonMovePool: MovePool = createMovePool([
   defineMove("nothing", {
     type: "move",
     name: "Do nothing",
