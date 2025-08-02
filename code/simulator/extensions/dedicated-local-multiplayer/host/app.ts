@@ -1,12 +1,12 @@
 import { DefaultEventsMap, Server, Socket } from "socket.io";
-import { MonsterPool } from "../../combat/data/monster_pool";
-import { Battle } from "../../combat/system/battle";
+import { MonsterPool } from "../../../data/monster_pool";
+import { Battle } from "../../../core/battle";
 import express from "express";
 import { createServer } from "node:http";
 import * as readline from "readline";
-import { MonsterTemplate } from "../../combat/system/monster/monster";
-import { ChooseMove, Notice, NoticeKind, Roll } from "../../combat/system/notice/notice";
-import { BattleEvent } from "../../combat/system/history/events";
+import { MonsterTemplate } from "../../../core/monster/monster";
+import { ChooseMove, Notice, NoticeKind, Roll } from "../../../core/notice/notice";
+import { BaseEvent } from "../../../core/event/base_event";
 
 type Player = {
   name: string;
@@ -15,7 +15,7 @@ type Player = {
 };
 
 export interface ServerToPlayerEvents {
-  newEvent: (event: BattleEvent) => void;
+  newEvent: (event: BaseEvent) => void;
   newNotice: (notice: Notice) => void;
 }
 export interface PlayerToServerEvents {
@@ -157,7 +157,7 @@ function startSimulator() {
 
   /// Subscribe to event history
   battle.eventHistory.subscribeListener({
-    onNewEvent: function (event: BattleEvent): void {
+    onNewEvent: function (event: BaseEvent): void {
       console.log(JSON.stringify(event));
 
       // TODO - better way to broadcast to all

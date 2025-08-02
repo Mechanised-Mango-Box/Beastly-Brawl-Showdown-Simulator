@@ -1,7 +1,7 @@
 import React from "react";
-import type { ChooseMove } from "../../../../combat/system/notice/notice";
-import type { EntryID } from "../../../../combat/system/types";
-import { movePool } from "../../../../combat/data/move_pool";
+import type { ChooseMove } from "../../../../../core/notice/notice";
+import type { EntryID } from "../../../../../core/types";
+import { commonMovePool } from "../../../../../data/common_move_pool";
 
 interface BattleControlsProps {
   chooseMove: ChooseMove;
@@ -19,7 +19,7 @@ const BattleControls: React.FC<BattleControlsProps> = ({ chooseMove, onSelectedM
       }}
     >
       {chooseMove.data.moveIdOptions.map((moveId) => {
-        const action = movePool[moveId];
+        const action = commonMovePool[moveId];
         if (!action) {
           console.error(`Invalid action ID (${moveId})`);
           return;

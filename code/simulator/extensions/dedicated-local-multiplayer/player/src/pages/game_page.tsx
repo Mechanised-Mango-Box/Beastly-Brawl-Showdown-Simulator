@@ -2,17 +2,17 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "../socket/socket_context";
 import BattleControls from "../components/battle_controls";
-import { type BattleEvent } from "../../../../combat/system/history/events";
-import type { Notice } from "../../../../combat/system/notice/notice";
+import { type BaseEvent } from "../../../../../core/event/base_event";
+import type { Notice } from "../../../../../core/notice/notice";
 import { useRef } from "react";
-import type { SideId } from "../../../../combat/system/side";
+import type { SideId } from "../../../../../core/side";
 
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
   const [showRedirectToLogin, setShowRedirectToLogin] = useState(false);
   const socketContext = useContext(SocketContext);
 
-  const [turnHistory, setTurnHistory] = useState<BattleEvent[]>([]);
+  const [turnHistory, setTurnHistory] = useState<BaseEvent[]>([]);
   const [pendingNotices, setPendngNotices] = useState<Notice[]>([]);
 
   const hasListeners = useRef(false);
@@ -41,7 +41,7 @@ const GamePage: React.FC = () => {
 
     socketContext.socket.onAny((event, args) => console.log(`Event recieved:\n${event}\n${JSON.stringify(args)}`));
 
-    socketContext.socket.on("newEvent", (event: BattleEvent) => {
+    socketContext.socket.on("newEvent", (event: BaseEvent) => {
       console.log(`New event recorded: ${JSON.stringify(event)}`);
       setTurnHistory((prev) => [...prev, event]);
     });
