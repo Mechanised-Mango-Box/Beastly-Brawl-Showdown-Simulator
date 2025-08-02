@@ -1,9 +1,9 @@
 import * as readline from "readline";
-import { Notice, NoticeKind } from "../notice/notice";
-import { NoticeBoard } from "../notice/notice_board";
-import { SideId } from "../side";
-import { EventHistory } from "../history/event_history";
-import { EntryID } from "../types";
+import { Notice, NoticeKind } from "../../core/notice/notice";
+import { NoticeBoard } from "../../core/notice/notice_board";
+import { SideId } from "../../core/side";
+import { EventHistory } from "../../core/history/event_history";
+import { EntryID } from "../../core/types";
 
 export class CliAdapter {
   noticeBoard: NoticeBoard;

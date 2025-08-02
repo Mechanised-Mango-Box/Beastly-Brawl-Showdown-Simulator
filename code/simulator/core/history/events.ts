@@ -1,4 +1,5 @@
 import { Side, SideId } from "../side";
+import { EntryID } from "../types";
 
 export interface BattleEvent {
   name: string;

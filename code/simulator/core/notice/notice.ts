@@ -1,4 +1,5 @@
 import { SideId } from "../side";
+import { EntryID } from "../types";
 
 interface BaseNotice<TKind extends string = string, TData = unknown, TCallback = (...args: unknown[]) => void> {
   readonly kind: TKind;

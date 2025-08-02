@@ -1,13 +1,13 @@
 // TODO: make swappable instead of a global
-import { Monster } from "../system/monster/monster";
-import { Battle } from "../system/battle";
-import { BlockedEvent, BuffEvent, DamageEvent, MoveEvadedEvent, MoveFailedEvent, MoveSuccessEvent, RerollEvent, RollEvent, StartMoveEvent } from "../system/history/events";
-import { SideId } from "../system/side";
-import { roll } from "../system/roll";
-import { AbilityChargeStunComponent, DefendComponent, DodgeChargeComponent, DodgeStateComponent, RerollChargeComponent, StunnedStateComponent } from "../system/monster/component";
-import { TargetingData, SingleEnemyTargeting, SelfTargeting } from "../system/action/targeting";
-import { defineMove, getMoveId, MoveData } from "../system/action/move";
-import { EntryID } from "../system/types";
+import { Monster } from "../core/monster/monster";
+import { Battle } from "../core/battle";
+import { BlockedEvent, BuffEvent, DamageEvent, MoveEvadedEvent, MoveFailedEvent, MoveSuccessEvent, RerollEvent, RollEvent, StartMoveEvent } from "../core/history/events";
+import { SideId } from "../core/side";
+import { roll } from "../core/roll";
+import { AbilityChargeStunComponent, DefendComponent, DodgeChargeComponent, DodgeStateComponent, RerollChargeComponent, StunnedStateComponent } from "../core/monster/component";
+import { TargetingData, SingleEnemyTargeting, SelfTargeting } from "../core/action/targeting";
+import { defineMove, getMoveId, MoveData } from "../core/action/move";
+import { EntryID } from "../core/types";
 
 /**
  * A move pool is a collection of moves accessable by ID

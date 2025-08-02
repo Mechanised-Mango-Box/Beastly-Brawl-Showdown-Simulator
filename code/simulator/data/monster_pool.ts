@@ -1,8 +1,8 @@
 // TODO: make swappable instead of a global
-import { Battle } from "../system/battle";
-import { DodgeChargeComponent, RerollChargeComponent } from "../system/monster/component";
-import { MonsterTemplate } from "../system/monster/monster";
-import { SideId } from "../system/side";
+import { Battle } from "../core/battle";
+import { DodgeChargeComponent, RerollChargeComponent } from "../core/monster/component";
+import { MonsterTemplate } from "../core/monster/monster";
+import { SideId } from "../core/side";
 
 export const MonsterPool: MonsterTemplate[] = [
   {

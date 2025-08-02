@@ -1,6 +1,6 @@
-import { MonsterPool } from "../data/monster_pool";
-import { Battle, BattleOptions } from "../system/battle";
-import { CliAdapter } from "../system/communication-adapter/cli_adapter";
+import { MonsterPool } from "../../data/monster_pool";
+import { Battle, BattleOptions } from "../../core/battle";
+import { CliAdapter } from "./cli_adapter";
 
 const battleOptions: BattleOptions = {
   seed: 0,
