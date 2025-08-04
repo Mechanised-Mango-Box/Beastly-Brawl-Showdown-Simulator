@@ -7,7 +7,7 @@ import React, { useState } from "react";
 export default function ProjectorPage() {
   const [serverUrl, setServerUrl] = useState<string>();
   const [roomId, setRoomId] = useState<number>();
-  const [joinCode, setJoinCode] = useState<string>();
+  const [joinCode, setJoinCode] = useState<string>("");
 
   const [playerList, setPlayerList] = useState<string[]>([]);
 
@@ -86,18 +86,19 @@ export default function ProjectorPage() {
 
   return (
     <div className="canvas-body" id="waiting-room-body">
-      {/* <div className="waiting-room-box">
-        <h1 className="lobby-title">Game Lobby</h1>
-        <h2 >Room ID: {joinCode}</h2>
-        <WaitingRoomInfoBox joinUrl={getJoinUrl()} />
-        <ParticipantDisplayBox name={playerList.toString()} />
-      </div> */}
+      {/* <ParticipantDisplayBox name={playerList.toString()} /> */}
       <div className="waiting-room-header">
         <div className="join-info">
           Join the game with your phone!
         </div>
-        <WaitingRoomInfoBox joinUrl="{getJoinUrl()}" />
+        <WaitingRoomInfoBox joinCode={joinCode} joinUrl={getJoinUrl()} />
       </div>
+
+      <div className="waiting-room-logo">
+        <h1>Beastly Brawl Showdown!</h1>
+      </div>
+
+      <ParticipantDisplayBox name={playerList.toString()} />
     </div>
   );
   //#endregion

@@ -9,11 +9,6 @@ export const ParticipantDisplayBox = ({ name }: { name: string }) => {
 
   return (
     <div className="participants-display-box">
-      <div className="participants-header">
-        <div className="participants-count">Players: {names.length}</div>
-        <button className="glb-btn start-game-btn">Start Game</button>
-      </div>
-
       <div className="participants-grid">
         {names.length > 0 &&
           names.map((n) => <ParticipantBox key={n} name={n} />)}
