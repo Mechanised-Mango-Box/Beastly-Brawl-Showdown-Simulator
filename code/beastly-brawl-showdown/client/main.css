@@ -40,13 +40,14 @@ button {
     0 -4px 0 #c26130;    /* top edge */
 }
 
-.glb-btn:active {
+.glb-btn:hover {
   box-shadow:
     0 2px 0 #773519,
     2px 0 0 #773519,
     -2px 0 0 #773519,
     0 -2px 0 #c26130;
-  transform: translateY(2px);
+  
+  transform: translateY(-2px);
 }
 
 /* Design page container stuff */
@@ -814,18 +815,12 @@ input:focus {
 }
 
 /* Start game btn */
-.start-game-btn {
-  background: linear-gradient(to bottom, #FF8C42, #E67E22);
-  color: white;
-  border: none;
-  padding: 8px 20px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.start-btn:hover {
-  background: linear-gradient(to bottom, #E67E22, #D35400);
+#start-game-btn {
+  position: relative;
+  width: 15vw;
+  left: auto;
+  top: 65%;
+  margin: 0px auto;
 }
 
 /* participants-name-box */

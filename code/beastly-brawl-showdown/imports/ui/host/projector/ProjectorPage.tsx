@@ -86,7 +86,6 @@ export default function ProjectorPage() {
 
   return (
     <div className="canvas-body" id="waiting-room-body">
-      {/* <ParticipantDisplayBox name={playerList.toString()} /> */}
       <div className="waiting-room-header">
         <div className="join-info">
           Join the game with your phone!
@@ -99,6 +98,10 @@ export default function ProjectorPage() {
       </div>
 
       <ParticipantDisplayBox name={playerList.toString()} />
+
+      <button className="glb-btn" id="start-game-btn">
+        Start Game
+      </button>
     </div>
   );
   //#endregion
