@@ -7,7 +7,7 @@ export const InvalidCodeWarning = ({ enabled }: { enabled: boolean }) => {
   if (enabled) {
     return <b>Invalid room code.</b>;
   } else {
-    return ;
+    return null;
   }
 };
 
