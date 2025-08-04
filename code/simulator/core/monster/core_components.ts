@@ -1,6 +1,22 @@
 import { Battle } from "../battle";
 import { SideId } from "../side";
+<<<<<<< HEAD:code/simulator/core/monster/core_components.ts
 import { BaseComponent } from "./component";
+=======
+
+export interface BaseComponent<TKind extends string = string> {
+  readonly kind: TKind;
+
+  getArmourBonus?: () => number;
+  getCritChanceBonus?: () => number;
+  getAttackBonus?: () => number;
+  getHealthBonus?: () => number;
+  getIsBlockedFromMove?: () => boolean;
+  getSpeedBonus?: () => number;
+  onStartTurn?(battle: Battle, selfSide: SideId): void;
+  onEndTurn?(battle: Battle, selfSide: SideId): void;
+}
+>>>>>>> a2aa661 (Added SpeedModifierComponent):code/combat/system/monster/component.ts
 
 export class RerollChargeComponent implements BaseComponent<"reroll"> {
   kind = "reroll" as const;
@@ -85,6 +101,7 @@ export class StunnedStateComponent implements BaseComponent<"stunned"> {
     }
   }
 }
+<<<<<<< HEAD:code/simulator/core/monster/core_components.ts
 type CommonComponentTypes =
   | typeof RerollChargeComponent
   | typeof DodgeChargeComponent
@@ -92,6 +109,31 @@ type CommonComponentTypes =
   | typeof DefendComponent
   | typeof AbilityChargeStunComponent
   | typeof StunnedStateComponent;
+=======
+export class SpeedModifierComponent implements BaseComponent<"speedModifier"> {
+  kind = "speedModifier" as const;
+  speedBonus: number;
+
+  constructor(speedBonus: number) {
+    this.speedBonus = speedBonus;
+  }
+
+  getSpeedBonus(): number {
+    return this.speedBonus;
+  }
+}
+
+type CommonComponentTypes = // TODO make this a plugin
+  typeof RerollChargeComponent | 
+  typeof DodgeChargeComponent | 
+  typeof DodgeStateComponent | 
+  typeof DefendComponent | 
+  typeof AbilityChargeStunComponent | 
+  typeof StunnedStateComponent |
+  typeof SpeedModifierComponent;
+
+
+>>>>>>> a2aa661 (Added SpeedModifierComponent):code/combat/system/monster/component.ts
 //# Map it then export
 type ComponentInstanceType = InstanceType<CommonComponentTypes>;
 export type ComponentKindMap = {
