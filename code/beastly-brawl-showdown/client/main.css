@@ -720,12 +720,14 @@ input:focus {
   align-items: center;
   gap: 20px;
   z-index: 100;
+  max-width: 42.5vw;
 }
 
 .join-info {
   font-size: 1.0rem;
   color: #333;
   font-weight: 500;
+  width: 25vw;
 }
 
 .game-pin {
@@ -805,7 +807,7 @@ input:focus {
 .participants-grid{
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 20px;
   justify-content: center;
   margin-bottom: 100px;
 }
@@ -816,35 +818,36 @@ input:focus {
 
 /* Start game btn */
 #start-game-btn {
-  position: relative;
+  position: absolute;
   width: 15vw;
-  left: auto;
-  top: 65%;
-  margin: 0px auto;
+  left: 42.5%;
+  top: 90%;
 }
 
 /* participants-name-box */
 .participants-name-box {
-  background: linear-gradient(to bottom, #A0522D, #8B4513);
-  color: white;
-  border: 2px solid #654321;
-  min-width: 110px;
-  height: 40px;
-  padding: 10px 8px;
-  border-radius: 6px;
-  text-align: center;
+  background-color: #8B4513;
+  color: #d4a574;
+  border: none;
+  padding: 15px 25px;
+  font-size: 1.1rem;
   font-weight: bold;
-  vertical-align: middle;
   cursor: pointer;
-  line-height: 40px;
-  font-size: 13px;
-  background-color: #f0f0f0;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transition: all 0.3s ease;
+  text-transform: capitalize;
+  min-width: 12.5rem;
+  min-height: 3rem;
+  
+  box-shadow:
+    0 4px 0 #773519,     /* bottom edge */
+    4px 0 0 #773519,     /* right edge */
+    -4px 0 0 #773519,    /* left edge */
+    0 -4px 0 #c26130;    /* top edge */
 }
 
+.participants-name-box:hover {
+  transform: translateY(-3px);
+}
 /* Shared container for full-page layout */
 .canvas-body {
   background-image: url("/homepage/background_3.png"); 

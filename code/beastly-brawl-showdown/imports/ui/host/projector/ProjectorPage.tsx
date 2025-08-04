@@ -88,7 +88,8 @@ export default function ProjectorPage() {
     <div className="canvas-body" id="waiting-room-body">
       <div className="waiting-room-header">
         <div className="join-info">
-          Join the game with your phone!
+          Join the game with your phone!<br />
+          Scan the QR code or join with the code!
         </div>
         <WaitingRoomInfoBox joinCode={joinCode} joinUrl={getJoinUrl()} />
       </div>
