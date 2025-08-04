@@ -80,4 +80,18 @@ export class Monster {
   getIsBlockedFromMove() {
     return this.components.filter((component) => component.getIsBlockedFromMove !== undefined).some((component) => component.getIsBlockedFromMove!());
   }
+
+  getSpeed(): number {
+    return (
+      this.base.baseStats.speed +
+      this.components
+        .filter(component => component.getSpeedBonus !== undefined)
+        .map(component => component.getSpeedBonus!())
+        .reduce((totalBonus, bonus) => totalBonus + bonus, 0)
+    );
+  }
+
+
+
+
 }
