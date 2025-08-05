@@ -7,7 +7,7 @@ export const InvalidCodeWarning = ({ enabled }: { enabled: boolean }) => {
   if (enabled) {
     return <b>Invalid room code.</b>;
   } else {
-    return <b></b>;
+    return null;
   }
 };
 
@@ -25,7 +25,7 @@ export const JoinForm = () => {
   // const [accountId, setAccountId] = useState(); // TODO - always nothing for now
   // const [roomId, setRoomId] = useState<number>();
 
-  const [isInvalidCodeSubmitted, setInvalidCodeSubmittedPopupState] =
+  const [isInvalidCodeSubmitted] =
     useState(false);
   const navigate = useNavigate();
 
@@ -44,7 +44,7 @@ export const JoinForm = () => {
 
     return (
       <>
-        <p>Connectng to servers...</p>
+        <p>Connecting to servers...</p>
       </>
     );
   }
@@ -93,7 +93,7 @@ export const JoinForm = () => {
           <input
             className="form-textbox"
             type="text"
-            placeholder="Add Room Code"
+            placeholder="Enter Code"
             value={inputJoinCode}
             onChange={(e) => setInputJoinCode(e.target.value)}
           />
