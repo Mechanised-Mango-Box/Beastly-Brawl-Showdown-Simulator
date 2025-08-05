@@ -8,7 +8,7 @@
     "visualize": "meteor --production --extra-packages bundle-visualizer"
   },
   "dependencies": {
-    "@babel/runtime": "^7.20.7",
+    "@babel/runtime": "^7.28.2",
     "cors": "^2.8.5",
     "easyqrcodejs": "^4.6.2",
     "express": "^5.1.0",
