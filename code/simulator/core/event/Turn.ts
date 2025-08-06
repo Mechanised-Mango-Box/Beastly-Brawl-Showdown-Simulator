@@ -32,7 +32,7 @@ export class Turn {
     }
 
     public startMoveEventText(): String {
-        return this.getSnapshotEvent().name
+        return this.startMoveEvent?.source + "uses " + this.startMoveEvent?.moveId + "."
     }
     
     // Methods for BuffEvent
@@ -45,7 +45,7 @@ export class Turn {
     }
 
     public buffEventText(): String {
-        return this.getBuffEvent().name
+        return this.buffEvent?.source + " has activated " + this.buffEvent?.name + "."
     }
 
     // Methods for RollEvent
@@ -58,7 +58,7 @@ export class Turn {
     }
 
     public rollEventText(): String | undefined {
-        return this.getRollEvent().name
+        return this.rollEvent?.source + " has rolled a " + this.rollEvent?.result + "."
     }
         
     // Methods for DamageEvent
@@ -70,6 +70,10 @@ export class Turn {
         this.damageEvent = value
     }
 
+    public damageEventText(): String | undefined {
+        return this.damageEvent?.target + " has taken " + this.damageEvent?.amount + " amount of damage."
+    }
+
     // Methods for BlockEvent
     public getBlockEvent(): BlockedEvent | undefined {
         return this.blockEvent
@@ -77,5 +81,9 @@ export class Turn {
 
     public setBlockEvent(value: BlockedEvent | undefined) {
         this.blockEvent = value
+    }
+
+    public blockEventText(): String | undefined {
+        return this.blockEvent?.source + " has blocked " + this.blockEvent?.target + "'s move."
     }
 }
