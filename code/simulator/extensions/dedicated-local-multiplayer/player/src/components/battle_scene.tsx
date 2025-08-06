@@ -1,13 +1,14 @@
 import React from "react";
 import type { SnapshotEvent } from "../../../../../core/event/core_events";
 import { parseSnapshot } from "./snapshot_parser";
+import { Turn } from "../../../../../core/event/Turn"
 
 
 interface BattleSceneProps {
     snapshot: SnapshotEvent;
 }
 
-const turns[]
+const turns: Turn[];
 
 console.log("BattleScene loaded");
 const BattleScene: React.FC<BattleSceneProps> = ({snapshot}) => {
