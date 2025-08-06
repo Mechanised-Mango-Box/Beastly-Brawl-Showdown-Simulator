@@ -6,59 +6,76 @@ import { DamageEvent } from "./core_events"
 import { BlockedEvent } from "./core_events"
 
 export class Turn {
-    private _snapshotEvent: SnapshotEvent | undefined
-    private _startMoveEvent: StartMoveEvent | undefined
-    private _buffEvent: BuffEvent | undefined
-    private _rollEvent: RollEvent | undefined
-    private _damageEvent: DamageEvent | undefined
-    private _blockEvent: BlockedEvent | undefined
+    private snapshotEvent: SnapshotEvent | undefined
+    private startMoveEvent: StartMoveEvent | undefined
+    private buffEvent: BuffEvent | undefined
+    private rollEvent: RollEvent | undefined
+    private damageEvent: DamageEvent | undefined
+    private blockEvent: BlockedEvent | undefined
     
-
-    public get snapshotEvent(): SnapshotEvent | undefined{
-        return this._snapshotEvent
+    // Methods for SnapshotEvent
+    public getSnapshotEvent(): SnapshotEvent | undefined{
+        return this.snapshotEvent
     }
 
-    public set snapshotEvent(value: SnapshotEvent) {
-        this._snapshotEvent = value
-    }
-    
-    public get startMoveEvent(): StartMoveEvent | undefined{
-        return this._startMoveEvent
-    }
-
-    public set startMoveEvent(value: StartMoveEvent) {
-        this._startMoveEvent = value
+    public setSnapshotEvent(value: SnapshotEvent) {
+        this.snapshotEvent = value
     }
     
-    public get buffEvent(): BuffEvent | undefined{
-        return this._buffEvent
+    // Methods for StartMoveEvent
+    public getStartMoveEvent(): StartMoveEvent | undefined{
+        return this.startMoveEvent
     }
 
-    public set buffEvent(value: BuffEvent) {
-        this._buffEvent = value
+    public setStartMoveEvent(value: StartMoveEvent) {
+        this.startMoveEvent = value
     }
 
-    public get rollEvent(): RollEvent | undefined {
-        return this._rollEvent
+    public startMoveEventText(): String {
+        return this.getSnapshotEvent().name
+    }
+    
+    // Methods for BuffEvent
+    public getBuffEvent(): BuffEvent | undefined{
+        return this.buffEvent
     }
 
-    public set rollEvent(value: RollEvent | undefined) {
-        this._rollEvent = value
+    public setBuffEvent(value: BuffEvent) {
+        this.buffEvent = value
+    }
+
+    public buffEventText(): String {
+        return this.getBuffEvent().name
+    }
+
+    // Methods for RollEvent
+    public getRollEvent(): RollEvent | undefined {
+        return this.rollEvent
+    }
+
+    public setRollEvent(value: RollEvent | undefined) {
+        this.rollEvent = value
+    }
+
+    public rollEventText(): String | undefined {
+        return this.getRollEvent().name
     }
         
-    public get damageEvent(): DamageEvent | undefined {
-        return this._damageEvent
+    // Methods for DamageEvent
+    public getDamageEvent(): DamageEvent | undefined {
+        return this.damageEvent
     }
 
-    public set damageEvent(value: DamageEvent | undefined) {
-        this._damageEvent = value
+    public setDamageEvent(value: DamageEvent | undefined) {
+        this.damageEvent = value
     }
 
-    public get blockEvent(): BlockedEvent | undefined {
-        return this._blockEvent
+    // Methods for BlockEvent
+    public getBlockEvent(): BlockedEvent | undefined {
+        return this.blockEvent
     }
 
-    public set blockEvent(value: BlockedEvent | undefined) {
-        this._blockEvent = value
+    public setBlockEvent(value: BlockedEvent | undefined) {
+        this.blockEvent = value
     }
 }
