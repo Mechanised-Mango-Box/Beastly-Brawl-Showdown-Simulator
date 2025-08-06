@@ -6,6 +6,7 @@ import { type BaseEvent } from "../../../../../core/event/base_event";
 import type { Notice } from "../../../../../core/notice/notice";
 import { useRef } from "react";
 import type { SideId } from "../../../../../core/side";
+import BattleScene from "../components/battle_scene";
 
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const GamePage: React.FC = () => {
 
   const [turnHistory, setTurnHistory] = useState<BaseEvent[]>([]);
   const [pendingNotices, setPendngNotices] = useState<Notice[]>([]);
+
 
   const hasListeners = useRef(false);
 
@@ -140,6 +142,7 @@ const GamePage: React.FC = () => {
     <>
       <h1>WIP - GAME</h1>
       <div>
+        <BattleScene events={turnHistory}></BattleScene>
         <textarea disabled value={JSON.stringify(turnHistory)} />
         <br />
         {actionPanel()}

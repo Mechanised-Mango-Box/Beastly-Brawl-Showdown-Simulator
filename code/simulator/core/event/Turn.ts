@@ -4,8 +4,10 @@ import { BuffEvent } from "./core_events"
 import { RollEvent } from "./core_events"
 import { DamageEvent } from "./core_events"
 import { BlockedEvent } from "./core_events"
+import type { BaseEvent } from "./base_event"
 
 export class Turn {
+    turnEvents: BaseEvent[] = [];
     private snapshotEvent: SnapshotEvent | undefined
     private startMoveEvent: StartMoveEvent | undefined
     private buffEvent: BuffEvent | undefined
@@ -13,6 +15,11 @@ export class Turn {
     private damageEvent: DamageEvent | undefined
     private blockEvent: BlockedEvent | undefined
     
+    //add event to the turnEvents
+    public addEvent(value: BaseEvent): void {
+        this.turnEvents.push(value);
+    }
+
     // Methods for SnapshotEvent
     public getSnapshotEvent(): SnapshotEvent | undefined{
         return this.snapshotEvent

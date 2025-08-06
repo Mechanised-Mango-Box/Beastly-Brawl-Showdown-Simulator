@@ -1,28 +1,95 @@
-import React, { useState } from "react";
+import React, { useState,useMemo } from "react";
 import { parseSnapshot } from "./snapshot_parser";
 import { Turn } from "../../../../../core/event/Turn"
+import type { BaseEvent } from "../../../../../core/event/base_event";
+import type { SnapshotEvent } from "../../../../../core/event/core_events";
 
-
+//this class is basically the entire simulator/information part of the battles, we might need to get playernames tho
 interface BattleSceneProps {
-  turns: Turn[];
+  events: BaseEvent[]
 }
 
 console.log("BattleScene loaded");
 
-const BattleScene: React.FC<BattleSceneProps> = ({ turns }) => {
+
+//so the way this works is we have an array of turns which in itself has an array of events which have occured in it
+//we've parsed the initial raw JSON data into an array (parsed) so if you want leftside you do parsed[0]
+//the list of values you can retrieve from the parsed information is in snapshot_parser part
+//you can add to the values just need ask if you need anything more
+const BattleScene: React.FC<BattleSceneProps> = ({ events }) => {
   const [turnInput, setTurnInput] = useState(0);
   const [turnIndex, setTurnIndex] = useState(0);
+  const [isManualSelection, setIsManualSelection] = useState(false);
+  let currentSnapshot;
 
-  const currentSnapshot = turns[turnIndex].getSnapshotEvent();
+  //copy pasted from mr gpt
+  // Build an array of Turn objects based on events
+  //this just gets a turn array filled with turn objects that cut off whenever a snapshot (new turn) occurs
+  const turns = useMemo(() => {
+    const turnArray: Turn[] = [];
+    let currentTurn: Turn | null = null;
+
+    for (const event of events) {
+      if (event.name === "snapshot") {
+        // Start a new turn
+        currentTurn = new Turn();
+        currentTurn.setSnapshotEvent(event as SnapshotEvent);
+        turnArray.push(currentTurn);
+      }
+
+      if (currentTurn) {
+        currentTurn.addEvent(event);
+
+        // Optionally capture specific event types
+        switch (event.name) {
+          case "buff":
+            currentTurn.setBuffEvent(event);
+            break;
+          case "startMove":
+            currentTurn.setStartMoveEvent(event);
+            break;
+          case "roll":
+            currentTurn.setRollEvent(event);
+            break;
+          case "damage":
+            currentTurn.setDamageEvent(event);
+            break;
+          case "blocked":
+            currentTurn.setBlockEvent(event);
+            break;
+        }
+      }
+    }
+    console.log(turnArray)
+    return turnArray;
+  }, [events]);
+  
+  //bugfix from gpt cuz I tried putting this inside the bottom if else block, probably need to change its location so this file doesn't look so ugly?
+  React.useEffect(() => {
+    if (isManualSelection && turnInput === turns.length) {
+      setIsManualSelection(false);
+    }
+  }, [isManualSelection, turnInput, turns.length]);
+  
+  if (isManualSelection) {
+    currentSnapshot = turns[turnIndex]?.getSnapshotEvent();
+  } else {
+    currentSnapshot = turns[turns.length - 1]?.getSnapshotEvent();
+  }
+  
   const parsed = currentSnapshot ? parseSnapshot(currentSnapshot) : [];
 
   const handleTurnChange = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsManualSelection(true);
     if (turnInput >= 0 && turnInput < turns.length) {
       setTurnIndex(turnInput-1);
     }
   };
 
+  if (parsed.length === 0) {
+    return <p>Waiting for game data...</p>;
+  }
 
   return (
     <div
@@ -77,8 +144,6 @@ const BattleScene: React.FC<BattleSceneProps> = ({ turns }) => {
       <form
         onSubmit={handleTurnChange}
         style={{
-          position: "absolute",
-          bottom: "-60px", // Push below battle boxes
           left: "0",
           display: "flex",
           alignItems: "center",
@@ -90,9 +155,10 @@ const BattleScene: React.FC<BattleSceneProps> = ({ turns }) => {
           type="number"
           name="turn"
           id="turn"
-          min={0}
-          max={turns.length - 1}
+          min={1}
+          max={turns.length}
           value={turnInput}
+          placeholder="1"
           onChange={(e) => setTurnInput(parseInt(e.target.value, 10) || 1)}
         />
         <button type="submit">Go</button>
