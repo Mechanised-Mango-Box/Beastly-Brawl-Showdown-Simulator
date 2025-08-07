@@ -38,8 +38,8 @@ export class Turn {
         this.startMoveEvent = value
     }
 
-    public startMoveEventText(): String {
-        return this.startMoveEvent?.source + "uses " + this.startMoveEvent?.moveId + "."
+    public startMoveEventText(startMoveEvent: StartMoveEvent): String {
+        return startMoveEvent.source + "uses " + startMoveEvent.moveId + "."
     }
     
     // Methods for BuffEvent
@@ -51,8 +51,8 @@ export class Turn {
         this.buffEvent = value
     }
 
-    public buffEventText(): String {
-        return this.buffEvent?.source + " has activated " + this.buffEvent?.name + "."
+    public buffEventText(buffEvent: BuffEvent): String {
+        return buffEvent.source + " has activated " + buffEvent.name + "."
     }
 
     // Methods for RollEvent
@@ -64,8 +64,8 @@ export class Turn {
         this.rollEvent = value
     }
 
-    public rollEventText(): String | undefined {
-        return this.rollEvent?.source + " has rolled a " + this.rollEvent?.result + "."
+    public rollEventText(rollEvent: RollEvent): String {
+        return rollEvent.source + " has rolled a " + rollEvent.result + "."
     }
         
     // Methods for DamageEvent
@@ -77,8 +77,8 @@ export class Turn {
         this.damageEvent = value
     }
 
-    public damageEventText(): String | undefined {
-        return this.damageEvent?.target + " has taken " + this.damageEvent?.amount + " amount of damage."
+    public damageEventText(damageEvent: DamageEvent): String {
+        return damageEvent.target + " has taken " + damageEvent.amount + " damage."
     }
 
     // Methods for BlockEvent
@@ -90,11 +90,30 @@ export class Turn {
         this.blockEvent = value
     }
 
-    public blockEventText(): String | undefined {
-        return this.blockEvent?.source + " has blocked " + this.blockEvent?.target + "'s move."
+    public blockEventText(blockedEvent: BlockedEvent): String {
+        return blockedEvent?.source + " has blocked " + blockedEvent.target + "'s move."
     }
 
     public printEventString(event: BaseEvent): String {
+        if (event.name == "snapshot") {
+            return "Start of turn"
+        } else if (event.name == "buff") {
+            const buffEvent = event as BuffEvent
+            return this.buffEventText(buffEvent)
+        } else if (event.name == "startMove") {
+            const startMoveEvent = event as StartMoveEvent
+            return this.startMoveEventText(startMoveEvent)
+        } else if (event.name == "roll") {
+            const rollEvent = event as RollEvent
+            return this.rollEventText(rollEvent)
+        } else if (event.name == "blocked") {
+            const blockedEvent = event as BlockedEvent
+            return this.blockEventText(blockedEvent)
+        } else if (event.name == "damage") {
+            const damageEvent = event as DamageEvent
+            return this.damageEventText(damageEvent)
+        }
+
         return event.name
     }
 }
