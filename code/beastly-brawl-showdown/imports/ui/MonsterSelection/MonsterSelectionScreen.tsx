@@ -1,6 +1,6 @@
 import React from "react";
 import { MonsterContainer } from "./MonsterContainer";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Confirms the monster the player will be using and all function that this button needs
