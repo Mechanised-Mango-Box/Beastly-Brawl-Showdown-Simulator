@@ -19,7 +19,7 @@ button {
   outline: none;
 }
 
-/* Shared button styles */
+/* Shared styles */
 .glb-btn {
   background-color: #8B4513;
   color: #d4a574;
@@ -48,6 +48,18 @@ button {
     0 -2px 0 #c26130;
   
   transform: translateY(-2px);
+}
+
+.canvas-body {
+  background-image: url("/homepage/background_3.png"); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100vw;
+  height: 100vh;
 }
 
 /* Design page container stuff */
@@ -664,6 +676,8 @@ input:focus {
   margin: 10px auto;
 }
 
+/* ######################################################################## */
+
 /*For the main screen*/
 .screen {
   display: flex;
@@ -671,7 +685,66 @@ input:focus {
   align-items: center;
 }
 
-/* Fullscreen layout */
+/* Homepage Styles */
+.homepage-container {
+  background-color: #ffcc9c;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  border: 0.2rem solid #ff9838;
+  border-radius: 1rem;
+  height: 65vh;
+
+    box-shadow:
+    0 4px 0 #773519,     /* bottom edge */
+    4px 0 0 #773519,     /* right edge */
+    -4px 0 0 #773519,    /* left edge */
+    0 -4px 0 #c26130;    /* top edge */
+}
+
+#homepage {
+  display: flex;
+}
+
+/* Logo styling */
+.logo-container {
+  margin-bottom: 2rem;
+}
+
+.logo-image {
+  width: 150px;
+  height: auto;
+  object-fit: contain;
+}
+
+.joinpage-container {
+  background-color: #ffcc9c;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  border: 0.2rem solid #ff9838;
+  border-radius: 1rem;
+  height: 20vh;
+  gap: 1rem;
+
+    box-shadow:
+    0 4px 0 #773519,     /* bottom edge */
+    4px 0 0 #773519,     /* right edge */
+    -4px 0 0 #773519,    /* left edge */
+    0 -4px 0 #c26130;    /* top edge */
+}
+
+#joinpage {
+  display: flex;
+}
+
+/* Waiting/Loading Screen for match to start */
 .waiting-screen {
   display: flex;
   flex-direction: column;
@@ -702,7 +775,7 @@ input:focus {
   font-size: 20px;
 }
 
-/*This shows everything related to the waiting room*/
+/* This shows everything related to the waiting room */
 .waiting-room-box {
   width: auto;
 }
@@ -723,6 +796,13 @@ input:focus {
   max-width: 42.5vw;
 }
 
+#waiting-room-body {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Projector Page Styles */
 .join-info {
   font-size: 1.0rem;
   color: #333;
@@ -746,7 +826,6 @@ input:focus {
   color: #333;
 }
 
-/*This shows and arranges the link and qr code components*/
 .waiting-room-info-box {
   display: flex;
   justify-content: space-between;
@@ -769,7 +848,6 @@ input:focus {
   letter-spacing: 2px;
 }
 
-/*The box to show the qr code*/
 .qr-box {
   width: 80px;
   height: 80px;
@@ -786,14 +864,7 @@ input:focus {
   height: 100%;
 }
 
-/*This shows everything related to the waiting room*/
-#waiting-room-body {
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
-}
-
-/*Component that displays the participants names dynamically*/
+/* Participants Grid Styles */
 .participants-display-box {
   position: relative;
   left: auto;
@@ -812,10 +883,6 @@ input:focus {
   margin-bottom: 100px;
 }
 
-.lobby-title {
-  margin-bottom: 1rem; 
-}
-
 /* Start game btn */
 #start-game-btn {
   position: absolute;
@@ -824,7 +891,7 @@ input:focus {
   top: 90%;
 }
 
-/* participants-name-box */
+/* Small Box that shows participants names */
 .participants-name-box {
   background-color: #8B4513;
   color: #d4a574;
@@ -847,92 +914,6 @@ input:focus {
 
 .participants-name-box:hover {
   transform: translateY(-3px);
-}
-/* Shared container for full-page layout */
-.canvas-body {
-  background-image: url("/homepage/background_3.png"); 
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: 100vw;
-  height: 100vh;
-}
-
-.homepage-container {
-  background-color: #ffcc9c;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  text-align: center;
-  border: 0.2rem solid #ff9838;
-  border-radius: 1rem;
-  height: 65vh;
-
-    box-shadow:
-    0 4px 0 #773519,     /* bottom edge */
-    4px 0 0 #773519,     /* right edge */
-    -4px 0 0 #773519,    /* left edge */
-    0 -4px 0 #c26130;    /* top edge */
-}
-
-#homepage {
-  display: flex;
-}
-
-.joinpage-container {
-  background-color: #ffcc9c;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  text-align: center;
-  border: 0.2rem solid #ff9838;
-  border-radius: 1rem;
-  height: 20vh;
-  gap: 1rem;
-
-    box-shadow:
-    0 4px 0 #773519,     /* bottom edge */
-    4px 0 0 #773519,     /* right edge */
-    -4px 0 0 #773519,    /* left edge */
-    0 -4px 0 #c26130;    /* top edge */
-}
-
-#joinpage {
-  display: flex;
-}
-
-/* Logo styling (optional image) */
-.logo-container {
-  margin-bottom: 2rem;
-}
-
-.logo-image {
-  width: 150px;
-  height: auto;
-  object-fit: contain;
-}
-
-/* Shared button styles */
-.btn {
-  width: 220px;
-  padding: 1rem;
-  font-size: 1.25rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: transform 0.1s ease;
-  margin: 0px;
-  padding: 0px;
-  width: 100%;
-  height: 100%;
 }
 
 .battleScreen {
@@ -1087,28 +1068,6 @@ progress::-moz-progress-bar {
   margin-top: 1rem;
 }
 
-/* Button color variants */
-.host-btn {
-  background-color: #a7ba93;
-  color: white;
-}
-.join-btn {
-  background-color: #694230;
-  border-color: #936049;
-}
-
-
-.settings-btn {
-  background-color: #c4b2a2;
-  color: white;
-}
-
-.join-buttons-container{
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-}
-
 /* Settings page styling */
 .settings-container {
   padding: 3rem;
@@ -1214,6 +1173,8 @@ input[type="range"] {
   left: 20rem;
 }
 
+/* #################################################################### */
+/* Mobile View Specific Styles */
 @media screen and (max-width: 768px) {
   .form-textbox {
     width: 65vw;
