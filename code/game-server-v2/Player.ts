@@ -24,14 +24,14 @@ export class Player {
   }
 
   hasMonster(): boolean {
-  return this.monster !== undefined;
+    return this.monster !== undefined;
   }
-  
+
   getMonster(): Monsters | undefined {
     return this.monster;
   }
 
   setMonster(monster: Monsters) {
-    this.monster  = monster;
+    this.monster = monster;
   }
 }
