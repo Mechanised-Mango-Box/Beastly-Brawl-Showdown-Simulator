@@ -32,9 +32,11 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events }) => {
     for (const event of events) {
       if (event.name === "snapshot") {
         // Start a new turn
+        console.log("CREATING NEW TURN ---------------------------------");
         currentTurn = new Turn();
         currentTurn.setSnapshotEvent(event as SnapshotEvent);
         turnArray.push(currentTurn);
+        console.log(currentTurn.turnEvents);
       }
 
       if (currentTurn) {
@@ -60,7 +62,7 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events }) => {
         }
       }
     }
-    console.log(turnArray)
+    // console.log(turnArray)
     return turnArray;
   }, [events]);
   
@@ -124,7 +126,7 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events }) => {
           textAlign: "center",
         }}
       >
-        <p>PlaceHolder Text for combat actions</p>
+        <p>{turns[turns.length - 1].turnEvents[turns[turns.length - 1].turnEvents.length - 1].name}</p>
       </div>
 
       {/* Right Div (PLAYER 2 MONSTER) */}
