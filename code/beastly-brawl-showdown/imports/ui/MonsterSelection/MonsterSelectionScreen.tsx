@@ -50,12 +50,14 @@ export const MonsterSelectionScreen = () => {
     }
 
     return (
-        <div className="monsterSelectionScreen">
-            <h1>Choose your Monster:</h1>
-            <MonsterContainer image="img/placeholder_monster_1.png" name="monster1" func={highlightAndShowConfirm} />
-            <MonsterContainer image="img/placeholder_monster_2.png" name="monster2" func={highlightAndShowConfirm} />
-            <MonsterContainer image="img/placeholder_monster_3.png" name="monster3" func={highlightAndShowConfirm} />
-            <ConfirmButton />
+        <div className="canvas-body" id="monster-selection-screen">
+            <div className="monster-selection-grid">
+                <h1>Choose your Monster:</h1>
+                <MonsterContainer image="img/placeholder_monster_1.png" name="monster1" func={highlightAndShowConfirm} />
+                <MonsterContainer image="img/placeholder_monster_2.png" name="monster2" func={highlightAndShowConfirm} />
+                <MonsterContainer image="img/placeholder_monster_3.png" name="monster3" func={highlightAndShowConfirm} />
+                <ConfirmButton />
+            </div>   
         </div>
     );
 };

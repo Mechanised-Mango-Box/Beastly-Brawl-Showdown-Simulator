@@ -744,6 +744,19 @@ input:focus {
   display: flex;
 }
 
+/* Monster Selection Screen Styles */
+#monster-selection-screen {
+  display: flex;
+}
+
+.monster-selection-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
 /* Waiting/Loading Screen for match to start */
 .waiting-screen {
   display: flex;

@@ -9,7 +9,7 @@ export const MonsterContainer = ({image, name, func}: {image: string, name: stri
     }
 
     return (
-        <div className="monsterContainer">
+        <div className="monster-selection-card">
             <img src={image} id={name} className="monsterImage" onClick={onClick}/>
         </div>
     )
