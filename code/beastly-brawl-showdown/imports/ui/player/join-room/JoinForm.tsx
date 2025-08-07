@@ -132,8 +132,8 @@ export const JoinForm = () => {
     sessionStorage.setItem("joinCode", inputJoinCode);
     sessionStorage.setItem("displayName", inputDisplayName);
     sessionStorage.setItem("serverUrl", serverUrl);
-    console.log("Go to game...");
-    navigate(`/play`);
+    console.log("Go to monster select...");
+    navigate(`/select`);
   }
   return (
     <>
