@@ -95,25 +95,37 @@ export class Turn {
     }
 
     public printEventString(event: BaseEvent): String {
-        if (event.name == "snapshot") {
-            return "Start of turn"
-        } else if (event.name == "buff") {
-            const buffEvent = event as BuffEvent
-            return this.buffEventText(buffEvent)
-        } else if (event.name == "startMove") {
-            const startMoveEvent = event as StartMoveEvent
-            return this.startMoveEventText(startMoveEvent)
-        } else if (event.name == "roll") {
-            const rollEvent = event as RollEvent
-            return this.rollEventText(rollEvent)
-        } else if (event.name == "blocked") {
-            const blockedEvent = event as BlockedEvent
-            return this.blockEventText(blockedEvent)
-        } else if (event.name == "damage") {
-            const damageEvent = event as DamageEvent
-            return this.damageEventText(damageEvent)
-        }
+        switch (event.name) {
+            case "snapshot":
+                return "Start of turn";
 
-        return event.name
+            case "buff": {
+                const buffEvent = event as BuffEvent;
+                return this.buffEventText(buffEvent);
+            }
+
+            case "startMove": {
+                const startMoveEvent = event as StartMoveEvent;
+                return this.startMoveEventText(startMoveEvent);
+            }
+
+            case "roll": {
+                const rollEvent = event as RollEvent;
+                return this.rollEventText(rollEvent);
+            }
+
+            case "blocked": {
+                const blockedEvent = event as BlockedEvent;
+                return this.blockEventText(blockedEvent);
+            }
+
+            case "damage": {
+                const damageEvent = event as DamageEvent;
+                return this.damageEventText(damageEvent);
+            }
+
+            default:
+                return event.name;
+        }
     }
 }
