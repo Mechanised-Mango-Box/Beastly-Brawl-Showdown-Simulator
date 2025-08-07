@@ -14,7 +14,7 @@ export class Turn {
     private rollEvent: RollEvent | undefined
     private damageEvent: DamageEvent | undefined
     private blockEvent: BlockedEvent | undefined
-    
+
     //add event to the turnEvents
     public addEvent(value: BaseEvent): void {
         this.turnEvents.push(value);
@@ -92,5 +92,9 @@ export class Turn {
 
     public blockEventText(): String | undefined {
         return this.blockEvent?.source + " has blocked " + this.blockEvent?.target + "'s move."
+    }
+
+    public printEventString(event: BaseEvent): String {
+        return event.name
     }
 }
