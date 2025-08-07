@@ -39,7 +39,7 @@ export class Turn {
     }
 
     public startMoveEventText(startMoveEvent: StartMoveEvent): String {
-        return startMoveEvent.source + "uses " + startMoveEvent.moveId + "."
+        return startMoveEvent.source + " uses " + startMoveEvent.moveId + "."
     }
     
     // Methods for BuffEvent
