@@ -625,8 +625,12 @@ body {
 .participants-display-box {
   max-width: 1085px;
   min-height: 50px;
+  min-height: 50px;
   max-height: 500px;
   padding: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -641,7 +645,9 @@ body {
 /*For the participants name*/
 .participants-box {
   min-width: 90px;
+  min-width: 90px;
   height: 40px;
+  padding: 0 10px;
   padding: 0 10px;
   text-align: center;
   vertical-align: middle;
