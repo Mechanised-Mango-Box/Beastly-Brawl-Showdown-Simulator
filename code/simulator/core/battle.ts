@@ -26,12 +26,11 @@ export type BattleOptions = {
 
 export class Battle {
   readonly seed: number;
-  readonly sides: Side[]; 
+  readonly sides: Side[];
+  
   readonly eventHistory: EventHistory;
 
   readonly noticeBoard: NoticeBoard;
-
-  readonly player_option_timeout: number;
 
   constructor(options: BattleOptions) {
     this.seed = options.seed;
@@ -48,8 +47,6 @@ export class Battle {
     this.eventHistory = new EventHistory();
 
     this.noticeBoard = new NoticeBoard(options.playerOptionSet.length);
-
-    this.player_option_timeout = options.player_option_timeout;
   }
 
   // TODO ? make the battle director a swappable component
@@ -82,10 +79,22 @@ export class Battle {
       console.log(`Gather moves: Start`);
       await new Promise<void>((resolve) => {
         this.sides.forEach((side) => {
-          const callback: (moveId: EntryID, target: TargetingData) => void = (moveId: EntryID, targetingData: TargetingData): void => {
+          const callback: (moveId: EntryID, target: TargetingData) => void = (
+            moveId: EntryID,
+            targetingData: TargetingData
+          ): void => {
             // TODO validate move
-            // TODO allow selecting of other targeting methods
+
+            const chosenMove: MoveData = commonMovePool[moveId];
+            if (chosenMove.targetingMethod != targetingData.targetingMethod) {
+              console.error(
+                `Error: Targeting method mismatch. [moveId=${moveId} ${chosenMove.name}] expects ${chosenMove.targetingMethod} but ${targetingData.targetingMethod} was recieved.`
+              );
+              return;
+            }
+
             side.pendingActions = [
+              /// For now there will only ever be one action per turn.
               {
                 moveId: moveId,
                 source: side.id,
@@ -102,7 +111,12 @@ export class Battle {
           const notice: chooseMove = {
             kind: "chooseMove",
             data: {
-              moveIdOptions: [side.monster.base.attackActionId, ...(side.monster.defendActionCharges > 0 ? [side.monster.base.defendActionId] : [])],
+              moveIdOptions: [
+                side.monster.base.attackActionId,
+                ...(side.monster.defendActionCharges > 0
+                  ? [side.monster.base.defendActionId]
+                  : []),
+              ],
             }, // TODO select special attack
             callback: callback,
           };
@@ -128,7 +142,10 @@ export class Battle {
         }
 
         /// Sort by source monster speed
-        return this.sides[b.source].monster.base.baseStats.speed - this.sides[a.source].monster.base.baseStats.speed; // TODO get speed rather than use base
+        return (
+          this.sides[b.source].monster.base.baseStats.speed -
+          this.sides[a.source].monster.base.baseStats.speed
+        ); // TODO get speed rather than use base
       });
       console.log(`Acton Queue:\n${JSON.stringify(moveRequestQueue)}`);
 
@@ -138,12 +155,10 @@ export class Battle {
       console.log("Resolve Actions");
       for (const moveRequest of moveRequestQueue) {
         const move: MoveData = commonMovePool[moveRequest.moveId];
-        // if (!actionHandler) {
-        //   throw new Error(`Action of this id=${action.actionId} does not exist.`);
-        // }
-
         if (this.sides[moveRequest.source].monster.getIsBlockedFromMove()) {
-          console.log(`Monster could not perform move right now (probs status).`);
+          console.log(
+            `Monster could not perform move right now (probs status).`
+          );
           continue;
         }
 
