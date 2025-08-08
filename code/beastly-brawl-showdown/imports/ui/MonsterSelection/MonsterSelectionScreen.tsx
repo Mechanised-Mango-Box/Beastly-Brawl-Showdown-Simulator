@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 function ConfirmButton() {
     const navigate = useNavigate();
     return (
-        <button id="confirmMonsterButton" disabled onClick={() => navigate("/play")}>
+        <button className="glb-btn" id="monster-selection-btn" disabled onClick={() => navigate("/play")}>
             Confirm
         </button>
     );
@@ -51,8 +51,9 @@ export const MonsterSelectionScreen = () => {
 
     return (
         <div className="canvas-body" id="monster-selection-screen">
+            <h1 className="monster-selection-screen-title">Choose Your</h1>
+            <h1 className="monster-selection-screen-title" id="header-2">Monster!</h1>
             <div className="monster-selection-grid">
-                <h1>Choose your Monster:</h1>
                 <MonsterContainer image="img/placeholder_monster_1.png" name="monster1" func={highlightAndShowConfirm} />
                 <MonsterContainer image="img/placeholder_monster_2.png" name="monster2" func={highlightAndShowConfirm} />
                 <MonsterContainer image="img/placeholder_monster_3.png" name="monster3" func={highlightAndShowConfirm} />
