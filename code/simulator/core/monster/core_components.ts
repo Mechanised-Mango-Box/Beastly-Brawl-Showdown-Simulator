@@ -12,7 +12,7 @@ export interface BaseComponent<TKind extends string = string> {
   getAttackBonus?: () => number;
   getHealthBonus?: () => number;
   getIsBlockedFromMove?: () => boolean;
-  getSpeedBonus?: () => number;
+  getSpeedBonus?: () => number;  getSpeedBonus?: () => number;
   onStartTurn?(battle: Battle, selfSide: SideId): void;
   onEndTurn?(battle: Battle, selfSide: SideId): void;
 }
@@ -122,15 +122,34 @@ export class SpeedModifierComponent implements BaseComponent<"speedModifier"> {
     return this.speedBonus;
   }
 }
+export class SpeedModifierComponent implements BaseComponent<"speedModifier"> {
+  kind = "speedModifier" as const;
+  speedBonus: number;
+
+  constructor(speedBonus: number) {
+    this.speedBonus = speedBonus;
+  }
+
+  getSpeedBonus(): number {
+    return this.speedBonus;
+  }
+}
 
 type CommonComponentTypes = // TODO make this a plugin
   typeof RerollChargeComponent | 
+  
   typeof DodgeChargeComponent | 
+  
   typeof DodgeStateComponent | 
+  
   typeof DefendComponent | 
+  
   typeof AbilityChargeStunComponent | 
+  
   typeof StunnedStateComponent |
+  typeof SpeedModifierComponent |
   typeof SpeedModifierComponent;
+
 
 
 >>>>>>> a2aa661 (Added SpeedModifierComponent):code/combat/system/monster/component.ts
