@@ -9,6 +9,7 @@ export interface BaseComponent<TKind extends string = string> {
   getAttackBonus?: () => number;
   getHealthBonus?: () => number;
   getIsBlockedFromMove?: () => boolean;
+  getSpeedBonus?: () => number;
 
   onStartTurn?(battle: Battle, selfSide: SideId): void;
   onEndTurn?(battle: Battle, selfSide: SideId): void;
