@@ -1,29 +1,13 @@
-import { RoomId, JoinCode, AccountId } from "./types";
-import { Player } from "./Player";
-import { GameSettings } from "./GameSettings";
-import { Battle } from "./Battle";
+import { Player } from "./player";
+import { Battle } from "./match";
 
-export class LobbyManager {
-  readonly hostSocketId: string;
+export class TournamentManager {
+  playersByAccountId: Map<string, Player> = new Map();
 
-  readonly roomId: RoomId;
-  /**
-   * The code which players can join the room with.
-   *
-   * Generated from {@link roomId} using {@link Sqids}
-   */
-  readonly joinCode: JoinCode;
+  battles: Battle[];
 
-  playersByAccountId: Map<AccountId, Player> = new Map();
-
-  battles: Battle[] = [];
-  gameState: any = undefined;
-  settings: GameSettings = new GameSettings();
-
-  constructor(hostSocketId: string, roomId: RoomId, joinCode: JoinCode) {
-    this.hostSocketId = hostSocketId;
-    this.roomId = roomId;
-    this.joinCode = joinCode;
+  constructor() {
+    this.battles = [];
   }
 
   createBattles(playerList: Player[]) {
@@ -42,7 +26,7 @@ export class LobbyManager {
   }
 
   // To be called immediately after a battle ends
-  async reportBattleResults(winnerId: AccountId, battleID: number): Promise<void> {
+  async reportBattleResults(winnerId: string, battleID: number): Promise<void> {
     // Find the battle by ID
     const battle = this.battles.find(b => b.battleID === battleID);
     if (!battle) {

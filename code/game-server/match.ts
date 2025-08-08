@@ -1,4 +1,4 @@
-import { Player } from "./Player";
+import { Player } from "./player";
 import { AccountId } from "./types";
 
 enum BattleType {
