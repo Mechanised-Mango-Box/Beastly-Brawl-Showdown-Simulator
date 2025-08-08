@@ -7,6 +7,7 @@ import { BattleOverEvent, SnapshotEvent } from "./event/core_events";
 import { commonMovePool } from "../data/common_move_pool";
 import { MoveData, MoveRequest } from "./action/move/move";
 import { EntryID } from "./types";
+import { TargetingData } from "./action/targeting";
 export interface PlayerOptions {
   name: string;
   /**
@@ -25,7 +26,7 @@ export type BattleOptions = {
 
 export class Battle {
   readonly seed: number;
-  readonly sides: Side[];
+  readonly sides: Side[]; 
   readonly eventHistory: EventHistory;
 
   readonly noticeBoard: NoticeBoard;
@@ -81,14 +82,14 @@ export class Battle {
       console.log(`Gather moves: Start`);
       await new Promise<void>((resolve) => {
         this.sides.forEach((side) => {
-          const callback: (moveId: EntryID, target: SideId) => void = (moveId: EntryID, target: SideId): void => {
+          const callback: (moveId: EntryID, target: TargetingData) => void = (moveId: EntryID, targetingData: TargetingData): void => {
             // TODO validate move
             // TODO allow selecting of other targeting methods
             side.pendingActions = [
               {
                 moveId: moveId,
                 source: side.id,
-                targetingData: { targetingMethod: "single-enemy", target: target },
+                targetingData: targetingData,
               },
             ]; /// Save to data
             this.noticeBoard.removeNotice(side.id, "chooseMove");
