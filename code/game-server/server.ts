@@ -11,7 +11,7 @@ import { LobbyManager } from "./lobby_manager";
 import { ServerId } from "../shared/types";
 import { PlayerChannelAuth, HostChannelAuth } from "../shared/types";
 import { Player } from "./user";
-import { MonsterId } from "../combat/system/monster";
+import { MonsterPool } from "../simulator/data/monster_pool";
 
 export type ServerConfig = {
   serverIp: string;

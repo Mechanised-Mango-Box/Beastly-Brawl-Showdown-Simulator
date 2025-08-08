@@ -1,4 +1,3 @@
-import { Monster } from "../simulator/core/monster/monster";
 import { MonsterPool } from "../simulator/data/monster_pool"
 
 export class Player {

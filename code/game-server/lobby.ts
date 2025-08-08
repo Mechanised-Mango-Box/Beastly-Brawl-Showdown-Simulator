@@ -1,5 +1,5 @@
-import { Battle } from "../combat/system/battle";
-import { MonsterPool } from "../combat/data/monster_pool";
+import { Battle } from "../simulator/core/battle";
+import { MonsterPool } from "../simulator/data/monster_pool";
 import { Host, Player } from "./user";
 import { LobbyId, JoinCode, ServerId } from "../shared/types";
 
@@ -50,10 +50,14 @@ export class Lobby {
       Array.from(this.players.values()).forEach((player, index) => {
         const result = results[index];
         if (result.status === "fulfilled") {
-          player.monsterTemplate = MonsterPool[result.value]; // Assign the returned ID
-        } else {
-          console.warn(`Player ${player.displayName} failed to select a monster:`, result.reason);
-          // TODO server should assign one if the player fails to do so
+          const monsterName = result.value;
+
+          const monster = MonsterPool.find(m => m.name === monsterName);
+          if (monster) {
+            player.monsterTemplate = monster;
+          } else {
+            console.warn("Monster not found for name:", monsterName);
+          }
         }
       });
     });
