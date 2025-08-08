@@ -5,6 +5,7 @@ import { HomePage } from "./HomePage";
 import ProjectorPage from "./host/projector/ProjectorPage";
 import { Player } from "./player/game/PlayerPage";
 import JoinPage from "./player/join-room/JoinPage";
+import { BattleScreen } from "./BattleScreen/BattleScreen";
 
 export const renderRoutes = () => (
   <>

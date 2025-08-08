@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MonsterContainer } from "./MonsterContainer";
-import { monsterData } from "../../data/monsters/MonsterData";
+import { MonsterPool } from "../../../../simulator/data/monster_pool";
 
 interface MonsterSelectionScreenProps {
   setSelectedMonsterCallback: (value: string) => void;
@@ -71,17 +71,14 @@ export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({
   return (
     <div className="monsterSelectionScreen">
       <h1>Choose your Monster:</h1>
-      {Object.entries(monsterData).map(([name, MonsterData]) => {
-        const previewMonster = new MonsterData();
-        return (
-          <MonsterContainer
-            key={name}
-            image={previewMonster.imageSelection}
-            name={name}
-            currentlySelectedMonster={currentlySelectedMonster}
-          />
-        );
-      })}
+      {MonsterPool.filter(monster => monster.name !== "BlankMon").map(monster => (
+        <MonsterContainer
+          key={monster.name}
+          image={monster.imageUrl}
+          name={monster.name}
+          currentlySelectedMonster={currentlySelectedMonster}
+        />
+      ))}
       <button
         id="confirmMonsterButton"
         onClick={handleConfirm}
@@ -90,5 +87,6 @@ export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({
         Confirm
       </button>
     </div>
+
   );
 };

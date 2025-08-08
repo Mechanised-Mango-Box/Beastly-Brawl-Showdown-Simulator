@@ -2,8 +2,7 @@ import React, { createContext, useContext, useEffect, useRef, useState, } from "
 import { io, Socket } from "socket.io-client";
 import { MonsterSelectionScreen } from "../../MonsterSelection/MonsterSelectionScreen";
 import { BattleScreen } from "../../BattleScreen/BattleScreen";
-import { monsterData, MonsterName } from "/imports/data/monsters/MonsterData";
-import Monsters from "/imports/data/monsters/Monsters";
+import { MonsterPool } from "../../../../../simulator/data/monster_pool";
 
 //#region Socket Context Definition
 
@@ -48,7 +47,7 @@ const PlayerSocketProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         console.log("Connected to server");
         setIsConnected(true);
       });
-      
+
       socketRef.current.on("disconnect", () => {
         console.log("Disconnected from server");
         setIsConnected(false);
@@ -127,30 +126,25 @@ const PlayerContent = () => {
   }
 
   // Type checking function converting string to MonsterName union
-  function isMonsterName(name: string): name is MonsterName {
-    return name in monsterData;
+  const validMonsterNames = new Set(MonsterPool.map(m => m.name));
+
+  function isMonsterName(name: string): boolean {
+    return validMonsterNames.has(name);
   }
 
   // Function that takes the result of monster selection and sends it to the server, then switches screen.
   const handleMonsterSelection = (monster: string) => {
-    // Checking if string is valid monster
-    if (isMonsterName(monster)) {
-      // Create new monster based on string given
-      const data: Monsters = new monsterData[monster]();
-
-      // Check if socket exists
-      if (socket) {
-        console.log(data);
-        socket.emit("RequestSubmitMonster", { data });
-
-        // TODO: Make sure all players select a monster before changing the state below
-        setMonsterSelected(true);
-        console.log("Monster selected:", monster);
-      } else {
-        console.log(`No socket connection available: socket ${socket}`);
-      }
-    } else {
+    if (!isMonsterName(monster)) {
       console.log(`Invalid monster name: ${monster}`);
+      return;
+    }
+
+    if (socket) {
+      socket.emit("RequestSubmitMonster", { monsterName: monster });
+      setMonsterSelected(true);
+      console.log("Monster selected:", monster);
+    } else {
+      console.log("No socket connection available");
     }
   };
 

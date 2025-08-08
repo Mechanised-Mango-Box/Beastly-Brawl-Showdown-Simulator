@@ -1,5 +1,5 @@
 import { DefaultEventsMap, Socket } from "socket.io";
-import { MonsterTemplate } from "../combat/system/monster";
+import { MonsterTemplate } from "../simulator/core/monster/monster";
 import { HostServerToClientEvents, HostClientToServerEvents, PlayerServerToClientEvents, PlayerClientToServerEvents, PlayerSocketData } from "../shared/types";
 import { HostSocketData } from "./server";
 

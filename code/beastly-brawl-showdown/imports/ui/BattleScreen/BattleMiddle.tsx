@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { BattleMonster } from './BattleMonster';
-import Monsters from '/imports/data/monsters/Monsters';
+import { Monster } from '../../../../simulator/core/monster/monster';
 
 
 // Define the props type
 type BattleMiddleProps = {
   showAnimation: boolean;
-  player1Monster: Monsters;
-  player2Monster: Monsters;
+  player1Monster: Monster;
+  player2Monster: Monster;
   playerId1: string;
   playerId2: string;
 };
@@ -67,8 +67,8 @@ export const BattleMiddle: React.FC<BattleMiddleProps> = ({
   return (
     <div className="battleMiddle">
       <BattleMonster
-        image={player1Monster.image}
-        alt={player1Monster.type}
+        image={player1Monster.base.imageUrl}
+        alt={player1Monster.base.name}
         position="monster1"
         playerId={playerId1}
         initialHp={player1Monster.health}
@@ -83,8 +83,8 @@ export const BattleMiddle: React.FC<BattleMiddleProps> = ({
       )}
 
       <BattleMonster
-        image={player2Monster.image}
-        alt={player2Monster.type}
+        image={player2Monster.base.imageUrl}
+        alt={player2Monster.base.name}
         position="monster2"
         playerId={playerId2}
         initialHp={player2Monster.health}
