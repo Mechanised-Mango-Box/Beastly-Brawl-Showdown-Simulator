@@ -85,13 +85,28 @@ export class StunnedStateComponent implements BaseComponent<"stunned"> {
     }
   }
 }
+
+export class SpeedModifierComponent implements BaseComponent<"speedModifier"> {
+  kind = "speedModifier" as const;
+  speedBonus: number;
+
+  constructor(speedBonus: number) {
+    this.speedBonus = speedBonus;
+  }
+
+  getSpeedBonus(): number {
+    return this.speedBonus;
+  }
+} 
+
 type CommonComponentTypes =
   | typeof RerollChargeComponent
   | typeof DodgeChargeComponent
   | typeof DodgeStateComponent
   | typeof DefendComponent
   | typeof AbilityChargeStunComponent
-  | typeof StunnedStateComponent;
+  | typeof StunnedStateComponent
+  | typeof SpeedModifierComponent;
 //# Map it then export
 type ComponentInstanceType = InstanceType<CommonComponentTypes>;
 export type ComponentKindMap = {
