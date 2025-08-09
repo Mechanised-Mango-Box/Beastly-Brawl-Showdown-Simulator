@@ -137,10 +137,8 @@ export class Battle {
         }
 
         /// Sort by source monster speed
-        return (
-          this.sides[b.source].monster.base.baseStats.speed -
-          this.sides[a.source].monster.base.baseStats.speed
-        ); // TODO get speed rather than use base
+        return this.sides[b.source].monster.getSpeed() - this.sides[a.source].monster.getSpeed();
+
       });
       console.log(`Acton Queue:\n${JSON.stringify(moveRequestQueue)}`);
 

@@ -15,7 +15,7 @@
 For host server
 
 ```sh
-ts-node /app.ts
+ts-node ./app.ts
 ```
 
 For player frontend server
