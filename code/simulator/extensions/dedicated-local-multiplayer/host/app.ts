@@ -122,7 +122,6 @@ function startSimulator() {
         monsterTemplate: player.monsterTemplate,
       };
     }),
-    player_option_timeout: 1000,
   });
 
   /// Subscribe to notice events

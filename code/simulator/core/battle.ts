@@ -8,11 +8,8 @@ import { commonMovePool } from "../data/common_move_pool";
 import { MoveData, MoveRequest } from "./action/move/move";
 import { EntryID } from "./types";
 import { TargetingData } from "./action/targeting";
+
 export interface PlayerOptions {
-  name: string;
-  /**
-   * A copy of a template
-   */
   monsterTemplate: MonsterTemplate; //! Can change to list if needed later
 }
 
@@ -20,14 +17,12 @@ export type BattleOptions = {
   seed: number;
 
   playerOptionSet: PlayerOptions[];
-
-  player_option_timeout: number;
 };
 
 export class Battle {
   readonly seed: number;
   readonly sides: Side[];
-  
+
   readonly eventHistory: EventHistory;
 
   readonly noticeBoard: NoticeBoard;

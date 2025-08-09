@@ -45,7 +45,7 @@ export class Monster {
   components: Array<BaseComponent>;
 
   constructor(template: MonsterTemplate) {
-    this.base = template;
+    this.base =  template; //structuredClone(template);
     this.health = template.baseStats.health;
     this.components = [];
     this.defendActionCharges = template.baseDefendActionCharges;
