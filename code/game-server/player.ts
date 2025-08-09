@@ -1,3 +1,4 @@
+import { MonsterTemplate } from "../simulator/core/monster/monster";
 import { MonsterPool } from "../simulator/data/monster_pool"
 
 export class Player {
@@ -5,7 +6,7 @@ export class Player {
   displayName: string;
   linkedAccountId?: string;
   spectators: string[];
-  monster?: typeof MonsterPool;
+  monster?: MonsterTemplate;
 
   constructor(socketId: string, displayName: string, linkedAccountId: string | undefined) {
     this.socketId = socketId;
