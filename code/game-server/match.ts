@@ -1,5 +1,5 @@
 import { Player } from "./player";
-import { AccountId } from "./types";
+import { AccountId } from "../shared/types";
 import { Battle, BattleOptions, PlayerOptions } from "../simulator/core/battle"
 
 enum MatchType {

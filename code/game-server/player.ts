@@ -27,11 +27,11 @@ export class Player {
     return this.monster !== undefined;
   }
 
-  getMonster(): typeof MonsterPool | undefined {``
+  getMonster(): MonsterTemplate | undefined {
     return this.monster;
   }
 
-  setMonster(monster: typeof MonsterPool) {
+  setMonster(monster: MonsterTemplate) {
     this.monster = monster;
   }
 }

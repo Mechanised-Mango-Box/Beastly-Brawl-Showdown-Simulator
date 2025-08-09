@@ -9,8 +9,8 @@ type BasicClientToServerEvents = {
 
 type BasicServerToClientEvents = {
   pong: () => void;
-
   error: (msg: string) => void;
+  gameReadyToStart: () => void;
 };
 
 export type PlayerClientToServerEvents = BasicClientToServerEvents & {
@@ -24,6 +24,9 @@ export type PlayerServerToClientEvents = BasicServerToClientEvents & {
   refreshPlayerList: (list: string[]) => void;
   requestMonsterSelection: (setMonsterName: (monsterName: MonsterName) => void) => void;
   requestMoveSelection: (responseDeadline: number) => void;
+
+  submitGameReadyState: () => void;
+  gameReadytoStart: () => void;
 };
 
 export type PlayerSocketData = {};
@@ -48,6 +51,7 @@ export type PlayerChannelAuth = {
 export type LobbyId = number & { __brand: "LobbyId" };
 export type JoinCode = string & { __brand: "JoinCode" };
 export type ServerId = number & { __brand: "ServerId" };
+export type AccountId = string;
 
 // export type AccountId = string;
 // export type MatchId = number;

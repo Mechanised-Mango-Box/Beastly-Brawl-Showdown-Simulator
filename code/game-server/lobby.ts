@@ -14,6 +14,7 @@ export class Lobby {
   //# Users
   host: Host;
   players = new Map<string, Player>();
+  private playersReadyForBattle: Set<string> = new Set();
 
   //# Data
   battles: Battle[] = [];
@@ -68,28 +69,63 @@ export class Lobby {
     });
   }
 
+  checkAllPlayersReady() {
+    // Make sure every player has selected a monster and is ready
+    const allReady = [...this.players.values()].every(
+      p => p.monsterTemplate && this.playersReadyForBattle.has(p.displayName)
+    );
+
+    if (allReady) {
+      // Notify host and players that game can start
+      this.host.socket.emit("gameReadyToStart");
+      this.players.forEach(player => {
+        player.socket.emit("gameReadyToStart");
+      });
+    }
+  }
+
   addAndSetupPlayer(player: Player) {
     this.players.set(player.displayName, player);
 
+    //#Region <<< Monster Selection >>>
     player.socket.on("submitMonsterChoice", () => {
-      // checks if selection is locked in
-      // if not assign this player's monster id
-      throw new Error("Not implemented");
+      // validates the monster choice
+      if (!player.monsterTemplate) {
+        player.socket.emit("error", "No monster template selected.");
+        return;
+      }
+
+      // Mark player as ready for battle
+      this.playersReadyForBattle.add(player.displayName);
+
+      // Inform the player their monster was accepted
+      player.socket.emit("submitGameReadyState");
+
     });
+    //#EndRegion <<< Monster Selection >>>
+
+    //#Region <<< Game Readiness >>>
     player.socket.on("submitGameReadyState", () => {
-      // checks if game readyness is locked in
-      // if not game the ready state
-      throw new Error("Not implemented");
+      // Check if all players are ready for battle
+      this.checkAllPlayersReady();
     });
+    //#EndRegion <<< Game Readiness >>>
+
+    //#Region <<< Move Selection >>>
     player.socket.on("submitMove", () => {
       // checks if move locked
       // if not override current move id and target
       throw new Error("Not implemented");
     });
+    //#EndRegion <<< Move Selection >>>
+
+    //#Region <<< Move Lock State >>>
     player.socket.on("submitMoveLockState", () => {
       // checks if not processing turn
       // if not then change move lock state
       throw new Error("Not implemented");
     });
+    //#EndRegion <<< Move Lock State >>>
   }
 }
+

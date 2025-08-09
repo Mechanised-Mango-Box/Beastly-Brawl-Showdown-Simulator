@@ -36,6 +36,7 @@ export class LobbyManager {
   encodeJoinCode(serverId: ServerId, lobbyId: LobbyId): JoinCode {
     return this.sqids.encode([serverId, lobbyId]) as JoinCode;
   }
+  
   decodeJoinCode(joinCode: JoinCode): { serverId: ServerId; lobbyId: LobbyId } {
     const [serverId, lobbyId] = this.sqids.decode(joinCode);
     return {
