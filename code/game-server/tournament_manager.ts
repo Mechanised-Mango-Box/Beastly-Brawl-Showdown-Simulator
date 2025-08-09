@@ -1,44 +1,44 @@
 import { Player } from "./player";
-import { Battle } from "./match";
+import { Match } from "./match";
 
 export class TournamentManager {
   playersByAccountId: Map<string, Player> = new Map();
 
-  battles: Battle[];
+  matches: Match[];
 
   constructor() {
-    this.battles = [];
+    this.matches = [];
   }
 
-  createBattles(playerList: Player[]) {
-    this.battles = [];
+  creatematchs(playerList: Player[]) {
+    this.matches = [];
 
     for (let i = 0; i < playerList.length; i += 2) {
       let matchID = i / 2 + 1;
       if (i + 1 < playerList.length) {
-        this.battles.push(new Battle(playerList[i], matchID, playerList[i + 1]));
+        this.matches.push(new Match(playerList[i], matchID, playerList[i + 1]));
       } else {
-        this.battles.push(new Battle(playerList[i], matchID));
+        this.matches.push(new Match(playerList[i], matchID));
       }
     }
 
-    console.log(`Created ${this.battles.length} battles for this round.`);
+    console.log(`Created ${this.matches.length} matchs for this round.`);
   }
 
-  // To be called immediately after a battle ends
-  async reportBattleResults(winnerId: string, battleID: number): Promise<void> {
-    // Find the battle by ID
-    const battle = this.battles.find(b => b.battleID === battleID);
-    if (!battle) {
-      throw new Error(`Battle with ID ${battleID} not found.`);
+  // To be called immediately after a match ends
+  async reportmatchResults(winnerId: string, matchID: number): Promise<void> {
+    // Find the match by ID
+    const match = this.matches.find(b => b.matchID === matchID);
+    if (!match) {
+      throw new Error(`match with ID ${matchID} not found.`);
     }
 
-    battle.winnerId =  winnerId;
+    match.winnerId =  winnerId;
 
     // Retrieve the loser's AccountId
-    const loserId = battle.player1.linkedAccountId === winnerId
-      ? battle.player2?.linkedAccountId
-      : battle.player1.linkedAccountId;
+    const loserId = match.player1.linkedAccountId === winnerId
+      ? match.player2?.linkedAccountId
+      : match.player1.linkedAccountId;
 
     if (loserId) {
       const loserPlayer = this.playersByAccountId.get(loserId);
@@ -47,23 +47,23 @@ export class TournamentManager {
       }
     }
 
-    // Remove completed battle
-    this.battles = this.battles.filter(b => b.battleID !== battleID);
+    // Remove completed match
+    this.matches = this.matches.filter(b => b.matchID !== matchID);
 
     await this.checkRoundCompletion();
   }
 
   async checkRoundCompletion(): Promise<void> {
-    // Check if all battles in the current round have winners
-    const allCompleted = this.battles.every(battle => battle.winnerId);
+    // Check if all matchs in the current round have winners
+    const allCompleted = this.matches.every(match => match.winnerId);
     if (!allCompleted) {
       return;
     }
 
-    // If all battles are completed, determine winners and create new battles for the next round
+    // If all matchs are completed, determine winners and create new matchs for the next round
     const winners: Player[] = [];
-    for (const battle of this.battles) {
-      const winnerId = battle.winnerId;
+    for (const match of this.matches) {
+      const winnerId = match.winnerId;
       if (winnerId) {
         const winner = this.playersByAccountId.get(winnerId);
         if (winner) {
@@ -72,7 +72,7 @@ export class TournamentManager {
       }
     }
 
-    this.battles = [];
+    this.matches = [];
 
     // If there's only one winner, the tournament is over
     if (winners.length === 1) {
@@ -80,13 +80,13 @@ export class TournamentManager {
       return;
     }
 
-    // If there are multiple winners, create new battles for the next round
-    this.createBattles(winners);
+    // If there are multiple winners, create new matchs for the next round
+    this.creatematchs(winners);
   }
 
   async startTournament(): Promise<void> {
     const players = Array.from(this.playersByAccountId.values());
-    this.createBattles(players);
+    this.creatematchs(players);
   }
 
 }
