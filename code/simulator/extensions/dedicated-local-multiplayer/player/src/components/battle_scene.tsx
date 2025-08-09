@@ -42,24 +42,24 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events }) => {
       if (currentTurn) {
         currentTurn.addEvent(event);
 
-        // Optionally capture specific event types
-        switch (event.name) {
-          case "buff":
-            currentTurn.setBuffEvent(event);
-            break;
-          case "startMove":
-            currentTurn.setStartMoveEvent(event);
-            break;
-          case "roll":
-            currentTurn.setRollEvent(event);
-            break;
-          case "damage":
-            currentTurn.setDamageEvent(event);
-            break;
-          case "blocked":
-            currentTurn.setBlockEvent(event);
-            break;
-        }
+        // // Optionally capture specific event types
+        // switch (event.name) {
+        //   case "buff":
+        //     currentTurn.setBuffEvent(event);
+        //     break;
+        //   case "startMove":
+        //     currentTurn.setStartMoveEvent(event);
+        //     break;
+        //   case "roll":
+        //     currentTurn.setRollEvent(event);
+        //     break;
+        //   case "damage":
+        //     currentTurn.setDamageEvent(event);
+        //     break;
+        //   case "blocked":
+        //     currentTurn.setBlockEvent(event);
+        //     break;
+        // }
       }
     }
     // console.log(turnArray)
