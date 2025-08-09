@@ -135,56 +135,6 @@ const eventsUpToSelection = React.useMemo(() => {
       </div>
 
       {/* Middle Div (INFORMATION ON ROLLS, ACTIONS TAKEN) */}
-      {/* <div
-        style={{
-          flex: 1,
-          backgroundColor: "#f77a7aff",
-          padding: "20px",
-          textAlign: "center",
-        }}
-      >
-        <p>{turns[turns.length - 1].turnEvents[turns[turns.length - 1].turnEvents.length - 1].name}</p>
-      </div> */}
-
-      {/* <div
-        style={{
-          flex: 1,
-          backgroundColor: "#f77a7aff",
-          padding: "20px",
-          textAlign: "left",
-          overflowY: "auto",  // makes it vertically scrollable
-          maxHeight: "135px", // sets a fixed height so scrolling is possible
-          border: "1px solid black"
-        }}
-      >
-        {turns.map((turn, i) =>
-          turn.turnEvents.map((event, j) => (
-            <p key={`${i}-${j}`} style={{ margin: "5px 0" }}>
-              {event.name}
-            </p>
-          ))
-        )}
-      </div> */}
-
-      {/* <div
-        style={{
-          flex: 1,
-          backgroundColor: "#f77a7aff",
-          padding: "20px",
-          textAlign: "left",
-          overflowY: "auto",
-          maxHeight: "135px",
-          border: "1px solid black",
-        }}
-      >
-        {turns.map((turn, i) =>
-          turn.turnEvents.map((event, j) => (
-            <p key={`${i}-${j}`} style={{ margin: "5px 0" }}>
-              {turn.printEventString(event)}
-            </p>
-          ))
-        )}
-      </div> */}
 
       <div
         style={{
