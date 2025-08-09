@@ -278,21 +278,65 @@
   color: black;
 }
 
-.circle-blue { background-color: #6c8a90; }
-.circle-mid-blue { background-color: #a8b7ba; }
-.circle-light-blue { background-color: #bbd9de; }
-.circle-green { background-color: #b4c2a3; }
-.circle-mid-green { background-color: #cfdebb; }
-.circle-light-green { background-color: #d1d8c9; }
-.circle-orange { background-color: #cd833a; }
-.circle-mid-orange { background-color: #daa677; }
-.circle-light-orange { background-color: #dbc2a0; }
-.circle-white { background-color: #f0f2f0; }
-.circle-redish-brown { background-color: #7e311e; }
-.circle-dark-orange { background-color: #b25034; }
-.circle-dark-brown { background-color: #462c23; }
-.circle-light-brown { background-color: #945b3a; }
-.circle-black { background-color: #312421; }
+.circle-blue {
+  background-color: #6c8a90;
+}
+
+.circle-mid-blue {
+  background-color: #a8b7ba;
+}
+
+.circle-light-blue {
+  background-color: #bbd9de;
+}
+
+.circle-green {
+  background-color: #b4c2a3;
+}
+
+.circle-mid-green {
+  background-color: #cfdebb;
+}
+
+.circle-light-green {
+  background-color: #d1d8c9;
+}
+
+.circle-orange {
+  background-color: #cd833a;
+}
+
+.circle-mid-orange {
+  background-color: #daa677;
+}
+
+.circle-light-orange {
+  background-color: #dbc2a0;
+}
+
+.circle-white {
+  background-color: #f0f2f0;
+}
+
+.circle-redish-brown {
+  background-color: #7e311e;
+}
+
+.circle-dark-orange {
+  background-color: #b25034;
+}
+
+.circle-dark-brown {
+  background-color: #462c23;
+}
+
+.circle-light-brown {
+  background-color: #945b3a;
+}
+
+.circle-black {
+  background-color: #312421;
+}
 
 /* Bottom Middle */
 .components {
@@ -508,8 +552,10 @@
 }
 
 .name-board {
-  width: 500px; /* 544px */
-  height: 200px; /* 432px */
+  width: 500px;
+  /* 544px */
+  height: 200px;
+  /* 432px */
   background-image: url('/Panel 1.png');
   background-size: 100% 100%;
   background-position: center;
@@ -521,26 +567,33 @@
 .textbox {
   display: block;
   margin: 10px auto;
-  padding: 10px 20px; /* Adjust based on where the text should sit */
+  padding: 10px 20px;
+  /* Adjust based on where the text should sit */
   font-size: 16px;
   background-image: url('/Textbox.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   background-color: transparent;
-  width: 500px;      /* Adjust to match the size of your PNG */
-  height: 100px;      /* Adjust to match the PNG height */
+  width: 500px;
+  /* Adjust to match the size of your PNG */
+  height: 100px;
+  /* Adjust to match the PNG height */
   border: none;
   outline: none;
-  color: #000;       /* Change if needed */
-  text-align: center; /* Or left/right as you like */
+  color: #000;
+  /* Change if needed */
+  text-align: center;
+  /* Or left/right as you like */
   font-family: inherit;
   image-rendering: pixelated;
 }
 
 .healthbar {
-  width: 276px; /* 544px */
-  height: 88px; /* 432px */
+  width: 276px;
+  /* 544px */
+  height: 88px;
+  /* 432px */
   background-image: url('/healthbar.png');
   background-size: 100% 100%;
   background-position: center;
@@ -550,8 +603,10 @@
 }
 
 .monster-card {
-  width: 150px; /* 544px */
-  height: 150px; /* 432px */
+  width: 150px;
+  /* 544px */
+  height: 150px;
+  /* 432px */
   background-image: url('/MonsterCardBg.png');
   background-size: 100% 100%;
   background-position: center;
@@ -587,7 +642,8 @@ body {
   align-items: center;
   background-color: #f0f0f0;
   border: 2px solid #333;
-  border-radius: 15px; /* This creates the curved corners */
+  border-radius: 15px;
+  /* This creates the curved corners */
   font-family: Arial, sans-serif;
   overflow: auto;
 }
@@ -601,16 +657,18 @@ body {
   align-items: center;
   background-color: #f0f0f0;
   border: 2px solid #333;
-  border-radius: 15px; /* This creates the curved corners */
+  border-radius: 15px;
+  /* This creates the curved corners */
 }
 
-.qr-box canvas{
+.qr-box canvas {
   width: 100%;
   height: 100%;
 }
+
 /*This shows and arranges the link and qr code components*/
 .waiting-room-info-box {
-  display:flex;
+  display: flex;
   gap: 20px;
 }
 
@@ -637,9 +695,8 @@ body {
   gap: 20px;
   background-color: #f0f0f0;
   border: 2px solid #333;
-  border-radius: 15px; /* This creates the curved corners */
-}
-  border-radius: 15px; /* This creates the curved corners */
+  border-radius: 15px;
+  /* This creates the curved corners */
 }
 
 /*For the participants name*/
@@ -654,11 +711,13 @@ body {
   line-height: 40px;
   background-color: #f0f0f0;
   border: 2px solid #333;
-  border-radius: 15px; /* This creates the curved corners */
-  border-radius: 15px; /* This creates the curved corners */
+  border-radius: 15px;
+  /* This creates the curved corners */
+  border-radius: 15px;
+  /* This creates the curved corners */
   white-space: nowrap;
 }
-}
+
 
 /* Shared container for full-page layout */
 .homepage-container {
@@ -686,6 +745,7 @@ body {
 .logo-container {
   margin-bottom: 2rem;
 }
+
 .logo-image {
   width: 150px;
   height: auto;
@@ -708,19 +768,19 @@ body {
   height: 100%;
 }
 
-.battleScreen{
+.battleScreen {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
 
-.battleScreenTop{
+.battleScreenTop {
   position: relative;
   display: block;
   background-color: red;
   width: 100%;
   height: 8%;
-  top : 0px;
+  top: 0px;
 }
 
 .battleMiddle {
@@ -735,11 +795,11 @@ body {
   z-index: 800;
 }
 
-.battleScreenBottom{
+.battleScreenBottom {
   display: flex;
-  justify-content: center; 
-  align-items: center;     
-  gap: 2rem;               
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
   background-color: red;
   width: 100%;
   height: 30%;
@@ -752,14 +812,14 @@ body {
   object-fit: fill;
 }
 
-.battleScreenBottomButton{
+.battleScreenBottomButton {
   width: 40%;
   height: 8rem;
   margin: 1rem;
   padding: 1rem;
 }
 
-.battleScreenTopButton{
+.battleScreenTopButton {
   position: relative;
   left: 0.5rem;
   display: inline-flex;
@@ -773,14 +833,14 @@ body {
   color: black;
 }
 
-.monster1{
+.monster1 {
   margin: 2rem;
   position: absolute;
   right: 10rem;
 
 }
 
-.monster2{
+.monster2 {
   margin: 2rem;
   position: absolute;
   bottom: 1rem;
@@ -800,7 +860,7 @@ body {
   height: 100%;
   appearance: none;
   border-radius: 10px;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 progress::-moz-progress-bar {
@@ -820,14 +880,14 @@ progress::-moz-progress-bar {
   pointer-events: none;
 }
 
-.battleScreenBottomButtonImage{
+.battleScreenBottomButtonImage {
   width: 5rem;
   height: 5rem;
   object-fit: fill;
 }
 
 
-.topBackIcon{
+.topBackIcon {
   position: absolute;
   width: 1.5rem;
   height: 1.5rem;
@@ -836,18 +896,20 @@ progress::-moz-progress-bar {
   left: 1rem;
 }
 
-.diceResult{
+.diceResult {
   position: absolute;
   font-size: 3rem;
   z-index: 1000;
-  top:17rem;
-  left:77.5rem;
+  top: 17rem;
+  left: 77.5rem;
 }
 
-.diceAnimation{
+.diceAnimation {
   z-index: 900;
-  left:20rem;
-}.btn:active {
+  left: 20rem;
+}
+
+.btn:active {
   transform: scale(0.97);
 }
 
@@ -862,6 +924,7 @@ progress::-moz-progress-bar {
   background-color: #a7ba93;
   color: white;
 }
+
 .join-btn {
   background-color: #b2d9ed;
   color: white;
@@ -941,17 +1004,19 @@ input[type="range"] {
 }
 
 .toggle-btn.on {
-  background-color: #6b5b95; /* Purple */
+  background-color: #6b5b95;
+  /* Purple */
   color: white;
 }
 
 .toggle-btn.off {
-  background-color: #e57373; /* Light red */
+  background-color: #e57373;
+  /* Light red */
   color: white;
 }
 
 
-.topBackIcon{
+.topBackIcon {
   position: absolute;
   width: 1.5rem;
   height: 1.5rem;
