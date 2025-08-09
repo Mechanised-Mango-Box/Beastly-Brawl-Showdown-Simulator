@@ -89,6 +89,23 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events }) => {
     }
   };
 
+// Checks the index of the turn to show
+const uptoIndex = isManualSelection
+  ? Math.max(0, Math.min(turnIndex, turns.length - 1))
+  : Math.max(0, turns.length - 1);
+
+// Build a flat list of events from Turn 0..uptoIndex
+const eventsUpToSelection = React.useMemo(() => {
+  if (!turns.length) return [];
+  const slice = turns.slice(0, uptoIndex + 1);
+  return slice.flatMap((turn, ti) =>
+    turn.turnEvents.map((event, ei) => ({
+      key: `${ti}-${ei}`,
+      text: turn.printEventString(event),
+    }))
+  );
+}, [turns, uptoIndex]);
+
   if (parsed.length === 0) {
     return <p>Waiting for game data...</p>;
   }
@@ -149,7 +166,7 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events }) => {
         )}
       </div> */}
 
-      <div
+      {/* <div
         style={{
           flex: 1,
           backgroundColor: "#f77a7aff",
@@ -165,6 +182,26 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events }) => {
             <p key={`${i}-${j}`} style={{ margin: "5px 0" }}>
               {turn.printEventString(event)}
             </p>
+          ))
+        )}
+      </div> */}
+
+      <div
+        style={{
+          flex: 1,
+          backgroundColor: "#f77a7aff",
+          padding: "20px",
+          textAlign: "left",
+          overflowY: "auto",
+          maxHeight: "135px",
+          border: "1px solid black",
+        }}
+      >
+        {eventsUpToSelection.length === 0 ? (
+          <p>No events yet.</p>
+        ) : (
+          eventsUpToSelection.map(({ key, text }) => (
+            <p key={key} style={{ margin: "5px 0" }}>{text}</p>
           ))
         )}
       </div>
