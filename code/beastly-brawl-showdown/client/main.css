@@ -785,6 +785,7 @@ input:focus {
   transition: all 0.3s ease;
   position: relative;
   max-width: 30vw;
+  height: 24.5vh;
 
     box-shadow:
     0 4px 0 #773519,     /* bottom edge */
@@ -811,8 +812,8 @@ input:focus {
 }
 
 .monster-avatar {
-  width: 10vw;
-  height: 20vh;
+  width: 37%;
+  height: 100%;
   border: 3px solid #333;
   border-radius: 50%;
   background: #f8f9fa;
@@ -1305,8 +1306,7 @@ input[type="range"] {
   }
 
   .monster-avatar {
-    width: 24.75vw;
-    height: 11.25vh;
+    height: 70%;
   }
 
   .monster-name {
