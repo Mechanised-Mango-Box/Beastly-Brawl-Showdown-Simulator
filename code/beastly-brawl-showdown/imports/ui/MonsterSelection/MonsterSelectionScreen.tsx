@@ -28,15 +28,14 @@ export const MonsterSelectionScreen = () => {
             // Deselect currently selected item
             const deselect = document.getElementById(currentlySelected);
             if (deselect) {
-                deselect.style.border = "none";
+                deselect.classList.remove('selected');
             }
         }
 
         // Create border around selected mosnter
         const selected = document.getElementById(name);
         if (selected) {
-            selected.style.border = "solid";
-            selected.style.borderWidth = "8px";
+            selected.classList.add('selected');
         }
 
         currentlySelected = name;
@@ -54,9 +53,9 @@ export const MonsterSelectionScreen = () => {
             <h1 className="monster-selection-screen-title">Choose Your</h1>
             <h1 className="monster-selection-screen-title" id="header-2">Monster!</h1>
             <div className="monster-selection-grid">
-                <MonsterContainer image="img/placeholder_monster_1.png" name="monster1" func={highlightAndShowConfirm} />
-                <MonsterContainer image="img/placeholder_monster_2.png" name="monster2" func={highlightAndShowConfirm} />
-                <MonsterContainer image="img/placeholder_monster_3.png" name="monster3" func={highlightAndShowConfirm} />
+                <MonsterContainer name="monster1" type="Attacker" func={highlightAndShowConfirm} />
+                <MonsterContainer name="monster2" type="Defender" func={highlightAndShowConfirm} />
+                <MonsterContainer name="monster3" type="Balanced" func={highlightAndShowConfirm} />
                 <ConfirmButton />
             </div>   
         </div>
