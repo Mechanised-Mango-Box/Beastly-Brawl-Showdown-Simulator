@@ -15,7 +15,9 @@ export const MonsterContainer = ({
 
   return (
     <div className="monster-selection-card" id={name} onClick={onClick}>
-      <div className="monster-avatar">🔥</div>
+      <div className="monster-avatar">
+        <img src={`/monsters/${name}.png`} alt={name} />
+      </div>
       <div className="monster-selection-card-info">
         {/* All of these are placeholder texts */}
         <div className="monster-name">{name}</div>
