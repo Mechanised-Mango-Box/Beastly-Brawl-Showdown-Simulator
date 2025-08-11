@@ -56,33 +56,25 @@ export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({ 
   }, [isConfirmed, selectedMonster, setSelectedMonsterCallback]);
 
   return (
-    <div className="monsterSelectionScreen">
-      <h1>Choose your Monster:</h1>
-
-      <MonsterContainer
-        image="img/placeholder_monster_1.png"
-        name="monster1"
-        currentlySelectedMonster={highlightAndShowConfirm}
-      />
-      <MonsterContainer
-        image="img/placeholder_monster_2.png"
-        name="monster2"
-        currentlySelectedMonster={highlightAndShowConfirm}
-      />
-      <MonsterContainer
-        image="img/placeholder_monster_3.png"
-        name="monster3"
-        currentlySelectedMonster={highlightAndShowConfirm}
-      />
+    <div className="canvas-body" id="monster-selection-screen">
+            <h1 className="monster-selection-screen-title">Choose Your</h1>
+            <h1 className="monster-selection-screen-title" id="header-2">Monster!</h1>
+            <div className="monster-selection-grid">
+                <MonsterContainer name="monster1" type="Attacker" func={highlightAndShowConfirm} />
+                <MonsterContainer name="monster2" type="Defender" func={highlightAndShowConfirm} />
+                <MonsterContainer name="monster3" type="Balanced" func={highlightAndShowConfirm} />
 
       <button
-        id="confirmMonsterButton"
+        className="glb-btn"
+        id="monster-selection-btn"
         onClick={handleConfirm}
         disabled={!confirmEnabled}
         
       >
         Confirm
       </button>
-    </div>
+          </div>
+            </div>   
+          
   );
 };
