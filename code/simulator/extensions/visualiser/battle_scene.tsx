@@ -1,8 +1,8 @@
 import React, { useState,useMemo } from "react";
+import { Turn } from "../../core/event/Turn"
+import type { BaseEvent } from "../../core/event/base_event";
+import type { SnapshotEvent } from "../../core/event/core_events";
 import { parseSnapshot } from "./snapshot_parser";
-import { Turn } from "../../../../../core/event/Turn"
-import type { BaseEvent } from "../../../../../core/event/base_event";
-import type { SnapshotEvent } from "../../../../../core/event/core_events";
 
 //this class is basically the entire simulator/information part of the battles, we might need to get playernames tho
 interface BattleSceneProps {
@@ -10,7 +10,6 @@ interface BattleSceneProps {
 }
 
 console.log("BattleScene loaded");
-
 
 //so the way this works is we have an array of turns which in itself has an array of events which have occured in it
 //we've parsed the initial raw JSON data into an array (parsed) so if you want leftside you do parsed[0]
@@ -65,7 +64,8 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events }) => {
     // console.log(turnArray)
     return turnArray;
   }, [events]);
-  
+
+  console.log(turns)
   //bugfix from gpt cuz I tried putting this inside the bottom if else block, probably need to change its location so this file doesn't look so ugly?
   React.useEffect(() => {
     if (isManualSelection && turnInput === turns.length) {
@@ -74,15 +74,16 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events }) => {
   }, [isManualSelection, turnInput, turns.length]);
   
   if (isManualSelection) {
+    console.log("Current Turn to display is" + turnIndex);
     currentSnapshot = turns[turnIndex]?.getSnapshotEvent();
   } else {
-    currentSnapshot = turns[turns.length - 1]?.getSnapshotEvent();
+    console.log("Current Turn to display is" + (turns.length));
+    currentSnapshot = turns[turns.length-1]?.getSnapshotEvent();
   }
   
   const parsed = currentSnapshot ? parseSnapshot(currentSnapshot) : [];
 
   const handleTurnChange = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
     setIsManualSelection(true);
     if (turnInput >= 0 && turnInput < turns.length) {
       setTurnIndex(turnInput-1);
@@ -182,29 +183,43 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events }) => {
         <p>Defend Charges: {parsed[1].defendActionCharge}</p>
       </div>
 
-      {/* Turn Counter Form (Bottom Left) */}
-      <form
-        onSubmit={handleTurnChange}
+      <div
         style={{
-          left: "0",
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
           display: "flex",
           alignItems: "center",
+          justifyContent: "center",
           gap: "10px",
+          padding: "12px",
+          backgroundColor: "#f8f8f8",
+          borderTop: "1px solid #ccc",
         }}
       >
         <label htmlFor="turn">Turn:</label>
+
         <input
-          type="number"
-          name="turn"
+          type="range"
           id="turn"
+          name="turn"
           min={1}
           max={turns.length}
           value={turnInput}
-          placeholder="1"
-          onChange={(e) => setTurnInput(parseInt(e.target.value, 10) || 1)}
+          onChange={(e) => {
+            const val = parseInt(e.target.value, 10);
+            setTurnInput(val);
+          }}
+          style={{ width: "300px" }}
         />
-        <button type="submit">Go</button>
-      </form>
+
+        <span>
+          {turnInput} / {turns.length}
+        </span>
+
+        <button onClick={() => handleTurnChange(turnInput)}>Go</button>
+      </div>
     </div>
   );
 };
