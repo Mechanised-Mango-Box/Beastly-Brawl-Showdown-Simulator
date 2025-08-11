@@ -3,7 +3,7 @@ import { MonsterContainer } from "./MonsterContainer";
 import { useNavigate } from "react-router-dom";
 
 interface MonsterSelectionScreenProps {
-  setSelectedMonsterCallback: (value: string) => void;
+  setSelectedMonsterCallback?: (value: string) => void;
 }
 
 export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({ setSelectedMonsterCallback }) => {
@@ -49,7 +49,7 @@ export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({ 
 
   // Notify parent after confirmation
   useEffect(() => {
-    if (isConfirmed && selectedMonster) {
+    if (isConfirmed && selectedMonster && setSelectedMonsterCallback) {
       setSelectedMonsterCallback(selectedMonster);
     }
   }, [isConfirmed, selectedMonster, setSelectedMonsterCallback]);
