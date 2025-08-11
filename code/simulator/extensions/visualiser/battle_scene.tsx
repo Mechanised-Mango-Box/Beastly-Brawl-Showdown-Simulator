@@ -41,24 +41,24 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events }) => {
       if (currentTurn) {
         currentTurn.addEvent(event);
 
-        // Optionally capture specific event types
-        switch (event.name) {
-          case "buff":
-            currentTurn.setBuffEvent(event);
-            break;
-          case "startMove":
-            currentTurn.setStartMoveEvent(event);
-            break;
-          case "roll":
-            currentTurn.setRollEvent(event);
-            break;
-          case "damage":
-            currentTurn.setDamageEvent(event);
-            break;
-          case "blocked":
-            currentTurn.setBlockEvent(event);
-            break;
-        }
+        // // Optionally capture specific event types
+        // switch (event.name) {
+        //   case "buff":
+        //     currentTurn.setBuffEvent(event);
+        //     break;
+        //   case "startMove":
+        //     currentTurn.setStartMoveEvent(event);
+        //     break;
+        //   case "roll":
+        //     currentTurn.setRollEvent(event);
+        //     break;
+        //   case "damage":
+        //     currentTurn.setDamageEvent(event);
+        //     break;
+        //   case "blocked":
+        //     currentTurn.setBlockEvent(event);
+        //     break;
+        // }
       }
     }
     // console.log(turnArray)
@@ -90,6 +90,23 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events }) => {
     }
   };
 
+// Checks the index of the turn to show
+const uptoIndex = isManualSelection
+  ? Math.max(0, Math.min(turnIndex, turns.length - 1))
+  : Math.max(0, turns.length - 1);
+
+// Build a flat list of events from Turn 0..uptoIndex
+const eventsUpToSelection = React.useMemo(() => {
+  if (!turns.length) return [];
+  const slice = turns.slice(0, uptoIndex + 1);
+  return slice.flatMap((turn, ti) =>
+    turn.turnEvents.map((event, ei) => ({
+      key: `${ti}-${ei}`,
+      text: turn.printEventString(event),
+    }))
+  );
+}, [turns, uptoIndex]);
+
   if (parsed.length === 0) {
     return <p>Waiting for game data...</p>;
   }
@@ -119,36 +136,6 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events }) => {
       </div>
 
       {/* Middle Div (INFORMATION ON ROLLS, ACTIONS TAKEN) */}
-      {/* <div
-        style={{
-          flex: 1,
-          backgroundColor: "#f77a7aff",
-          padding: "20px",
-          textAlign: "center",
-        }}
-      >
-        <p>{turns[turns.length - 1].turnEvents[turns[turns.length - 1].turnEvents.length - 1].name}</p>
-      </div> */}
-
-      {/* <div
-        style={{
-          flex: 1,
-          backgroundColor: "#f77a7aff",
-          padding: "20px",
-          textAlign: "left",
-          overflowY: "auto",  // makes it vertically scrollable
-          maxHeight: "135px", // sets a fixed height so scrolling is possible
-          border: "1px solid black"
-        }}
-      >
-        {turns.map((turn, i) =>
-          turn.turnEvents.map((event, j) => (
-            <p key={`${i}-${j}`} style={{ margin: "5px 0" }}>
-              {event.name}
-            </p>
-          ))
-        )}
-      </div> */}
 
       <div
         style={{
@@ -161,11 +148,11 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events }) => {
           border: "1px solid black",
         }}
       >
-        {turns.map((turn, i) =>
-          turn.turnEvents.map((event, j) => (
-            <p key={`${i}-${j}`} style={{ margin: "5px 0" }}>
-              {turn.printEventString(event)}
-            </p>
+        {eventsUpToSelection.length === 0 ? (
+          <p>No events yet.</p>
+        ) : (
+          eventsUpToSelection.map(({ key, text }) => (
+            <p key={key} style={{ margin: "5px 0" }}>{text}</p>
           ))
         )}
       </div>
