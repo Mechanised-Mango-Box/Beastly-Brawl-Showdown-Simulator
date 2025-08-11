@@ -1,6 +1,6 @@
 import { DefaultEventsMap, Server, Socket } from "socket.io";
 import { MonsterPool } from "../../../data/monster_pool";
-import { Battle } from "../../../core/battle";
+import { Battle, PlayerOptions } from "../../../core/battle";
 import express from "express";
 import { createServer } from "node:http";
 import * as readline from "readline";
@@ -43,8 +43,8 @@ const app = express();
 const server = createServer(app);
 const io = new Server<PlayerToServerEvents, ServerToPlayerEvents, never, PlayerSocketData>(server, {
   cors: {
-    origin: "http://localhost:5173/"
-  }
+    origin: "http://localhost:5173/",
+  },
 });
 
 /// Middleware
@@ -117,10 +117,10 @@ function startSimulator() {
   const battle: Battle = new Battle({
     seed: 0,
     playerOptionSet: players.map((player) => {
-      return {
-        name: player.name,
+      const playerOptions: PlayerOptions = {
         monsterTemplate: player.monsterTemplate,
       };
+      return playerOptions;
     }),
   });
 
@@ -151,6 +151,8 @@ function startSimulator() {
           roll.callback(...rollParams);
           break;
         }
+
+        // TODO Reroll
         default:
           console.error(`Notice resolution [noticeKind=${noticeKind}] not implmeneted.`);
           break;

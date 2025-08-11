@@ -3,7 +3,8 @@ import { SideId } from "../side";
 /**
  * The following targeting methods are availible
  */
-export type TargetingMethod = "self" | "single-enemy" | "all-enemy" | "all";
+export type TargetingMethod = "self" | "single-enemy";
+// export type TargetingMethod = "self" | "single-enemy" | "all-enemy" | "all";
 interface BaseTargetingData<TM extends TargetingMethod> {
   targetingMethod: TM;
 }

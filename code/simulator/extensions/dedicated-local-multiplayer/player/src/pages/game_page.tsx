@@ -6,6 +6,8 @@ import { type BaseEvent } from "../../../../../core/event/base_event";
 import type { Notice } from "../../../../../core/notice/notice";
 import { useRef } from "react";
 import type { SideId } from "../../../../../core/side";
+import type { SelfTargeting, SingleEnemyTargeting, TargetingData } from "../../../../../core/action/targeting";
+import { commonMovePool } from "../../../../../data/common_move_pool";
 
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
@@ -19,8 +21,7 @@ const GamePage: React.FC = () => {
 
   useEffect(() => {
     if (hasListeners.current) {
-      return;
-      /// Socket connection already exists - dont need this
+      return; /// Socket connection already exists - dont need this
     }
 
     if (!socketContext) {
@@ -39,7 +40,9 @@ const GamePage: React.FC = () => {
       return () => clearTimeout(timer);
     }
 
-    socketContext.socket.onAny((event, args) => console.log(`Event recieved:\n${event}\n${JSON.stringify(args)}`));
+    socketContext.socket.onAny((event, args) => console.log(`Message recieved:\n${event}\n${JSON.stringify(args)}`));
+
+    // TODO request game data - block / display loading until all data recieved
 
     socketContext.socket.on("newEvent", (event: BaseEvent) => {
       console.log(`New event recorded: ${JSON.stringify(event)}`);
@@ -87,7 +90,27 @@ const GamePage: React.FC = () => {
             <BattleControls
               onSelectedMoveId={(moveId) => {
                 console.log(`Action pressed: ${moveId}`);
-                const params: Parameters<typeof currentNotice.callback> = [moveId, 1 as SideId];
+                let targeting: TargetingData;
+                switch (commonMovePool[moveId].targetingMethod) {
+                  case "self":
+                    const selfTargeting: SelfTargeting = {
+                      targetingMethod: "self"
+                    }
+                    targeting = selfTargeting
+                    break;
+                  case "single-enemy":
+                    const singleEnemyTargeting: SingleEnemyTargeting = {
+                      targetingMethod: "single-enemy",
+                      target: ((sideId + 1) % 2) as SideId, // TODO get side id
+                    }
+                    targeting = singleEnemyTargeting
+                    break;
+
+                  default:
+                    console.error(`Error: Unknown targeting method: ${commonMovePool[moveId].targetingMethod}`)
+                    return;
+                }
+                const params: Parameters<typeof currentNotice.callback> = [moveId, targeting];
                 socketContext?.socket?.emit("resolveNotice", currentNotice.kind, params);
 
                 pendingNotices.pop();
