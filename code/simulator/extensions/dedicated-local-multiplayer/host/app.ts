@@ -6,21 +6,26 @@ import { createServer } from "node:http";
 import * as readline from "readline";
 import { MonsterTemplate } from "../../../core/monster/monster";
 import { ChooseMove, Notice, NoticeKind, Roll } from "../../../core/notice/notice";
-import { BaseEvent } from "../../../core/event/base_event";
+import { OrderedEvent } from "../../../core/event/event_history";
+import { SideId } from "../../../core/side";
 
 type Player = {
   name: string;
+  sideId: SideId;
   monsterTemplate: MonsterTemplate;
   socket: Socket<PlayerToServerEvents, ServerToPlayerEvents, never, PlayerSocketData>;
 };
 
 export interface ServerToPlayerEvents {
-  newEvent: (event: BaseEvent) => void;
+  newEvent: (event: OrderedEvent) => void;
   newNotice: (notice: Notice) => void;
 }
 export interface PlayerToServerEvents {
   /// Extract the notice type that matches the kind=K requirement, then get the callback Params
   resolveNotice<K extends NoticeKind>(kind: K, params: Parameters<Extract<Notice, { kind: K }>["callback"]>): void;
+  getHistory(): OrderedEvent[];
+  getSelfInfo(): SideId;
+  getNotices(): Notice[];
 }
 interface PlayerSocketData {
   // name: string;
@@ -63,6 +68,7 @@ io.use((socket, next) => {
   /// Valid connection
   const newPlayer: Player = {
     name: auth.name, //`P${players.length + 1}`,
+    sideId: players.length as SideId,
     socket: socket,
     monsterTemplate: MonsterPool[1],
   };
@@ -74,8 +80,8 @@ io.use((socket, next) => {
 
 /// Start accepting requests to connect
 io.on("connection", (socket) => {
-  socket.on("disconnect", (dcReason) => {
-    console.log(`Socket disconnected: ${dcReason}`);
+  socket.on("disconnect", (dc_reason) => {
+    console.log(`Socket disconnected: ${dc_reason}`);
   });
 
   socket.onAny((args) => {
@@ -135,6 +141,17 @@ function startSimulator() {
     },
   });
   players.map((player, index) => {
+    player.socket.on("getSelfInfo", () => {
+      return player.sideId;
+    });
+
+    player.socket.on("getHistory", () => {
+      return battle.eventHistory.events;
+    });
+    player.socket.on("getNotices", () => {
+      return battle.noticeBoard.noticeMaps[player.sideId];
+    });
+
     player.socket.on("resolveNotice", (noticeKind, params) => {
       switch (noticeKind) {
         // TODO make generic
@@ -162,7 +179,7 @@ function startSimulator() {
 
   /// Subscribe to event history
   battle.eventHistory.subscribeListener({
-    onNewEvent: function (event: BaseEvent): void {
+    onNewEvent: function (event: OrderedEvent): void {
       console.log(JSON.stringify(event));
 
       // TODO - better way to broadcast to all

@@ -98,7 +98,8 @@ export class Battle {
             ]; /// Save to data
             this.noticeBoard.removeNotice(side.id, "chooseMove");
 
-            /// All if all sides ready -> move to next stage
+            // TODO allow for something else to decide on when to resolve a turn
+            /// All if all sides ready -> ready move to next stage
             if (this.sides.every((side) => side.pendingActions)) {
               resolve();
             }
