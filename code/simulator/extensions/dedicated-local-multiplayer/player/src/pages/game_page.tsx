@@ -142,7 +142,7 @@ const GamePage: React.FC = () => {
     <>
       <h1>WIP - GAME</h1>
       <div>
-        <BattleVisualizer>
+        {/* <BattleVisualizer /> */}
         <textarea disabled value={JSON.stringify(turnHistory)} />
         <br />
         {actionPanel()}
