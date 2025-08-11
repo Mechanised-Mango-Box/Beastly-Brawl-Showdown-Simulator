@@ -5,9 +5,10 @@ import express from "express";
 import { createServer } from "node:http";
 import * as readline from "readline";
 import { MonsterTemplate } from "../../../core/monster/monster";
-import { ChooseMove, Notice, NoticeKind, Roll } from "../../../core/notice/notice";
+import { ChooseMove, Notice, Roll } from "../../../core/notice/notice";
 import { OrderedEvent } from "../../../core/event/event_history";
 import { SideId } from "../../../core/side";
+import { PlayerToServerEvents, ServerToPlayerEvents } from "./api";
 
 type Player = {
   name: string;
@@ -16,17 +17,6 @@ type Player = {
   socket: Socket<PlayerToServerEvents, ServerToPlayerEvents, never, PlayerSocketData>;
 };
 
-export interface ServerToPlayerEvents {
-  newEvent: (event: OrderedEvent) => void;
-  newNotice: (notice: Notice) => void;
-}
-export interface PlayerToServerEvents {
-  /// Extract the notice type that matches the kind=K requirement, then get the callback Params
-  resolveNotice<K extends NoticeKind>(kind: K, params: Parameters<Extract<Notice, { kind: K }>["callback"]>): void;
-  getHistory(): OrderedEvent[];
-  getSelfInfo(): SideId;
-  getNotices(): Notice[];
-}
 interface PlayerSocketData {
   // name: string;
   // monsterTemplateId: number;
