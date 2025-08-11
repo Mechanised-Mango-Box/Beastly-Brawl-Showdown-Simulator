@@ -60,9 +60,9 @@ export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({ 
             <h1 className="monster-selection-screen-title">Choose Your</h1>
             <h1 className="monster-selection-screen-title" id="header-2">Monster!</h1>
             <div className="monster-selection-grid">
-                <MonsterContainer name="monster1" type="Attacker" func={highlightAndShowConfirm} />
-                <MonsterContainer name="monster2" type="Defender" func={highlightAndShowConfirm} />
-                <MonsterContainer name="monster3" type="Balanced" func={highlightAndShowConfirm} />
+                <MonsterContainer name="monster1" type="Attacker" currentlySelectedMonster={highlightAndShowConfirm} />
+                <MonsterContainer name="monster2" type="Defender" currentlySelectedMonster={highlightAndShowConfirm} />
+                <MonsterContainer name="monster3" type="Balanced" currentlySelectedMonster={highlightAndShowConfirm} />
 
       <button
         className="glb-btn"
