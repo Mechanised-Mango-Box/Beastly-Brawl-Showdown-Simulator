@@ -3,7 +3,7 @@ import { log_notice } from "../utils";
 
 const MONGO_URI = "mongodb://localhost:27017/test";
 
-const connectDb = () => {
+export default async function connectDb() {
   try {
     mongoose.connect(MONGO_URI);
     log_notice("Connected to MongoDB.");
@@ -13,4 +13,4 @@ const connectDb = () => {
   }
 };
 
-export default connectDb;
+
