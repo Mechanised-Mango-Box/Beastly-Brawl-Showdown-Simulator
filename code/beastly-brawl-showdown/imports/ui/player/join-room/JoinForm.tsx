@@ -30,7 +30,7 @@ export const JoinForm = () => {
         if (isJoinCodeValid && isDisplayNameValid) {
             sessionStorage.setItem("joinCode", inputJoinCode);
             sessionStorage.setItem("displayName", inputDisplayName);
-            sessionStorage.setItem("serverUrl", serverUrl);
+            sessionStorage.setItem("serverUrl", serverUrl ?? "");
             console.log("Go to monster select...");
             navigate(`/select`);
         }
