@@ -26,7 +26,6 @@ export type BattleOptions = {
 };
 
 export class Battle {
-  readonly seed: number;
   readonly rng: PRNG;
   readonly sides: Side[];
   readonly eventHistory: EventHistory;
@@ -36,8 +35,7 @@ export class Battle {
   readonly player_option_timeout: number;
 
   constructor(options: BattleOptions) {
-    this.seed = options.seed;
-    this.rng = new PRNG(this.seed);
+    this.rng = new PRNG(options.seed);
     initRolls(this.rng);
 
     this.sides = options.playerOptionSet.map((playerOptions, idx) => {
