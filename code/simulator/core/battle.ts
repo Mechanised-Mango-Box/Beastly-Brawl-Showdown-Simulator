@@ -7,6 +7,8 @@ import { BattleOverEvent, SnapshotEvent } from "./event/core_events";
 import { commonMovePool } from "../data/common_move_pool";
 import { MoveData, MoveRequest } from "./action/move/move";
 import { EntryID } from "./types";
+import { PRNG } from "./prng";
+import { initRolls } from "../core/roll";
 export interface PlayerOptions {
   name: string;
   /**
@@ -25,6 +27,7 @@ export type BattleOptions = {
 
 export class Battle {
   readonly seed: number;
+  readonly rng: PRNG;
   readonly sides: Side[];
   readonly eventHistory: EventHistory;
 
@@ -34,6 +37,8 @@ export class Battle {
 
   constructor(options: BattleOptions) {
     this.seed = options.seed;
+    this.rng = new PRNG(this.seed);
+    initRolls(this.rng);
 
     this.sides = options.playerOptionSet.map((playerOptions, idx) => {
       const side: Side = {
@@ -178,3 +183,5 @@ export class Battle {
     this.eventHistory.addEvent(battleOverEvent);
   }
 }
+
+
