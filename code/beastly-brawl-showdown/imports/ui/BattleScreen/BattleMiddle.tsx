@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BattleMonster } from './BattleMonster';
-import { Monster } from '../../../../simulator/core/monster/monster';
+import { Monster } from '/imports/simulator/core/monster/monster';
 
 
 // Define the props type

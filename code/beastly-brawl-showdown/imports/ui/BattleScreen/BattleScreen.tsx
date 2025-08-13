@@ -3,7 +3,7 @@ import { BattleTop } from './BattleTop';
 import { BattleMiddle } from './BattleMiddle';
 import { BattleBottom } from './BattleBottom';
 import { usePlayerSocket } from '../player/game/PlayerPage';
-import { Monster, MonsterTemplate } from '../../../../simulator/core/monster/monster';
+import { Monster, MonsterTemplate } from '/imports/simulator/core/monster/monster';
 
 export const BattleScreen: React.FC = () => {
 

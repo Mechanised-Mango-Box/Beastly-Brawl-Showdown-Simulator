@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useRef, useState, } from "
 import { io, Socket } from "socket.io-client";
 import { MonsterSelectionScreen } from "../../MonsterSelection/MonsterSelectionScreen";
 import { BattleScreen } from "../../BattleScreen/BattleScreen";
-import { MonsterPool } from "../../../../../simulator/data/monster_pool";
+import { MonsterPool } from "/imports/simulator/data/monster_pool";
 
 //#region Socket Context Definition
 

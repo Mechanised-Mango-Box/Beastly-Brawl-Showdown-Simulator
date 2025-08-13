@@ -19,6 +19,7 @@ export class LobbyManager {
     minLength: this.CODE_MIN_LENGTH,
     alphabet: this.CODE_ALPHABET,
   });
+  
   constructor(serverId: ServerId, maxCapacity: number) {
     if (serverId < 0) {
       throw new Error("Invalid server id.");
@@ -36,7 +37,7 @@ export class LobbyManager {
   encodeJoinCode(serverId: ServerId, lobbyId: LobbyId): JoinCode {
     return this.sqids.encode([serverId, lobbyId]) as JoinCode;
   }
-  
+
   decodeJoinCode(joinCode: JoinCode): { serverId: ServerId; lobbyId: LobbyId } {
     const [serverId, lobbyId] = this.sqids.decode(joinCode);
     return {

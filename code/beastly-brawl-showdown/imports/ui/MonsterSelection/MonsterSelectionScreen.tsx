@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MonsterContainer } from "./MonsterContainer";
-import { MonsterPool } from "../../../../simulator/data/monster_pool";
+import { MonsterPool } from "/imports/simulator/data/monster_pool";
 
 interface MonsterSelectionScreenProps {
   setSelectedMonsterCallback: (value: string) => void;
