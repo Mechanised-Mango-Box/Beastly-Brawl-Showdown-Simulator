@@ -70,7 +70,7 @@ export const commonMovePool: MovePool = createMovePool([
           },
         });
       });
-      let rollResult: number = roll(20);
+      let rollResult: number = roll(battle.rng,20);
       const rollEvent: RollEvent = {
         name: "roll",
         source: source,
@@ -89,7 +89,7 @@ export const commonMovePool: MovePool = createMovePool([
             callback: function (shouldReroll: boolean): void {
               if (shouldReroll) {
                 rerollComponent.charges--;
-                rollResult = roll(20);
+                rollResult = roll(battle.rng,20);
                 const rerollEvent: RerollEvent = {
                   name: "reroll",
                   source: source,
@@ -125,11 +125,11 @@ export const commonMovePool: MovePool = createMovePool([
       battle.eventHistory.addEvent(moveSuccessEvent);
 
       //# Base damage roll
-      const baseDamage: number = roll(4) + sourceMonster.base.baseStats.attack;
+      const baseDamage: number = roll(battle.rng,4) + sourceMonster.base.baseStats.attack;
 
       //# Crit Check
       const critChanceBonus: number = sourceMonster.getCritChanceBonus();
-      const critRollResult: number = roll(20);
+      const critRollResult: number = roll(battle.rng, 20);
       const critRollEvent: RollEvent = {
         name: "roll",
         source: source,
