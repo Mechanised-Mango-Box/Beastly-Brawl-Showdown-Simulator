@@ -8,7 +8,6 @@ import { commonMovePool } from "../data/common_move_pool";
 import { MoveData, MoveRequest } from "./action/move/move";
 import { EntryID } from "./types";
 import { PRNG } from "./prng";
-import { initRolls } from "../core/roll";
 export interface PlayerOptions {
   name: string;
   /**
@@ -36,7 +35,6 @@ export class Battle {
 
   constructor(options: BattleOptions) {
     this.rng = new PRNG(options.seed);
-    initRolls(this.rng);
 
     this.sides = options.playerOptionSet.map((playerOptions, idx) => {
       const side: Side = {
