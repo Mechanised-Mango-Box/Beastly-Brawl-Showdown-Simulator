@@ -23,15 +23,17 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex }) => {
   //this just gets a turn array filled with turn objects that cut off whenever a snapshot (new turn) occurs
   const turns = useMemo(() => parseTurns(events), [events]);
 
-  const currentTurn = turns[turnIndex];
+  // Clamp is used to restrict the number to make sure it stays within range
+  const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(n, max));
+  const uptoIndex =
+    Number.isInteger(turnIndex)
+      ? clamp(turnIndex, 0, Math.max(0, turns.length - 1))
+      : Math.max(0, turns.length - 1);
+
+  // Use uptoIndex (not raw turnIndex) everywhere you access turns
+  const currentTurn = turns[uptoIndex];
   const currentSnapshot = currentTurn ? currentTurn.getSnapshotEvent() : null;
   const parsed = currentSnapshot ? parseSnapshot(currentSnapshot) : [];
-
-
-  // Checks the index of the turn to show
-  const uptoIndex = turnIndex
-    ? Math.max(0, Math.min(turnIndex, turns.length - 1))
-    : Math.max(0, turns.length - 1);
 
   // Build a flat list of events from Turn 0..uptoIndex
   const eventsUpToSelection = React.useMemo(() => {
@@ -46,7 +48,7 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex }) => {
   }, [turns, uptoIndex]);
 
   
-  if (parsed.length === 0) {
+  if (parsed.length < 2) {
     return <p>Waiting for game data...</p>;
   }
   
