@@ -30,6 +30,18 @@ rm -f "$READY_FILE"
 echo "[launcher] Removed game server readiness file."
 
 # Start Meteor app
+echo "Checking packages"
+cd "$BASE_DIR/beastly-brawl-showdown"
+missing=$(meteor npm ls --depth=0 2>&1 | grep "missing:" || true)
+if [ -n "$missing" ]; then
+  echo "Missing packages detected:"
+  echo "$missing"
+  echo "Running 'meteor npm install' to fix..."
+  meteor npm install
+else
+  echo "No missing packages. Everything looks good."
+fi
+cd "$BASE_DIR"
 echo "[launcher] Starting Meteor app..."
 (cd "$BASE_DIR/beastly-brawl-showdown" && bash run.sh) &
 
