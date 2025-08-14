@@ -11,6 +11,7 @@ export class Match {
     player1: Player;
     player2?: Player;
     winnerId?: AccountId;
+    winner?: Player;
     spectators: AccountId[];
     matchType: MatchType;
     matchID: number;
@@ -23,7 +24,7 @@ export class Match {
         this.matchID = matchID;
     }
 
-    async startBattle(): Promise<void> {
+    async runBattle(playersByAccountId: Map<string, Player>): Promise<void> {
         if (this.matchType == MatchType.BYE) {
             this.winnerId = this.player1.linkedAccountId;
             return;
@@ -45,16 +46,31 @@ export class Match {
             monsterTemplate: this.player2.monster,
             },
         ],
-        player_option_timeout: 30,
+            player_option_timeout: 30,
         };
 
-    const battle = new Battle(options);
-    await battle.run();
+        const battle = new Battle(options);
+        await battle.run();
 
-    const survivingSide = battle.sides.find((side) => side.monster.health > 0);
-    const winnerIndex = battle.sides.indexOf(survivingSide!);
-    this.winnerId = winnerIndex === 0 ? this.player1.linkedAccountId : this.player2!.linkedAccountId;
+        const survivingSide = battle.sides.find((side) => side.monster.health > 0);
+        const winnerIndex = battle.sides.indexOf(survivingSide!);
+        
+        this.winnerId = winnerIndex === 0 
+        ? this.player1.linkedAccountId 
+        : this.player2?.linkedAccountId;
+        if (this.winnerId) {
+            this.winner = playersByAccountId.get(this.winnerId);
+        }
+        const loserId = this.player1.linkedAccountId === this.winnerId
+        ? this.player2?.linkedAccountId
+        : this.player1.linkedAccountId;
+        if (loserId) {
+            const winnerPlayer = playersByAccountId.get(loserId);
+            if (winnerPlayer) {
+                winnerPlayer.addSpectator(loserId);
+            }
+        }
 
-    console.log(`Match ${this.matchID}: Winner is ${this.winnerId}`);
+        console.log(`Match ${this.matchID}: Winner is ${this.winnerId}`);
     }
 }

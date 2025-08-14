@@ -56,7 +56,7 @@ export class TournamentManager {
     const players = Array.from(this.playersByAccountId.values());
     this.creatematchs(players);
 
-    await Promise.all(this.matches.map(match => match.startBattle(this.playersByAccountId)))
+    await Promise.all(this.matches.map(match => match.runBattle(this.playersByAccountId)))
     await this.checkRoundCompletion()
   }
 }
