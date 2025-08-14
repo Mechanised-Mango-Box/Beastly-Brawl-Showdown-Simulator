@@ -25,77 +25,112 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex }) => {
 
   // Clamp is used to restrict the number to make sure it stays within range
   const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(n, max));
-  const uptoIndex =
+  const selectedTurnIndex =
     Number.isInteger(turnIndex)
       ? clamp(turnIndex, 0, Math.max(0, turns.length - 1))
       : Math.max(0, turns.length - 1);
 
   // Use uptoIndex (not raw turnIndex) everywhere you access turns
-  const currentTurn = turns[uptoIndex];
+  const currentTurn = turns[selectedTurnIndex];
   const currentSnapshot = currentTurn ? currentTurn.getSnapshotEvent() : null;
   const parsed = currentSnapshot ? parseSnapshot(currentSnapshot) : [];
 
   const isSnapshot = (ev: BaseEvent): ev is SnapshotEvent =>
     (ev as any).name === "snapshot";
 
+  // Building the lookup table for turn: snapshot event index
+  const turnStartIndex = useMemo(() => {
+    const map: Record<number, number> = {};
+    let t = -1;
+    for (let i = 0; i < events.length; i++) {
+      if (isSnapshot(events[i])) {
+        t += 1;
+        map[t] = i; // snapshot event index starting this turn
+      }
+    }
+    return map;
+  }, [events]);
 
+  // List for the previous events
+  const preLog = useMemo(() => {
+    const out: { key: string; text: string }[] = [];
+    if (!turns.length || selectedTurnIndex <= 0) return out;
+
+    const last = Math.min(selectedTurnIndex - 1, turns.length - 1);
+    for (let t = 0; t <= last; t++) {
+      const turn = turns[t];
+      out.push({ key: `pre-t${t}-snap`, text: `Turn ${t + 1} started` });
+      for (let ei = 0; ei < turn.turnEvents.length; ei++) {
+        const ev = turn.turnEvents[ei];
+        out.push({
+          key: `pre-t${t}-e${ei}`,
+          text: turn.printEventString(ev) ?? "Unknown event",
+        });
+      }
+    }
+    return out;
+  }, [turns, selectedTurnIndex]);
+
+  // State of the section of the game log that is rendered live
   const [liveLog, setLiveLog] = React.useState<{ key: string; text: string }[]>([]);
 
-const nextTick = (ms = 0) => new Promise<void>((r) => setTimeout(r, ms));
+  // For animations to be put in
+  const nextTick = (ms = 0) => new Promise<void>((r) => setTimeout(r, ms));
 
-React.useEffect(() => {
-  let cancelled = false;
-  setLiveLog([]); // reset when inputs change
+  // Rendering the selected turn
+  React.useEffect(() => {
+    let cancelled = false;
 
-  const run = async () => {
-    let turnNo = -1;
+    // Seed with previous turns instantly
+    setLiveLog(preLog);
 
-    for (let i = 0; i < events.length; i++) {
-      if (cancelled) return;
+    const runSelectedTurn = async () => {
+      if (selectedTurnIndex < 0) {return};
 
-      const ev = events[i];
+      const startIdx = turnStartIndex[selectedTurnIndex];
+      if (startIdx === undefined) return; // selected turn not present yet
 
-      if (isSnapshot(ev)) {
-        turnNo += 1;
+      // Walk from the selected turn's snapshot until the next turn's snapshot
+      let turnNo = selectedTurnIndex - 1; // first snapshot we see bumps this to uptoIndex
 
-        // if we've passed the selected turn, stop
-        if (turnNo > uptoIndex) break;
+      for (let i = startIdx; i < events.length; i++) {
+        if (cancelled) return;
 
-        // append "turn started"
-        setLiveLog((prev) => [
-          ...prev,
-          { key: `t${turnNo}-snap-${i}`, text: `Turn ${turnNo + 1} started` },
-        ]);
+        const ev = events[i];
 
-        // TODO: await animateTurnStart(turnNo);
+        if (isSnapshot(ev)) {
+          turnNo += 1;
+
+          // If we hit the next turn, stop
+          if (turnNo > selectedTurnIndex) break;
+
+          setLiveLog((prev) => [
+            ...prev,
+            { key: `sel-t${turnNo}-snap-${i}`, text: `Turn ${turnNo + 1} started` },
+          ]);
+          // TODO: await animateTurnStart(turnNo);
+          await nextTick(0);
+          continue;
+        }
+
+        // Only log events for the selected turn
+        if (turnNo !== selectedTurnIndex) continue;
+
+        const text =
+          turns[turnNo]?.printEventString(ev) ??
+          String((ev as any).name ?? (ev as any).eventName ?? "event");
+
+        setLiveLog((prev) => [...prev, { key: `sel-t${turnNo}-e${i}`, text }]);
+        // TODO: await animateEvent(ev, turnNo);
         await nextTick(0);
-        continue;
       }
+    };
 
-      if (turnNo === -1) continue;    // ignore pre-snapshot events
-      if (turnNo > uptoIndex) break;  // stop if beyond selected turn
+    runSelectedTurn();
 
-      const text =
-        turns[turnNo]?.printEventString(ev) ??
-        String((ev as any).name ?? (ev as any).eventName ?? "event");
+    return () => { cancelled = true; };
+  }, [events, selectedTurnIndex, turns, preLog, turnStartIndex]);
 
-      setLiveLog((prev) => [...prev, { key: `t${turnNo}-e${i}`, text }]);
-
-      // TODO: await animateEvent(ev, turnNo);
-      await nextTick(0);
-    }
-  };
-
-  run();
-
-  return () => {
-    cancelled = true; // stop prior loop when deps change/unmount
-  };
-}, [events, uptoIndex, turns]);
-
-
-
-  
   if (parsed.length < 2) {
     return <p>Waiting for game data...</p>;
   }
