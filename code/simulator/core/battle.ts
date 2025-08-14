@@ -99,11 +99,22 @@ export class Battle {
               resolve();
             }
           };
+          const moveIdOptions: EntryID[] = [];
+
+          const base = side.monster.base;
+
+          if (base.attackActionId) {
+            moveIdOptions.push(base.attackActionId);
+          }
+          if (base.defendActionId && side.monster.defendActionCharges > 0) {
+            moveIdOptions.push(base.defendActionId);
+          }
+          if (base.abilityActionId) {
+            moveIdOptions.push(base.abilityActionId);
+          }
           const notice: chooseMove = {
             kind: "chooseMove",
-            data: {
-              moveIdOptions: [side.monster.base.attackActionId, ...(side.monster.defendActionCharges > 0 ? [side.monster.base.defendActionId] : [])],
-            }, // TODO select special attack
+            data: { moveIdOptions },
             callback: callback,
           };
           this.noticeBoard.postNotice(side.id, notice);
