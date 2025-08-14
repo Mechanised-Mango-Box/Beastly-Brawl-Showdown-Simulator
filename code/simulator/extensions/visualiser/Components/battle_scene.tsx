@@ -35,39 +35,64 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex }) => {
   const currentSnapshot = currentTurn ? currentTurn.getSnapshotEvent() : null;
   const parsed = currentSnapshot ? parseSnapshot(currentSnapshot) : [];
 
-  // Build a flat list of events from Turn 0..uptoIndex
-  const eventsUpToSelection = useMemo(() => {
-  const out: { key: string; text: string }[] = [];
-  if (!events.length) return out;
+  const isSnapshot = (ev: BaseEvent): ev is SnapshotEvent =>
+    (ev as any).name === "snapshot";
 
-  let turnNo = -1; // increments when a snapshot is seen
 
-  for (let i = 0; i < events.length; i++) {
-    const ev = events[i];
+  const [liveLog, setLiveLog] = React.useState<{ key: string; text: string }[]>([]);
 
-    // If it's a snapshot, count as a new turn
-    if ((ev as any).name === "snapshot") {
-      turnNo += 1;
-      if (turnNo > uptoIndex) break; // stop once we pass selected turn
-      out.push({
-        key: `t${turnNo}-e${i}`,
-        text: `Turn ${turnNo + 1} started`,
-      });
-      continue;
+const nextTick = (ms = 0) => new Promise<void>((r) => setTimeout(r, ms));
+
+React.useEffect(() => {
+  let cancelled = false;
+  setLiveLog([]); // reset when inputs change
+
+  const run = async () => {
+    let turnNo = -1;
+
+    for (let i = 0; i < events.length; i++) {
+      if (cancelled) return;
+
+      const ev = events[i];
+
+      if (isSnapshot(ev)) {
+        turnNo += 1;
+
+        // if we've passed the selected turn, stop
+        if (turnNo > uptoIndex) break;
+
+        // append "turn started"
+        setLiveLog((prev) => [
+          ...prev,
+          { key: `t${turnNo}-snap-${i}`, text: `Turn ${turnNo + 1} started` },
+        ]);
+
+        // TODO: await animateTurnStart(turnNo);
+        await nextTick(0);
+        continue;
+      }
+
+      if (turnNo === -1) continue;    // ignore pre-snapshot events
+      if (turnNo > uptoIndex) break;  // stop if beyond selected turn
+
+      const text =
+        turns[turnNo]?.printEventString(ev) ??
+        String((ev as any).name ?? (ev as any).eventName ?? "event");
+
+      setLiveLog((prev) => [...prev, { key: `t${turnNo}-e${i}`, text }]);
+
+      // TODO: await animateEvent(ev, turnNo);
+      await nextTick(0);
     }
+  };
 
-    // If it's a normal event and we're within the selected turn count
-    if (turnNo === -1) continue; // skip pre-snapshot events
-    if (turnNo > uptoIndex) break;
+  run();
 
-    out.push({
-      key: `t${turnNo}-e${i}`,
-      text: turns[turnNo]?.printEventString(ev) ?? "Unknown event",
-    });
-  }
-
-  return out;
+  return () => {
+    cancelled = true; // stop prior loop when deps change/unmount
+  };
 }, [events, uptoIndex, turns]);
+
 
 
   
@@ -117,10 +142,8 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex }) => {
           border: "1px solid black",
         }}
       >
-        {eventsUpToSelection.length === 0 ? (
-          <p>No events yet.</p>
-        ) : (
-          eventsUpToSelection.map(({ key, text }) => (
+        {liveLog.length === 0 ? (<p>No events yet.</p>) : 
+        (liveLog.map(({ key, text }) => (
             <p key={key} style={{ margin: "5px 0" }}>{text}</p>
           ))
         )}
