@@ -9,6 +9,8 @@ import { parseTurns } from "./turns_array_maker";
 interface BattleSceneProps {
   events: BaseEvent[]
   turnIndex: number;
+  autoplay?: boolean; // play subsequent turns automatically
+  onAdvanceTurn?: (nextIndex: number) => void; // ask parent to move to next turn
 }
 
 console.log("BattleScene loaded");
@@ -17,7 +19,7 @@ console.log("BattleScene loaded");
 //we've parsed the initial raw JSON data into an array (parsed) so if you want leftside you do parsed[0]
 //the list of values you can retrieve from the parsed information is in snapshot_parser part
 //you can add to the values just need ask if you need anything more
-const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex }) => {
+const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex, autoplay, onAdvanceTurn }) => {
 
   // Build an array of Turn objects based on events
   //this just gets a turn array filled with turn objects that cut off whenever a snapshot (new turn) occurs
@@ -30,7 +32,7 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex }) => {
       ? clamp(turnIndex, 0, Math.max(0, turns.length - 1))
       : Math.max(0, turns.length - 1);
 
-  // Use uptoIndex (not raw turnIndex) everywhere you access turns
+  // Use selectedTurnIndex (not raw turnIndex) everywhere you access turns
   const currentTurn = turns[selectedTurnIndex];
   const currentSnapshot = currentTurn ? currentTurn.getSnapshotEvent() : null;
   const parsed = currentSnapshot ? parseSnapshot(currentSnapshot) : [];
@@ -77,21 +79,26 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex }) => {
   // For animations to be put in
   const nextTick = (ms = 0) => new Promise<void>((r) => setTimeout(r, ms));
 
+  // ChatGPT did this: Something about making sure it doesn't trigger multiple advances
+  const advanceCalledRef = React.useRef(false);
+
+  React.useEffect(() => {
+    advanceCalledRef.current = false;
+  }, [selectedTurnIndex]);
+
   // Rendering the selected turn
   React.useEffect(() => {
     let cancelled = false;
 
-    // Seed with previous turns instantly
-    setLiveLog(preLog);
+    setLiveLog(preLog); // previous turns printed instantly
 
     const runSelectedTurn = async () => {
-      if (selectedTurnIndex < 0) {return};
+      if (selectedTurnIndex < 0) return;
 
       const startIdx = turnStartIndex[selectedTurnIndex];
-      if (startIdx === undefined) return; // selected turn not present yet
+      if (startIdx === undefined) return;
 
-      // Walk from the selected turn's snapshot until the next turn's snapshot
-      let turnNo = selectedTurnIndex - 1; // first snapshot we see bumps this to uptoIndex
+      let turnNo = selectedTurnIndex - 1;
 
       for (let i = startIdx; i < events.length; i++) {
         if (cancelled) return;
@@ -100,8 +107,6 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex }) => {
 
         if (isSnapshot(ev)) {
           turnNo += 1;
-
-          // If we hit the next turn, stop
           if (turnNo > selectedTurnIndex) break;
 
           setLiveLog((prev) => [
@@ -113,7 +118,6 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex }) => {
           continue;
         }
 
-        // Only log events for the selected turn
         if (turnNo !== selectedTurnIndex) continue;
 
         const text =
@@ -124,12 +128,28 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex }) => {
         // TODO: await animateEvent(ev, turnNo);
         await nextTick(0);
       }
+
+      // After the selected turn finishes
+      if (cancelled) return;
+      if (advanceCalledRef.current) return; // prevent double-trigger on re-renders
+      advanceCalledRef.current = true;
+
+      const lastTurnIndex = Math.max(0, turns.length - 1);
+
+      if (selectedTurnIndex < lastTurnIndex) {
+        // If autoplay is on, request the parent to advance to the next turn
+        if (autoplay && onAdvanceTurn) {
+          // Optional: tiny pause between turns (good for future "between-turn" animation)
+          await nextTick(0); // TODO: await animateBetweenTurns(selectedTurnIndex, selectedTurnIndex+1);
+          onAdvanceTurn(selectedTurnIndex + 1);
+        }
+      }
     };
 
     runSelectedTurn();
-
     return () => { cancelled = true; };
-  }, [events, selectedTurnIndex, turns, preLog, turnStartIndex]);
+  }, [events, selectedTurnIndex, turns, preLog, turnStartIndex, autoplay, onAdvanceTurn]);
+
 
   if (parsed.length < 2) {
     return <p>Waiting for game data...</p>;

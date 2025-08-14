@@ -12,7 +12,7 @@ const BattleVisualizerDemo: React.FC = () => {
   return (
     <div style={{ padding: "20px" }}>
       <EventTextBox onEventsSubmit={setEvents} />
-      <BattleScene events={events} turnIndex={turnInput} />
+      <BattleScene events={events} turnIndex={turnInput} autoplay={false} onAdvanceTurn={(next) => setTurnIndex(next)}/>
       <BattleBar
         turnInput={turnInput}
         setTurnInput={setTurnInput}
