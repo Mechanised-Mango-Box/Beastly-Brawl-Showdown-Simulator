@@ -77,7 +77,7 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex, autoplay, 
   const [liveLog, setLiveLog] = React.useState<{ key: string; text: string }[]>([]);
 
   // For animations to be put in
-  const nextTick = (ms = 0) => new Promise<void>((r) => setTimeout(r, ms));
+  const nextTick = (ms = 500) => new Promise<void>((r) => setTimeout(r, ms));
 
   // ChatGPT did this: Something about making sure it doesn't trigger multiple advances
   const advanceCalledRef = React.useRef(false);
@@ -114,7 +114,7 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex, autoplay, 
             { key: `sel-t${turnNo}-snap-${i}`, text: `Turn ${turnNo + 1} started` },
           ]);
           // TODO: await animateTurnStart(turnNo);
-          await nextTick(0);
+          await nextTick();
           continue;
         }
 
@@ -126,7 +126,7 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex, autoplay, 
 
         setLiveLog((prev) => [...prev, { key: `sel-t${turnNo}-e${i}`, text }]);
         // TODO: await animateEvent(ev, turnNo);
-        await nextTick(0);
+        await nextTick();
       }
 
       // After the selected turn finishes
