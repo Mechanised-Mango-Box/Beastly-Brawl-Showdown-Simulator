@@ -108,14 +108,11 @@ export default function ProjectorPage() {
 
   //#region Host App
 
-  /**
-   * Handle button click to start the game
-   * Sends arguments to main.ts listener
-   */
+  // Handle start game button
   function startGame() {
-    socketRef.current.emit("RequestStartGame");
+    socketRef.current?.emit("RequestStartGame");
   }
-
+  
   return (
     <div className="waiting-room-box">
       <h1>Game Lobby</h1>

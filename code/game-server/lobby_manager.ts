@@ -19,7 +19,7 @@ export class LobbyManager {
     minLength: this.CODE_MIN_LENGTH,
     alphabet: this.CODE_ALPHABET,
   });
-  
+
   constructor(serverId: ServerId, maxCapacity: number) {
     if (serverId < 0) {
       throw new Error("Invalid server id.");

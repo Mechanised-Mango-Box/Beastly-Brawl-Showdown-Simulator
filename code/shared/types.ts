@@ -41,8 +41,6 @@ export type HostServerToClientEvents = BasicServerToClientEvents & {
   refreshPlayerList: (list: string[]) => void;
 };
 
-export type HostChannelAuth = {};
-
 export type PlayerChannelAuth = {
   joinCode: JoinCode;
   displayName: string;
