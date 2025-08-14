@@ -36,16 +36,39 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex }) => {
   const parsed = currentSnapshot ? parseSnapshot(currentSnapshot) : [];
 
   // Build a flat list of events from Turn 0..uptoIndex
-  const eventsUpToSelection = React.useMemo(() => {
-    if (!turns.length) return [];
-    const slice = turns.slice(0, uptoIndex + 1);
-    return slice.flatMap((turn, ti) =>
-      turn.turnEvents.map((event, ei) => ({
-        key: `${ti}-${ei}`,
-        text: turn.printEventString(event),
-      }))
-    );
-  }, [turns, uptoIndex]);
+  const eventsUpToSelection = useMemo(() => {
+  const out: { key: string; text: string }[] = [];
+  if (!events.length) return out;
+
+  let turnNo = -1; // increments when a snapshot is seen
+
+  for (let i = 0; i < events.length; i++) {
+    const ev = events[i];
+
+    // If it's a snapshot, count as a new turn
+    if ((ev as any).name === "snapshot") {
+      turnNo += 1;
+      if (turnNo > uptoIndex) break; // stop once we pass selected turn
+      out.push({
+        key: `t${turnNo}-e${i}`,
+        text: `Turn ${turnNo + 1} started`,
+      });
+      continue;
+    }
+
+    // If it's a normal event and we're within the selected turn count
+    if (turnNo === -1) continue; // skip pre-snapshot events
+    if (turnNo > uptoIndex) break;
+
+    out.push({
+      key: `t${turnNo}-e${i}`,
+      text: turns[turnNo]?.printEventString(ev) ?? "Unknown event",
+    });
+  }
+
+  return out;
+}, [events, uptoIndex, turns]);
+
 
   
   if (parsed.length < 2) {
