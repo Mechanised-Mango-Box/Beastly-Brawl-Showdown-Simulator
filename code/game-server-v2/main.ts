@@ -1,4 +1,4 @@
-import { GameServer } from "./GameServer";
+import { GameServer } from "./gameServer";
 import * as readline from "readline";
 import cors from "cors";
 import express from "express";

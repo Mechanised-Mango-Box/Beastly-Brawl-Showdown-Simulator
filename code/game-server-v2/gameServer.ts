@@ -1,7 +1,7 @@
 import Sqids from "sqids";
 import { log_notice, log_warning } from "./utils";
-import { Room } from "./Room";
-import { Player } from "./Player";
+import { Room } from "./room";
+import { Player } from "./player";
 import { ServerId, RoomId, JoinCode, AccountId } from "./types";
 
 export class GameServer {

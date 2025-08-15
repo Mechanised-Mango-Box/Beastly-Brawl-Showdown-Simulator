@@ -1,6 +1,5 @@
 import { RoomId, JoinCode, AccountId } from "./types";
-import { Player } from "./Player";
-import { GameSettings } from "./GameSettings";
+import { Player } from "./player";
 
 export class Room {
   readonly hostSocketId: string;
@@ -15,7 +14,6 @@ export class Room {
 
   players: Map<string, Player> = new Map<string, Player>();
   gameState: any = undefined;
-  settings: GameSettings = new GameSettings();
 
   constructor(hostSocketId: string, roomId: RoomId, joinCode: JoinCode) {
     this.hostSocketId = hostSocketId;
