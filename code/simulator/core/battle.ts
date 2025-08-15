@@ -7,12 +7,10 @@ import { BattleOverEvent, SnapshotEvent } from "./event/core_events";
 import { commonMovePool } from "../data/common_move_pool";
 import { MoveData, MoveRequest } from "./action/move/move";
 import { EntryID } from "./types";
+import { TargetingData } from "./action/targeting";
 import { PRNG } from "./prng";
+
 export interface PlayerOptions {
-  name: string;
-  /**
-   * A copy of a template
-   */
   monsterTemplate: MonsterTemplate; //! Can change to list if needed later
 }
 
@@ -20,18 +18,15 @@ export type BattleOptions = {
   seed: number;
 
   playerOptionSet: PlayerOptions[];
-
-  player_option_timeout: number;
 };
 
 export class Battle {
   readonly rng: PRNG;
   readonly sides: Side[];
+
   readonly eventHistory: EventHistory;
 
   readonly noticeBoard: NoticeBoard;
-
-  readonly player_option_timeout: number;
 
   constructor(options: BattleOptions) {
     this.rng = new PRNG(options.seed);
@@ -48,8 +43,6 @@ export class Battle {
     this.eventHistory = new EventHistory();
 
     this.noticeBoard = new NoticeBoard(options.playerOptionSet.length);
-
-    this.player_option_timeout = options.player_option_timeout;
   }
 
   // TODO ? make the battle director a swappable component
@@ -82,19 +75,32 @@ export class Battle {
       console.log(`Gather moves: Start`);
       await new Promise<void>((resolve) => {
         this.sides.forEach((side) => {
-          const callback: (moveId: EntryID, target: SideId) => void = (moveId: EntryID, target: SideId): void => {
+          const callback: (moveId: EntryID, target: TargetingData) => void = (
+            moveId: EntryID,
+            targetingData: TargetingData
+          ): void => {
             // TODO validate move
-            // TODO allow selecting of other targeting methods
+
+            const chosenMove: MoveData = commonMovePool[moveId];
+            if (chosenMove.targetingMethod != targetingData.targetingMethod) {
+              console.error(
+                `Error: Targeting method mismatch. [moveId=${moveId} ${chosenMove.name}] expects ${chosenMove.targetingMethod} but ${targetingData.targetingMethod} was recieved.`
+              );
+              return;
+            }
+
             side.pendingActions = [
+              /// For now there will only ever be one action per turn.
               {
                 moveId: moveId,
                 source: side.id,
-                targetingData: { targetingMethod: "single-enemy", target: target },
+                targetingData: targetingData,
               },
             ]; /// Save to data
             this.noticeBoard.removeNotice(side.id, "chooseMove");
 
-            /// All if all sides ready -> move to next stage
+            // TODO allow for something else to decide on when to resolve a turn
+            /// All if all sides ready -> ready move to next stage
             if (this.sides.every((side) => side.pendingActions)) {
               resolve();
             }
@@ -102,7 +108,12 @@ export class Battle {
           const notice: chooseMove = {
             kind: "chooseMove",
             data: {
-              moveIdOptions: [side.monster.base.attackActionId, ...(side.monster.defendActionCharges > 0 ? [side.monster.base.defendActionId] : [])],
+              moveIdOptions: [
+                side.monster.base.attackActionId,
+                ...(side.monster.defendActionCharges > 0
+                  ? [side.monster.base.defendActionId]
+                  : []),
+              ],
             }, // TODO select special attack
             callback: callback,
           };
@@ -127,10 +138,8 @@ export class Battle {
           return moveB.priorityClass - moveA.priorityClass;
         }
 
-        /// Sort by source monster speed --> updated
-        const speedB = this.sides[b.source].monster.getSpeed();
-        const speedA = this.sides[a.source].monster.getSpeed();
-        return speedB - speedA;
+        /// Sort by source monster speed
+        return this.sides[b.source].monster.getSpeed() - this.sides[a.source].monster.getSpeed();
 
       });
       console.log(`Acton Queue:\n${JSON.stringify(moveRequestQueue)}`);
@@ -141,12 +150,10 @@ export class Battle {
       console.log("Resolve Actions");
       for (const moveRequest of moveRequestQueue) {
         const move: MoveData = commonMovePool[moveRequest.moveId];
-        // if (!actionHandler) {
-        //   throw new Error(`Action of this id=${action.actionId} does not exist.`);
-        // }
-
         if (this.sides[moveRequest.source].monster.getIsBlockedFromMove()) {
-          console.log(`Monster could not perform move right now (probs status).`);
+          console.log(
+            `Monster could not perform move right now (probs status).`
+          );
           continue;
         }
 
