@@ -1,9 +1,5 @@
 import { Meteor } from "meteor/meteor";
-import { io, Socket } from "socket.io-client";
 import { locateServerBest } from "../../server/GameServerLocator";
-
-const MAX_RETRIES = 3;        // number of connection attempts
-const TIMEOUT_MS = 10000;     // 10-second timeout per attempt
 
 Meteor.methods({
   async getBestServerUrl(): Promise<string> {

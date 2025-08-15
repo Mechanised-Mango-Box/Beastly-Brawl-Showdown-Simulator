@@ -1,25 +1,30 @@
 import React from "react";
 
 export const MonsterContainer = ({
-  image,
   name,
+  type,
   currentlySelectedMonster,
 }: {
-  image: string;
   name: string;
+  type: string;
   currentlySelectedMonster: (name: string) => void;
 }) => {
-    
-  /**
-   * Onclick handler, sends name of selected monster back to selection screen
-   */
   function onClick() {
     currentlySelectedMonster(name);
   }
 
   return (
-    <div className="monsterContainer">
-      <img src={image} id={name} className="monsterImage" onClick={onClick} />
+    <div className="monster-selection-card" id={name} onClick={onClick}>
+      <div className="monster-avatar">
+        <img src={`/monsters/${name}.png`} alt={name} />
+      </div>
+      <div className="monster-selection-card-info">
+        {/* All of these are placeholder texts */}
+        <div className="monster-name">{name}</div>
+        <div className="monster-type">{type}</div>
+        <div className="monster-desc">A fierce dragon-like creature with burning claws</div>
+        <div className="ability-desc">Ability: Ignite - Burns enemies on contact</div>
+      </div>
     </div>
   );
-};   
+};

@@ -113,67 +113,14 @@ const PlayerContent = () => {
     return <p>Connecting to server...</p>;
   }
 
-  // Once connected, this screen will display
-  if (!startSelection) {
-    return (
-      <div>
-        <h1>PLAYER VIEW</h1>
-        <p>Server URL: {serverUrl}</p>
-        <p>Name: {displayName}</p>
-        <p>Room Code: {joinCode}</p>
+  return (
+    <div className="waiting-screen">
+      <div className="logo" />
+      <div className="waiting-wrapper">
+        <div className="waiting-line" />
+        <p className="waiting-text">Waiting ...</p>
+        <div className="waiting-line" />
       </div>
-    );
-  }
-
-  // Type checking function converting string to MonsterName union
-  const validMonsterNames = new Set(MonsterPool.map(m => m.name));
-
-  function isMonsterName(name: string): boolean {
-    return validMonsterNames.has(name);
-  }
-
-  // Function that takes the result of monster selection and sends it to the server, then switches screen.
-  const handleMonsterSelection = (monster: string) => {
-    if (!isMonsterName(monster)) {
-      console.log(`Invalid monster name: ${monster}`);
-      return;
-    }
-
-    if (socket) {
-      socket.emit("RequestSubmitMonster", { monsterName: monster });
-      setMonsterSelected(true);
-      console.log("Monster selected:", monster);
-    } else {
-      console.log("No socket connection available");
-    }
-  };
-
-  // Monster selection is displayed when a monster has not been selected
-  if (!monsterSelected) {
-    return (
-      <MonsterSelectionScreen
-        setSelectedMonsterCallback={handleMonsterSelection}
-      />
-    );
-  }
-
-  // Waiting screen while players select monsters
-  if (!allReady) {
-    return <p>Waiting for all players to select their monsters...</p>;
-  }
-
-  // Battle screen displays when all checks have been passed
-  // TODO: selectedMonsterName should not exist, battle screen needs some other way to know what monsters to display
-  return <BattleScreen />;
+    </div>
+  );
 };
-//#endregion
-
-//#region Exported Component
-// Wrap the contents of the page to allow original player content to access the socket
-export const Player = () => (
-  <PlayerSocketProvider>
-    <PlayerContent />
-  </PlayerSocketProvider>
-);
-//#endregion
-

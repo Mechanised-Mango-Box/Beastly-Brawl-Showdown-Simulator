@@ -44,8 +44,7 @@ export async function locateServerBest(): Promise<string> {
  * @returns The server URL as a string
  */
 export async function locateServer(joinCode: string): Promise<string> {
-  try {
-    const [serverNo] = sqids.decode(joinCode);
+  const [serverNo] = sqids.decode(joinCode);
 
     const serverInfo = await GameServerRecords.findOneAsync({
       serverNumber: serverNo,

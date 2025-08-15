@@ -1,37 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { MonsterContainer } from "./MonsterContainer";
-import { MonsterPool } from "/imports/simulator/data/monster_pool";
+import { useNavigate } from "react-router-dom";
 
 interface MonsterSelectionScreenProps {
-  setSelectedMonsterCallback: (value: string) => void;
+  setSelectedMonsterCallback?: (value: string) => void;
 }
 
-export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({
-  setSelectedMonsterCallback,
-}) => {
+export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({ setSelectedMonsterCallback }) => {
+  const navigate = useNavigate();
 
-
-  const [isConfirmed, setIsConfirmed] = useState(false);
-  // Enable confirm button
+  const [selectedMonster, setSelectedMonster] = useState<string>("");
   const [confirmEnabled, setConfirmEnabled] = useState(false);
-  // Currently selected monster
-  const [selectedMonster, setMonsterName] = useState("");
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
-  useEffect(() => {
-    console.log("Component rendered. isConfirmed =", isConfirmed);
-  }, [isConfirmed]);
-
-  /**
-   * Updates the currently selected monster visually and in code 
-   * @param name name of monster currently selected
-   */
-  function currentlySelectedMonster(name: string) {
+  function highlightAndShowConfirm(name: string) {
     console.log("Monster clicked:", name);
 
-    // Assign monster name value
-    setMonsterName(name);
-
-    // Remove border from previous
+    // Remove styling from previous selection
     if (selectedMonster) {
       const deselect = document.getElementById(selectedMonster);
       if (deselect) {
@@ -40,7 +25,7 @@ export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({
       }
     }
 
-    // Add border to new
+    // Add styling to new selection
     const selected = document.getElementById(name);
     if (selected) {
       selected.style.border = "solid";
@@ -48,45 +33,42 @@ export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({
       selected.style.opacity = "0.5";
     }
 
-    // Enabled button once monster has been clicked
+    setSelectedMonster(name);
     setConfirmEnabled(true);
   }
 
-  /**
-   * Handles passing of information back to PlayerPage.tsx
-   */
+  // Called when the confirm button is clicked
+
   function handleConfirm() {
-    console.log("Confirm clicked. Selected monster:", selectedMonster);
-    setIsConfirmed(true);
+    if (selectedMonster) {
+      console.log("Confirmed monster:", selectedMonster);
+      setIsConfirmed(true);
+      navigate("/play");
+    }
   }
 
-  // If confirm button pressed and monster selected, return result to parent page (PlayerPage.tsx)
+  // Notify parent after confirmation
   useEffect(() => {
-    if (isConfirmed && selectedMonster) {
+    if (isConfirmed && selectedMonster && setSelectedMonsterCallback) {
       setSelectedMonsterCallback(selectedMonster);
     }
   }, [isConfirmed, selectedMonster, setSelectedMonsterCallback]);
 
-  // HTML display of the monsters
   return (
-    <div className="monsterSelectionScreen">
-      <h1>Choose your Monster:</h1>
-      {MonsterPool.filter(monster => monster.name !== "BlankMon").map(monster => (
-        <MonsterContainer
-          key={monster.name}
-          image={monster.imageUrl}
-          name={monster.name}
-          currentlySelectedMonster={currentlySelectedMonster}
-        />
-      ))}
-      <button
-        id="confirmMonsterButton"
-        onClick={handleConfirm}
-        disabled={!confirmEnabled}
-      >
-        Confirm
-      </button>
-    </div>
+    <div className="canvas-body" id="monster-selection-screen">
+      <h1 className="monster-selection-screen-title">Choose Your</h1>
+      <h1 className="monster-selection-screen-title" id="header-2">
+        Monster!
+      </h1>
+      <div className="monster-selection-grid">
+        <MonsterContainer name="wolf" type="Attacker" currentlySelectedMonster={highlightAndShowConfirm} />
+        <MonsterContainer name="turtle" type="Defender" currentlySelectedMonster={highlightAndShowConfirm} />
+        <MonsterContainer name="dragon" type="Balanced" currentlySelectedMonster={highlightAndShowConfirm} />
 
+        <button className="glb-btn" id="monster-selection-btn" onClick={handleConfirm} disabled={!confirmEnabled}>
+          Confirm
+        </button>
+      </div>
+    </div>
   );
 };
