@@ -1,53 +1,79 @@
+import { io } from "socket.io-client";
 import { Meteor } from "meteor/meteor";
 import { locateServerBest } from "../../server/GameServerLocator";
 
 Meteor.methods({
+  // /** Request for a room to be allocated */
+  // async requestHostRoom() {
+  //   console.log("Requesting to host room.");
+  //   return await requestRoomCreation();
+  // },
+
   async getBestServerUrl(): Promise<string> {
-    try {
-      const serverUrl = await locateServerBest();
-      console.log(`Attempting connection to game server @ ${serverUrl}`);
+    /// Lookup the server info from the global db
+    const serverUrl = await locateServerBest();
+    /// Attempt to connect to the specified server
+    console.log(`Testing connection to game server @ <${serverUrl}>.`);
 
-      for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-        console.log(`Connection attempt ${attempt} of ${MAX_RETRIES}`);
+    /// Check with server if join code leads to an active room if not error
+    return new Promise((resolve, reject) => {
+      const socket = io(serverUrl);
+      /// If said server is not responding then error
+      const echoMsg = "Test echo msg";
+      socket.on("connect", () => {
+        console.log("Connected to server");
 
-        const success = await new Promise<boolean>((resolve, reject) => {
-          const socket: Socket = io(serverUrl + "/host");
+        // Send a test message
+        console.log("Test connection to server (echo)");
+        socket.emit("echo", echoMsg);
+      });
+      socket.on("echo", async (msg) => {
+        console.log("Echo sent:", echoMsg, " | Echo response:", msg);
+        resolve(serverUrl);
+      });
 
-          const timeout = setTimeout(() => {
-            socket.disconnect();
-            reject(new Meteor.Error(500, "Server did not respond in time."));
-          }, TIMEOUT_MS);
-
-          socket.on("connect", () => {
-            console.log("Connected, sending echo test...");
-            socket.emit("echo", "Test echo msg");
-          });
-
-          socket.on("echo", (_msg) => {
-            clearTimeout(timeout);
-            console.log("Echo received from server!");
-            socket.disconnect();
-            resolve(true);
-          });
-
-          socket.on("connect_error", (err) => {
-            clearTimeout(timeout);
-            console.error("Socket connection failed:", err.message);
-            socket.disconnect();
-            reject(new Meteor.Error(500, "Could not connect to server."));
-          });
-        }).catch((err) => {
-          console.warn(`Attempt ${attempt} failed: ${err.message}`);
-          return false;
-        });
-
-        if (success) return serverUrl;
-      }
-
-      throw new Meteor.Error(500, "All connection attempts to the game server failed.");
-    } catch (err: any) {
-      console.error("getBestServerUrl failed:", err.message || err);
-      throw new Meteor.Error(500, "Failed to locate or connect to a game server.");
-    }
+      socket.on("connect_error", (err) => {
+        console.error(`Connection failed: ${err.message}`);
+        reject(new Error("Room is not joinable."));
+      });
+    });
   },
+
+  // /**
+  //  * Get the url of the server which generated this code only if it is active.
+  //  * @param joinCode
+  //  * @returns the url of the server that this code is from
+  //  */
+  // async getServerConnection(joinCode: string): Promise<string> {
+  //   console.log(`Requesting to join room with code <${joinCode}>.`);
+  //   // TODO make sure that the rooms can mark themselves as closed / in progress
+
+  //   /// Lookup the server info from the global db
+  //   const serverUrl = await locateServer(joinCode);
+  //   /// Attempt to connect to the specified server
+  //   console.log(`Attempting to connect to game server @ <${serverUrl}>.`);
+  //   const gameServerConnection = DDP.connect(serverUrl);
+  //   /// If said server is not responding then error
+
+  //   /// Check with server if join code leads to an active room if not error
+  //   return new Promise((resolve, reject) => {
+  //     gameServerConnection.call(
+  //       "checkHasJoinableRoom",
+  //       joinCode,
+  //       (error: Error, result: boolean) => {
+  //         if (error) {
+  //           console.error("RPC Error:", error);
+  //           reject(error);
+  //         } else {
+  //           console.log("Is room joinable:", result);
+  //           if (!result) {
+  //             reject(new Error("Room is not joinable."));
+  //           }
+
+  //           resolve(serverUrl);
+  //         }
+  //       }
+  //     );
+  //   });
+  // },
 });
