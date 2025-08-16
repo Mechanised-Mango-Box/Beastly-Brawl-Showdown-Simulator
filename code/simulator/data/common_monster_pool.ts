@@ -3,7 +3,7 @@ import { DodgeChargeComponent, RerollChargeComponent } from "../core/monster/com
 import { MonsterPool } from "../core/monster/monster_pool";
 import { SideId } from "../core/side";
 
-export const monsterPool: MonsterPool = {
+export const COMMON_MONSTER_POOL: MonsterPool = {
   name: "common_monster_pool",
   monsters: {
     blank: {
@@ -94,4 +94,4 @@ export const monsterPool: MonsterPool = {
       onSpawnActions: [],
     },
   },
-};
+} as const;

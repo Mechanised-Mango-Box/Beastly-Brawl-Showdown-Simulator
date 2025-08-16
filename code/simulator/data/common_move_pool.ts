@@ -1,13 +1,14 @@
 // TODO: make swappable instead of a global
-import { Monster } from "../core/monster/monster";
+import { getComponent, getStat, Monster } from "../core/monster/monster";
 import { Battle } from "../core/battle";
 import { BlockedEvent, BuffEvent, DamageEvent, MoveEvadedEvent, MoveFailedEvent, MoveSuccessEvent, RerollEvent, RollEvent, StartMoveEvent } from "../core/event/core_events";
 import { SideId } from "../core/side";
 import { roll } from "../core/roll";
-import { AbilityChargeStunComponent, DefendComponent, DodgeChargeComponent, DodgeStateComponent, RerollChargeComponent, StunnedStateComponent } from "../core/monster/core_components";
+import { AbilityChargeStunComponent, DefendComponent, DodgeChargeComponent, DodgeStateComponent, RerollChargeComponent, StunnedStateComponent } from "../core/monster/component/core_components";
 import { TargetingData, SingleEnemyTargeting, SelfTargeting } from "../core/action/targeting";
 import { defineMove, getMoveId } from "../core/action/move/move";
 import { MovePool, createMovePool } from "../core/action/move/move_pool";
+import { COMMON_MONSTER_POOL } from "./common_monster_pool";
 
 export const commonMovePool: MovePool = createMovePool([
   defineMove("nothing", {
@@ -47,7 +48,7 @@ export const commonMovePool: MovePool = createMovePool([
       battle.eventHistory.addEvent(startMoveEvent);
 
       //# Evade check
-      const dodgeState: DodgeStateComponent | null = targetMonster.getComponent("dodging");
+      const dodgeState: DodgeStateComponent | null = getComponent(targetMonster, "dodging");
       if (dodgeState) {
         const moveEvadedEvent: MoveEvadedEvent = {
           name: "evaded",
@@ -70,7 +71,7 @@ export const commonMovePool: MovePool = createMovePool([
           },
         });
       });
-      let rollResult: number = roll(battle.rng,20);
+      let rollResult: number = roll(battle.rng, 20);
       const rollEvent: RollEvent = {
         name: "roll",
         source: source,
@@ -80,7 +81,7 @@ export const commonMovePool: MovePool = createMovePool([
       battle.eventHistory.addEvent(rollEvent);
 
       // # Reroll
-      const rerollComponent: RerollChargeComponent | null = sourceMonster.getComponent("reroll");
+      const rerollComponent: RerollChargeComponent | null = getComponent(sourceMonster, "reroll");
       if (rerollComponent && rerollComponent.charges > 0) {
         await new Promise<void>((resolve) => {
           battle.noticeBoard.postNotice(source, {
@@ -89,7 +90,7 @@ export const commonMovePool: MovePool = createMovePool([
             callback: function (shouldReroll: boolean): void {
               if (shouldReroll) {
                 rerollComponent.charges--;
-                rollResult = roll(battle.rng,20);
+                rollResult = roll(battle.rng, 20);
                 const rerollEvent: RerollEvent = {
                   name: "reroll",
                   source: source,
@@ -106,7 +107,7 @@ export const commonMovePool: MovePool = createMovePool([
       }
 
       //# Armour Check
-      if (rollResult <= targetMonster.getArmourBonus()) {
+      if (rollResult <= getStat("armour", targetMonster, COMMON_MONSTER_POOL.monsters[targetMonster.baseID])) {
         const blockedEvent: BlockedEvent = {
           name: "blocked",
           source: source,
@@ -125,10 +126,10 @@ export const commonMovePool: MovePool = createMovePool([
       battle.eventHistory.addEvent(moveSuccessEvent);
 
       //# Base damage roll
-      const baseDamage: number = roll(battle.rng,4) + sourceMonster.baseID.baseStats.attack;
+      const baseDamage: number = roll(battle.rng, 4) + getStat("attack", sourceMonster, COMMON_MONSTER_POOL.monsters[sourceMonster.baseID]);
 
       //# Crit Check
-      const critChanceBonus: number = sourceMonster.getCritChanceBonus();
+      const critChanceBonus: number = getStat("crit_chance", sourceMonster, COMMON_MONSTER_POOL.monsters[sourceMonster.baseID]);
       const critRollResult: number = roll(battle.rng, 20);
       const critRollEvent: RollEvent = {
         name: "roll",
@@ -204,7 +205,7 @@ export const commonMovePool: MovePool = createMovePool([
     async perform(battle: Battle, source: SideId, targetingData: SelfTargeting): Promise<void> {
       const sourceMonster: Monster = battle.sides[source].monster;
 
-      const dodgeChargeComponent: DodgeChargeComponent | null = sourceMonster.getComponent("dodgeCharges");
+      const dodgeChargeComponent: DodgeChargeComponent | null = getComponent(sourceMonster, "dodgeCharges");
       if (!dodgeChargeComponent) {
         const failedEvent: MoveFailedEvent = {
           name: "moveFailed",
@@ -217,7 +218,7 @@ export const commonMovePool: MovePool = createMovePool([
         return;
       }
 
-      const dodgeComponent: DodgeStateComponent | null = sourceMonster.getComponent("dodging");
+      const dodgeComponent: DodgeStateComponent | null = getComponent(sourceMonster, "dodging");
       if (!dodgeComponent) {
         sourceMonster.components.push(new DodgeStateComponent(1));
       } else {
@@ -240,7 +241,7 @@ export const commonMovePool: MovePool = createMovePool([
       const target: SideId = targetingData.target;
       const targetMonster: Monster = battle.sides[target].monster;
 
-      const abilityChargeStunComponent: AbilityChargeStunComponent | null = sourceMonster.getComponent("abilityChargeStun");
+      const abilityChargeStunComponent: AbilityChargeStunComponent | null = getComponent(sourceMonster, "abilityChargeStun");
       if (!abilityChargeStunComponent) {
         const failedEvent: MoveFailedEvent = {
           name: "moveFailed",
@@ -253,7 +254,7 @@ export const commonMovePool: MovePool = createMovePool([
         return;
       }
 
-      const stunnedComponent: StunnedStateComponent | null = targetMonster.getComponent("stunned");
+      const stunnedComponent: StunnedStateComponent | null = getComponent(targetMonster, "stunned");
       if (!stunnedComponent) {
         sourceMonster.components.push(new StunnedStateComponent(1));
       } else {

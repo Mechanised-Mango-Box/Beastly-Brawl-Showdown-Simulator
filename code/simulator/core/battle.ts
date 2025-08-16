@@ -39,7 +39,7 @@ export class Battle {
     this.monsterPool = options.monsterPool;
 
     this.sides = options.playerOptionSet.map((playerOptions, idx) => {
-      if (!this.monsterPool.monsters.has(playerOptions.monsterId)) {
+      if (!this.monsterPool.monsters[playerOptions.monsterId]) {
         throw new RangeError(`Key out of range: [key=${playerOptions.monsterId}] does not exist in the monster pool ${this.monsterPool.name}`);
       }
 
@@ -118,7 +118,7 @@ export class Battle {
           };
           const moveIdOptions: EntryID[] = [];
 
-          const base = this.monsterPool.monsters.get(side.monster.baseID);
+          const base = this.monsterPool.monsters[side.monster.baseID];
           if (!base) {
             throw new RangeError(`Key out of range: [key=${side.monster.baseID}] does not exist in the monster pool ${this.monsterPool.name}`);
           }
@@ -160,8 +160,8 @@ export class Battle {
 
         /// Sort by source monster speed
         return (
-          getStat("speed", this.sides[b.source].monster, this.monsterPool.monsters.get(this.sides[b.source].monster.baseID)!) -
-          getStat("speed", this.sides[a.source].monster, this.monsterPool.monsters.get(this.sides[a.source].monster.baseID)!)
+          getStat("speed", this.sides[b.source].monster, this.monsterPool.monsters[this.sides[b.source].monster.baseID]!) -
+          getStat("speed", this.sides[a.source].monster, this.monsterPool.monsters[this.sides[a.source].monster.baseID]!)
         );
       });
       console.log(`Acton Queue:\n${JSON.stringify(moveRequestQueue)}`);
