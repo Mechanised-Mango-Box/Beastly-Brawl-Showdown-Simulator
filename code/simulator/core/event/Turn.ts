@@ -4,11 +4,6 @@ import type { BaseEvent } from "./base_event"
 export class Turn {
     turnEvents: BaseEvent[] = [];
     private snapshotEvent: SnapshotEvent | undefined
-    // private startMoveEvent: StartMoveEvent | undefined
-    // private buffEvent: BuffEvent | undefined
-    // private rollEvent: RollEvent | undefined
-    // private damageEvent: DamageEvent | undefined
-    // private blockEvent: BlockedEvent | undefined
 
     //add event to the turnEvents
     public addEvent(value: BaseEvent): void {
@@ -23,67 +18,22 @@ export class Turn {
     public setSnapshotEvent(value: SnapshotEvent) {
         this.snapshotEvent = value
     }
-    
-    // Methods for StartMoveEvent
-    // public getStartMoveEvent(): StartMoveEvent | undefined{
-    //     return this.startMoveEvent
-    // }
-
-    // public setStartMoveEvent(value: StartMoveEvent) {
-    //     this.startMoveEvent = value
-    // }
 
     public startMoveEventText(startMoveEvent: StartMoveEvent): String {
         return startMoveEvent.source + " uses " + startMoveEvent.moveId + "."
     }
-    
-    // Methods for BuffEvent
-    // public getBuffEvent(): BuffEvent | undefined{
-    //     return this.buffEvent
-    // }
-
-    // public setBuffEvent(value: BuffEvent) {
-    //     this.buffEvent = value
-    // }
 
     public buffEventText(buffEvent: BuffEvent): String {
         return buffEvent.source + " has activated " + buffEvent.name + "."
     }
 
-    // Methods for RollEvent
-    // public getRollEvent(): RollEvent | undefined {
-    //     return this.rollEvent
-    // }
-
-    // public setRollEvent(value: RollEvent | undefined) {
-    //     this.rollEvent = value
-    // }
-
     public rollEventText(rollEvent: RollEvent): String {
         return rollEvent.source + " has rolled a " + rollEvent.result + "."
     }
-        
-    // Methods for DamageEvent
-    // public getDamageEvent(): DamageEvent | undefined {
-    //     return this.damageEvent
-    // }
-
-    // public setDamageEvent(value: DamageEvent | undefined) {
-    //     this.damageEvent = value
-    // }
 
     public damageEventText(damageEvent: DamageEvent): String {
         return damageEvent.target + " has taken " + damageEvent.amount + " damage."
     }
-
-    // Methods for BlockEvent
-    // public getBlockEvent(): BlockedEvent | undefined {
-    //     return this.blockEvent
-    // }
-
-    // public setBlockEvent(value: BlockedEvent | undefined) {
-    //     this.blockEvent = value
-    // }
 
     public blockEventText(blockedEvent: BlockedEvent): String {
         return blockedEvent?.source + " has blocked " + blockedEvent.target + "'s move."
