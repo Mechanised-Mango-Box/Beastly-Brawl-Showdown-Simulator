@@ -4,6 +4,7 @@ import type { BaseEvent } from "../../../core/event/base_event";
 import type { SnapshotEvent } from "../../../core/event/core_events";
 import { parseSnapshot } from "./snapshot_parser";
 import { parseTurns } from "./turns_array_maker";
+import { clamp } from "./utils/clamp";
 
 //this class is basically the entire simulator/information part of the battles, we might need to get playernames tho
 interface BattleSceneProps {
@@ -26,7 +27,6 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex, autoplay, 
   const turns = useMemo(() => parseTurns(events), [events]);
 
   // Clamp is used to restrict the number to make sure it stays within range
-  const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(n, max));
   const selectedTurnIndex =
     Number.isInteger(turnIndex)
       ? clamp(turnIndex, 0, Math.max(0, turns.length - 1))
