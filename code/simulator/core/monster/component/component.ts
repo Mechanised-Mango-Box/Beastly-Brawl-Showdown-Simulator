@@ -14,4 +14,3 @@ export interface BaseComponent<TKind extends string = string> {
   onStartTurn?(battle: Battle, selfSide: SideId): void;
   onEndTurn?(battle: Battle, selfSide: SideId): void;
 }
-

@@ -1,5 +1,6 @@
 import { Battle } from "../../battle";
 import { SideId } from "../../side";
+import { removeComponent } from "../monster";
 import { BaseComponent } from "./component";
 
 export class RerollChargeComponent implements BaseComponent<"reroll"> {
@@ -28,9 +29,7 @@ export class DodgeStateComponent implements BaseComponent<"dodging"> {
   onEndTurn(battle: Battle, selfSide: SideId): void {
     this.remainingDuration--;
     if (this.remainingDuration <= 0) {
-      battle.sides[selfSide].monster.components.splice(
-        battle.sides[selfSide].monster.components.indexOf(this)
-      );
+      removeComponent(battle.sides[selfSide].monster, this);
     }
   }
 }
@@ -51,16 +50,12 @@ export class DefendComponent implements BaseComponent<"defend"> {
   onEndTurn(battle: Battle, selfSide: SideId): void {
     this.remainingDuration--;
     if (this.remainingDuration <= 0) {
-      battle.sides[selfSide].monster.components.splice(
-        battle.sides[selfSide].monster.components.indexOf(this)
-      );
+      removeComponent(battle.sides[selfSide].monster, this);
     }
   }
 }
 
-export class AbilityChargeStunComponent
-  implements BaseComponent<"abilityChargeStun">
-{
+export class AbilityChargeStunComponent implements BaseComponent<"abilityChargeStun"> {
   kind = "abilityChargeStun" as const;
   charges: number;
   constructor(charges: number) {
@@ -79,9 +74,7 @@ export class StunnedStateComponent implements BaseComponent<"stunned"> {
   onEndTurn(battle: Battle, selfSide: SideId): void {
     this.remainingDuration--;
     if (this.remainingDuration <= 0) {
-      battle.sides[selfSide].monster.components.splice(
-        battle.sides[selfSide].monster.components.indexOf(this)
-      );
+      removeComponent(battle.sides[selfSide].monster, this);
     }
   }
 }
@@ -97,7 +90,7 @@ export class SpeedModifierComponent implements BaseComponent<"speedModifier"> {
   getSpeedBonus(): number {
     return this.speedBonus;
   }
-} 
+}
 
 type CommonComponentTypes =
   | typeof RerollChargeComponent
@@ -110,8 +103,5 @@ type CommonComponentTypes =
 //# Map it then export
 type ComponentInstanceType = InstanceType<CommonComponentTypes>;
 export type ComponentKindMap = {
-  [K in ComponentInstanceType["kind"]]: Extract<
-    ComponentInstanceType,
-    { kind: K }
-  >;
+  [K in ComponentInstanceType["kind"]]: Extract<ComponentInstanceType, { kind: K }>;
 };
