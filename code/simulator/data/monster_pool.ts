@@ -24,7 +24,7 @@ export const MonsterPool: MonsterTemplate[] = [
   {
     name: "Mystic Wyvern",
     description: "A mystical creature of the skies. A Balanced Monster.",
-    imageUrl: "/img/monster-selection-images/placeholder_monster_1.png",
+    imageUrl: "/monsters/dragon.png",
     baseStats: {
       health: 25,
       armour: 14,
@@ -47,7 +47,7 @@ export const MonsterPool: MonsterTemplate[] = [
   {
     name: "Shadow Fang Predator",
     description: "A stealthy and cunning beast. An Attack Monster.",
-    imageUrl: "/img/monster-selection-images/placeholder_monster_2.png",
+    imageUrl: "/monsters/wolf.png",
     baseStats: {
       health: 20,
       armour: 12,
@@ -80,7 +80,7 @@ export const MonsterPool: MonsterTemplate[] = [
   {
     name: "Stone Hide Guardian",
     description: "A sturdy and resilient protector. A Defense Monster.",
-    imageUrl: "/img/monster-selection-images/placeholder_monster_3.png",
+    imageUrl: "/monsters/turtle.png",
     baseStats: {
       health: 30,
       armour: 16,

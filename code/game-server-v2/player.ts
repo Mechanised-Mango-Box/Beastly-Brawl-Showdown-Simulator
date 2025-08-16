@@ -1,14 +1,17 @@
 import { MonsterTemplate } from "../simulator/core/monster/monster";
-import { MonsterPool } from "../simulator/data/monster_pool"
+import { RoomId } from "./types";
 
 export class Player {
+  roomId: RoomId;
   socketId: string;
   displayName: string;
   linkedAccountId?: string;
   spectators: string[];
   monster?: MonsterTemplate;
+  isReady: boolean = false;
 
-  constructor(socketId: string, displayName: string, linkedAccountId: string | undefined) {
+  constructor(roomId: RoomId, socketId: string, displayName: string, linkedAccountId: string | undefined) {
+    this.roomId = roomId;
     this.socketId = socketId;
     this.displayName = displayName;
     this.linkedAccountId = linkedAccountId;

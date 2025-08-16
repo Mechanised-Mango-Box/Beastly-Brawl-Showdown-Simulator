@@ -50,6 +50,7 @@ export type LobbyId = number & { __brand: "LobbyId" };
 export type JoinCode = string & { __brand: "JoinCode" };
 export type ServerId = number & { __brand: "ServerId" };
 export type AccountId = string;
+export type RoomId = number & { __brand: "RoomId" };
 
 // export type AccountId = string;
 // export type MatchId = number;

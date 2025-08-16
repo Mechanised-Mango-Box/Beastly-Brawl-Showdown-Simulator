@@ -9,6 +9,7 @@ import { GameServerRegisterModel, IGameServerRegisterEntry } from "./db/models";
 import { log_attention, log_event, log_notice, log_warning } from "./utils";
 import * as fs from "fs";
 import * as path from "path";
+import { Player } from "./player";
 
 type ServerConfig = {
   serverIp: string;
@@ -98,6 +99,7 @@ async function main(config: ServerConfig) {
     */
   });
 
+  // #region Host Channel
   type HostChannelAuth = {
     // hostName: string;
   };
@@ -121,6 +123,7 @@ async function main(config: ServerConfig) {
       log_event("Host disconnected.");
     });
 
+    // #region New Room
     socket.on("request-room", async () => {
       log_event("Room requested.");
       // TODO prevent multiple rooms at the same time
@@ -137,6 +140,7 @@ async function main(config: ServerConfig) {
       }
     });
 
+    // #region Start Game
     socket.on("start-game", async (msg) => {
       log_event(`Requested to start game: ${msg}`);
 
@@ -230,12 +234,46 @@ async function main(config: ServerConfig) {
     next();
   });
 
+  // #region Player Channel
   playerChannel.on("connection", async (socket: Socket) => {
     log_event(`Player connected: ${socket.id}`);
 
     socket.on("disconnect", () => {
       log_event("Player disconnected.");
     });
+
+    // #region Select Monster
+    socket.on(RequestSubmitMonster.name, RequestSubmitMonster);
+
+    function RequestSubmitMonster(data: any): void {
+      const player = socket.data.player as Player;
+      if (!player) {
+        socket.emit("error", "This player has not been initiated.");
+        return;
+      }
+
+      const room = gameServer.rooms.get(player.roomId);
+      if (!room) {
+        socket.emit("error", "500 Internal Server Error");
+        return;
+      }
+
+      player.setMonster(data.data);
+      player.isReady = true;
+      console.log(`Player ${player.displayName} is ready with monster:`, player.monster);
+
+      // Check if all players are ready
+      const allReady = Array.from(room.players.values()).every((p) => p.isReady);
+      if (!allReady) {
+        log_notice("Waiting for all players to submit their monsters...");
+        return;
+      }
+
+      // TODO Now that everyone is ready: generate next round
+
+    }
+
+    // #region Submit Move
 
     socket.on("submit-move", async (msg) => {
       console.log("Move submitted: ", JSON.stringify(msg));
@@ -252,8 +290,7 @@ async function main(config: ServerConfig) {
 
   httpServer.listen(config.serverPort, () => {
     log_notice(
-      `Socket.IO server running on ${
-        config.serverIp.toString() + ":" + config.serverPort.toString()
+      `Socket.IO server running on ${config.serverIp.toString() + ":" + config.serverPort.toString()
       }. <CTRL+C> to shutdown.`
     );
     //#endregion

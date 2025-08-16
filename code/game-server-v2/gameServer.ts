@@ -146,7 +146,7 @@ export class GameServer {
       throw new Error("Display name already taken.");
     }
 
-    const newPlayer = new Player(socketId, displayName, linkedAcccountId);
+    const newPlayer = new Player(roomId, socketId, displayName, linkedAcccountId);
     room.players.set(displayName, newPlayer);
   }
 }
