@@ -125,7 +125,7 @@ export const commonMovePool: MovePool = createMovePool([
       battle.eventHistory.addEvent(moveSuccessEvent);
 
       //# Base damage roll
-      const baseDamage: number = roll(battle.rng,4) + sourceMonster.base.baseStats.attack;
+      const baseDamage: number = roll(battle.rng,4) + sourceMonster.baseID.baseStats.attack;
 
       //# Crit Check
       const critChanceBonus: number = sourceMonster.getCritChanceBonus();
