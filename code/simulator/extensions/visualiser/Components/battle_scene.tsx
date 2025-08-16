@@ -59,13 +59,13 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex, autoplay, 
     if (!turns.length || selectedTurnIndex <= 0) return out;
 
     const last = Math.min(selectedTurnIndex - 1, turns.length - 1);
-    for (let t = 0; t <= last; t++) {
-      const turn = turns[t];
-      out.push({ key: `pre-t${t}-snap`, text: `Turn ${t + 1} started` });
-      for (let ei = 0; ei < turn.turnEvents.length; ei++) {
-        const ev = turn.turnEvents[ei];
+    for (let turnNumber = 0; turnNumber <= last; turnNumber++) {
+      const turn = turns[turnNumber];
+      out.push({ key: `pre-t${turnNumber}-snap`, text: `Turn ${turnNumber + 1} started` });
+      for (let eventNumber = 0; eventNumber < turn.turnEvents.length; eventNumber++) {
+        const ev = turn.turnEvents[eventNumber];
         out.push({
-          key: `pre-t${t}-e${ei}`,
+          key: `pre-t${turnNumber}-e${eventNumber}`,
           text: turn.printEventString(ev) ?? "Unknown event",
         });
       }
