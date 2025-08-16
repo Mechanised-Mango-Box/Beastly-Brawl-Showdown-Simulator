@@ -1,5 +1,4 @@
 import { Side, SideId } from "./side";
-import { getSpeedBonus, getIsBlockedFromMove, Monster, getSpeed } from "./monster/monster";
 import { MonsterTemplate } from "./monster/monster_template";
 import { ChooseMove as chooseMove } from "./notice/notice";
 import { NoticeBoard } from "./notice/notice_board";
@@ -11,6 +10,7 @@ import { EntryID } from "./types";
 import { TargetingData } from "./action/targeting";
 import { PRNG } from "./prng";
 import { MonsterPool, MonsterId } from "./monster/monster_pool";
+import { getIsBlockedFromMove, getStat } from "./monster/monster";
 
 export interface PlayerOptions {
   monsterId: MonsterId; //! Can change to list if needed later
@@ -160,8 +160,8 @@ export class Battle {
 
         /// Sort by source monster speed
         return (
-          getSpeed(this.sides[b.source].monster, this.monsterPool.monsters.get(this.sides[b.source].monster.baseID)!) -
-          getSpeed(this.sides[a.source].monster, this.monsterPool.monsters.get(this.sides[a.source].monster.baseID)!)
+          getStat("speed", this.sides[b.source].monster, this.monsterPool.monsters.get(this.sides[b.source].monster.baseID)!) -
+          getStat("speed", this.sides[a.source].monster, this.monsterPool.monsters.get(this.sides[a.source].monster.baseID)!)
         );
       });
       console.log(`Acton Queue:\n${JSON.stringify(moveRequestQueue)}`);

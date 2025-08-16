@@ -1,6 +1,7 @@
 import { Battle } from "../../battle";
 import { SideId } from "../../side";
 import { removeComponent } from "../monster";
+import { MonsterStatType } from "../monster_stats";
 import { BaseComponent } from "./component";
 
 export class RerollChargeComponent implements BaseComponent<"reroll"> {
@@ -44,8 +45,11 @@ export class DefendComponent implements BaseComponent<"defend"> {
     this.bonusArmour = bonusArmour;
   }
 
-  getArmourBonus(): number {
-    return this.bonusArmour;
+  getStatBonus(statType: MonsterStatType) {
+    if (statType === "armour") {
+      return this.bonusArmour;
+    }
+    return null;
   }
   onEndTurn(battle: Battle, selfSide: SideId): void {
     this.remainingDuration--;
@@ -87,8 +91,11 @@ export class SpeedModifierComponent implements BaseComponent<"speedModifier"> {
     this.speedBonus = speedBonus;
   }
 
-  getSpeedBonus(): number {
-    return this.speedBonus;
+  getStatBonus(statType: MonsterStatType) {
+    if (statType === "speed") {
+      return this.speedBonus;
+    }
+    return null;
   }
 }
 

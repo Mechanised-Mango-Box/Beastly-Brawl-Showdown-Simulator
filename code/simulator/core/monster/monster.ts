@@ -1,14 +1,17 @@
 import { EntryID } from "../types";
 import { BaseComponent } from "./component/component";
 import { ComponentKindMap } from "./component/core_components";
+import { MonsterStatType } from "./monster_stats";
 import { MonsterTemplate } from "./monster_template";
 
 export interface Monster {
+  //# Template
   /**
    * The key to the template that this monster is based on
    */
   baseID: EntryID;
 
+  //# Resources
   /**
    * The current health
    */
@@ -19,6 +22,7 @@ export interface Monster {
    */
   defendActionCharges: number;
 
+  //# Components
   /**
    * The components attached to this monster
    */
@@ -38,38 +42,18 @@ export function removeComponent(monster: Monster, component: BaseComponent) {
   monster.components.splice(monster.components.indexOf(component));
 }
 
-//# Component Checks
-export function getArmour(monster: Monster, monsterTemplate: MonsterTemplate): number {
-  return getBaseArmour(monsterTemplate) + getArmourBonus(monster);
+export function getStat(statType: MonsterStatType, monster: Monster, monsterTemplate: MonsterTemplate): number {
+  return getBaseStat(statType, monsterTemplate) + getStatBonus(statType, monster);
 }
-export function getBaseArmour(monsterTemplate: MonsterTemplate): number {
-  return monsterTemplate.baseStats.armour!;
+export function getBaseStat(statType: MonsterStatType, monsterTemplate: MonsterTemplate): number {
+  return monsterTemplate.baseStats[statType]!;
 }
-export function getArmourBonus(monster: Monster): number {
+export function getStatBonus(statType: MonsterStatType, monster: Monster): number {
   return monster.components
-    .filter((component) => component.getArmourBonus !== undefined)
-    .map((component) => component.getArmourBonus!())
-    .reduce((totalBonus, bonus) => totalBonus + bonus, 0);
-}
-
-export function getSpeed(monster: Monster, monsterTemplate: MonsterTemplate): number {
-  return getBaseSpeed(monsterTemplate) + getSpeedBonus(monster);
-}
-export function getBaseSpeed(monsterTemplate: MonsterTemplate): number {
-  return monsterTemplate.baseStats.speed!;
-}
-export function getSpeedBonus(monster: Monster): number {
-  return monster.components
-    .filter((component) => component.getSpeedBonus !== undefined)
-    .map((component) => component.getSpeedBonus!())
-    .reduce((totalBonus, bonus) => totalBonus + bonus, 0);
-}
-
-export function getCritChanceBonus(monster: Monster): number {
-  return monster.components
-    .filter((component) => component.getCritChanceBonus !== undefined)
-    .map((component) => component.getCritChanceBonus!())
-    .reduce((totalBonus, bonus) => totalBonus + bonus, 0);
+    .filter((component) => component.getStatBonus !== undefined) /// Does it even implement a stat bonus
+    .map((component) => component.getStatBonus!(statType)) /// Get the stat bonus
+    .filter((bonus) => bonus !== null) /// If there was no bonus - ignore
+    .reduce((totalBonus, bonus) => totalBonus + bonus, 0); /// Sum
 }
 
 export function getIsBlockedFromMove(monster: Monster) {
