@@ -1,96 +1,67 @@
-import { SpawnAction } from "../action/spawn_action";
 import { EntryID } from "../types";
-import { BaseComponent } from "./component";
-import { ComponentKindMap } from "./core_components";
+import { BaseComponent } from "./component/component";
+import { ComponentKindMap } from "./component/core_components";
+import { MonsterPool } from "./monster_pool";
+import { MonsterTemplate } from "./monster_template";
 
-/**
- * Holds a set of the common stats
- */
-export type MonsterStats = {
-  health: number;
-  armour: number;
-  attack: number;
-  speed: number;
-};
-
-/**
- * A base template for a monster
- */
-export type MonsterTemplate = {
-  //# Flavour
-  name: string;
-  description: string;
-  imageUrl: string;
-
-  //# Stats
-  baseStats: MonsterStats;
-
-  //# Action
-  attackActionId: EntryID;
-  defendActionId: EntryID;
-  baseDefendActionCharges: number;
-  abilityActionId?: EntryID;
-  onSpawnActions: SpawnAction[];
-};
-
-export class Monster {
+export interface Monster {
   /**
-   * The template that this monster is based on
+   * The key to the template that this monster is based on
    */
-  base: MonsterTemplate;
+  baseID: EntryID;
+
+  /**
+   * The current health
+   */
   health: number;
-  defendActionCharges: number; /// How many times can the monster defend in a round
 
-  //* Non-default components
+  /**
+   * How many times can the monster defend in a round
+   */
+  defendActionCharges: number;
+
+  /**
+   * The components attached to this monster
+   */
   components: Array<BaseComponent>;
+}
 
-  constructor(template: MonsterTemplate) {
-    this.base =  template; //structuredClone(template);
-    this.health = template.baseStats.health;
-    this.components = [];
-    this.defendActionCharges = template.baseDefendActionCharges;
-  }
+export function getComponent<K extends keyof ComponentKindMap>(monster: Monster, kind: K): ComponentKindMap[K] | null {
+  return monster.components.find((component): component is ComponentKindMap[K] => component.kind === kind) || null;
+}
 
-  getComponent<K extends keyof ComponentKindMap>(kind: K): ComponentKindMap[K] | null {
-    return this.components.find((component): component is ComponentKindMap[K] => component.kind === kind) || null;
-  }
+export function getComponents<K extends keyof ComponentKindMap>(monster: Monster, kind: K): ComponentKindMap[K][] {
+  return monster.components.filter((component): component is ComponentKindMap[K] => component.kind === kind);
+}
 
-  getComponents<K extends keyof ComponentKindMap>(kind: K): ComponentKindMap[K][] {
-    return this.components.filter((component): component is ComponentKindMap[K] => component.kind === kind);
-  }
+//# Component Checks
+export function getArmourBonus(monster: Monster): number {
+  return monster.components
+    .filter((component) => component.getArmourBonus !== undefined)
+    .map((component) => component.getArmourBonus!())
+    .reduce((totalBonus, bonus) => totalBonus + bonus, 0);
+}
+export function getCritChanceBonus(monster: Monster): number {
+  return monster.components
+    .filter((component) => component.getCritChanceBonus !== undefined)
+    .map((component) => component.getCritChanceBonus!())
+    .reduce((totalBonus, bonus) => totalBonus + bonus, 0);
+}
 
-  //# Component Checks
-  getArmourBonus(): number {
-    return (
-      this.base.baseStats.armour +
-      this.components
-        .filter((component) => component.getArmourBonus !== undefined)
-        .map((component) => component.getArmourBonus!())
-        .reduce((totalBonus, bonus) => totalBonus + bonus, 0)
-    );
-  }
-  getCritChanceBonus(): number {
-    return this.components
-      .filter((component) => component.getCritChanceBonus !== undefined)
-      .map((component) => component.getCritChanceBonus!())
-      .reduce((totalBonus, bonus) => totalBonus + bonus, 0);
-  }
+export function getIsBlockedFromMove(monster: Monster) {
+  return monster.components.filter((component) => component.getIsBlockedFromMove !== undefined).some((component) => component.getIsBlockedFromMove!());
+}
 
-  getIsBlockedFromMove() {
-    return this.components.filter((component) => component.getIsBlockedFromMove !== undefined).some((component) => component.getIsBlockedFromMove!());
-  }
+export function getSpeed(monster: Monster, monsterTemplate: MonsterTemplate): number {
+  return getBaseSpeed(monsterTemplate) + getSpeedBonus(monster);
+}
 
-  getSpeed(): number {
-    return (
-      this.base.baseStats.speed +
-      this.components
-        .filter(component => component.getSpeedBonus !== undefined)
-        .map(component => component.getSpeedBonus!())
-        .reduce((totalBonus, bonus) => totalBonus + bonus, 0)
-    );
-  }
-
-
-
-
+export function getBaseSpeed(monsterTemplate: MonsterTemplate): number {
+  return monsterTemplate.baseStats.speed!;
+}
+export function getSpeedBonus(monster: Monster): number {
+  return monster.components
+    .filter((component) => component.getSpeedBonus !== undefined)
+    .map((component) => component.getSpeedBonus!())
+    .reduce((totalBonus, bonus) => totalBonus + bonus, 0);
 }

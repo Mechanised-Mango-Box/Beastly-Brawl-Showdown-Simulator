@@ -1,5 +1,6 @@
 import { Side, SideId } from "./side";
-import { Monster, MonsterTemplate } from "./monster/monster";
+import { getSpeedBonus, getIsBlockedFromMove, Monster, getSpeed } from "./monster/monster";
+import { MonsterTemplate } from "./monster/monster_template";
 import { ChooseMove as chooseMove } from "./notice/notice";
 import { NoticeBoard } from "./notice/notice_board";
 import { EventHistory } from "./event/event_history";
@@ -9,19 +10,24 @@ import { MoveData, MoveRequest } from "./action/move/move";
 import { EntryID } from "./types";
 import { TargetingData } from "./action/targeting";
 import { PRNG } from "./prng";
+import { MonsterPool, MonsterId } from "./monster/monster_pool";
 
 export interface PlayerOptions {
-  monsterTemplate: MonsterTemplate; //! Can change to list if needed later
+  monsterId: MonsterId; //! Can change to list if needed later
 }
 
 export type BattleOptions = {
   seed: number;
+
+  monsterPool: MonsterPool;
 
   playerOptionSet: PlayerOptions[];
 };
 
 export class Battle {
   readonly rng: PRNG;
+  readonly monsterPool: MonsterPool;
+
   readonly sides: Side[];
 
   readonly eventHistory: EventHistory;
@@ -30,11 +36,21 @@ export class Battle {
 
   constructor(options: BattleOptions) {
     this.rng = new PRNG(options.seed);
+    this.monsterPool = options.monsterPool;
 
     this.sides = options.playerOptionSet.map((playerOptions, idx) => {
+      if (!this.monsterPool.monsters.has(playerOptions.monsterId)) {
+        throw new RangeError(`Key out of range: [key=${playerOptions.monsterId}] does not exist in the monster pool ${this.monsterPool.name}`);
+      }
+
       const side: Side = {
         id: idx as SideId,
-        monster: new Monster(playerOptions.monsterTemplate),
+        monster: {
+          baseID: playerOptions.monsterId,
+          health: 0,
+          defendActionCharges: 0,
+          components: [],
+        },
         pendingActions: null,
       };
       return side;
@@ -75,17 +91,12 @@ export class Battle {
       console.log(`Gather moves: Start`);
       await new Promise<void>((resolve) => {
         this.sides.forEach((side) => {
-          const callback: (moveId: EntryID, target: TargetingData) => void = (
-            moveId: EntryID,
-            targetingData: TargetingData
-          ): void => {
+          const callback: (moveId: EntryID, target: TargetingData) => void = (moveId: EntryID, targetingData: TargetingData): void => {
             // TODO validate move
 
             const chosenMove: MoveData = commonMovePool[moveId];
             if (chosenMove.targetingMethod != targetingData.targetingMethod) {
-              console.error(
-                `Error: Targeting method mismatch. [moveId=${moveId} ${chosenMove.name}] expects ${chosenMove.targetingMethod} but ${targetingData.targetingMethod} was recieved.`
-              );
+              console.error(`Error: Targeting method mismatch. [moveId=${moveId} ${chosenMove.name}] expects ${chosenMove.targetingMethod} but ${targetingData.targetingMethod} was recieved.`);
               return;
             }
 
@@ -107,7 +118,10 @@ export class Battle {
           };
           const moveIdOptions: EntryID[] = [];
 
-          const base = side.monster.base;
+          const base = this.monsterPool.monsters.get(side.monster.baseID);
+          if (!base) {
+            throw new RangeError(`Key out of range: [key=${side.monster.baseID}] does not exist in the monster pool ${this.monsterPool.name}`);
+          }
 
           if (base.attackActionId) {
             moveIdOptions.push(base.attackActionId);
@@ -145,8 +159,10 @@ export class Battle {
         }
 
         /// Sort by source monster speed
-        return this.sides[b.source].monster.getSpeed() - this.sides[a.source].monster.getSpeed();
-
+        return (
+          getSpeed(this.sides[b.source].monster, this.monsterPool.monsters.get(this.sides[b.source].monster.baseID)!) -
+          getSpeed(this.sides[a.source].monster, this.monsterPool.monsters.get(this.sides[a.source].monster.baseID)!)
+        );
       });
       console.log(`Acton Queue:\n${JSON.stringify(moveRequestQueue)}`);
 
@@ -156,10 +172,8 @@ export class Battle {
       console.log("Resolve Actions");
       for (const moveRequest of moveRequestQueue) {
         const move: MoveData = commonMovePool[moveRequest.moveId];
-        if (this.sides[moveRequest.source].monster.getIsBlockedFromMove()) {
-          console.log(
-            `Monster could not perform move right now (probs status).`
-          );
+        if (getIsBlockedFromMove(this.sides[moveRequest.source].monster)) {
+          console.log(`Monster could not perform move right now (probs status).`);
           continue;
         }
 
@@ -192,5 +206,3 @@ export class Battle {
     this.eventHistory.addEvent(battleOverEvent);
   }
 }
-
-

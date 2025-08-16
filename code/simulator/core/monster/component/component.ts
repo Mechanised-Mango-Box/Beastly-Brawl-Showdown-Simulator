@@ -1,5 +1,5 @@
-import { Battle } from "../battle";
-import { SideId } from "../side";
+import { Battle } from "../../battle";
+import { SideId } from "../../side";
 
 export interface BaseComponent<TKind extends string = string> {
   readonly kind: TKind;

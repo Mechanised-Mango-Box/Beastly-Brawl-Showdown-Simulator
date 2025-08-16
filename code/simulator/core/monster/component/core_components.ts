@@ -1,5 +1,5 @@
-import { Battle } from "../battle";
-import { SideId } from "../side";
+import { Battle } from "../../battle";
+import { SideId } from "../../side";
 import { BaseComponent } from "./component";
 
 export class RerollChargeComponent implements BaseComponent<"reroll"> {
