@@ -37,15 +37,12 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex, autoplay, 
   const currentSnapshot = currentTurn ? currentTurn.getSnapshotEvent() : null;
   const parsed = currentSnapshot ? parseSnapshot(currentSnapshot) : [];
 
-  const isSnapshot = (ev: BaseEvent): ev is SnapshotEvent =>
-    (ev as any).name === "snapshot";
-
   // Building the lookup table for turn: snapshot event index
   const turnStartIndex = useMemo(() => {
     const map: Record<number, number> = {};
     let t = -1;
     for (let i = 0; i < events.length; i++) {
-      if (isSnapshot(events[i])) {
+      if (events[i].name == "snapshot") {
         t += 1;
         map[t] = i; // snapshot event index starting this turn
       }
@@ -105,7 +102,7 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex, autoplay, 
 
         const ev = events[i];
 
-        if (isSnapshot(ev)) {
+        if (ev.name == "snapshot") {
           turnNo += 1;
           if (turnNo > selectedTurnIndex) break;
 
