@@ -4,5 +4,5 @@ export type MonsterId = Lowercase<string>;
 
 export interface MonsterPool {
   name: string;
-  monsters: ReadonlyMap<MonsterId, MonsterTemplate>;
+  monsters: Readonly<Record<MonsterId, MonsterTemplate>>;
 }

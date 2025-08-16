@@ -44,12 +44,21 @@ const GamePage: React.FC = () => {
     socketContext.socket.onAny((event, args) => console.log(`Message recieved:\n${event}\n${JSON.stringify(args)}`));
 
     /// Request game data
-    setSelfInfo(await socketContext.socket.emitWithAck("getSelfInfo"))
-    if (!selfInfo) { console.error("Did not recieve SelfInfo"); return; }
-    setTurnHistory(await socketContext.socket.emitWithAck("getHistory"))
-    if (!turnHistory) { console.error("Did not recieve TurnHistory"); return; }
-    setPendngNotices(await socketContext.socket.emitWithAck("getNotices"))
-    if (!pendingNotices) { console.error("Did not recieve PendingNotices"); return; }
+    setSelfInfo(await socketContext.socket.emitWithAck("getSelfInfo"));
+    if (!selfInfo) {
+      console.error("Did not recieve SelfInfo");
+      return;
+    }
+    setTurnHistory(await socketContext.socket.emitWithAck("getHistory"));
+    if (!turnHistory) {
+      console.error("Did not recieve TurnHistory");
+      return;
+    }
+    setPendngNotices(await socketContext.socket.emitWithAck("getNotices"));
+    if (!pendingNotices) {
+      console.error("Did not recieve PendingNotices");
+      return;
+    }
 
     // TODO block / display loading until all data recieved
 
@@ -71,7 +80,7 @@ const GamePage: React.FC = () => {
       socketContext.socket.off("newEvent");
       socketContext.socket.off("newNotice");
       socketContext.socket.offAny();
-    }
+    };
   };
 
   useEffect(() => {
@@ -105,22 +114,24 @@ const GamePage: React.FC = () => {
                 console.log(`Action pressed: ${moveId}`);
                 let targeting: TargetingData;
                 switch (commonMovePool[moveId].targetingMethod) {
-                  case "self":
+                  case "self": {
                     const selfTargeting: SelfTargeting = {
-                      targetingMethod: "self"
-                    }
-                    targeting = selfTargeting
+                      targetingMethod: "self",
+                    };
+                    targeting = selfTargeting;
                     break;
-                  case "single-enemy":
+                  }
+                  case "single-enemy": {
                     const singleEnemyTargeting: SingleEnemyTargeting = {
                       targetingMethod: "single-enemy",
                       target: ((selfInfo! + 1) % 2) as SideId, // TODO get side id
-                    }
-                    targeting = singleEnemyTargeting
+                    };
+                    targeting = singleEnemyTargeting;
                     break;
+                  }
 
                   default:
-                    console.error(`Error: Unknown targeting method: ${commonMovePool[moveId].targetingMethod}`)
+                    console.error(`Error: Unknown targeting method: ${commonMovePool[moveId].targetingMethod}`);
                     return;
                 }
                 const params: Parameters<typeof currentNotice.callback> = [moveId, targeting];
