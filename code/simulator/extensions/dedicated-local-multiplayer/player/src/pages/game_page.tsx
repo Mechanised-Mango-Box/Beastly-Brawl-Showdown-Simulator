@@ -5,6 +5,7 @@ import BattleControls from "../components/battle_controls";
 import type { Notice } from "../../../../../core/notice/notice";
 import { useRef } from "react";
 import type { SideId } from "../../../../../core/side";
+import BattleVisualizer from "../../../../visualiser/BattleVisualiser"
 import type { SelfTargeting, SingleEnemyTargeting, TargetingData } from "../../../../../core/action/targeting";
 import { commonMovePool } from "../../../../../data/common_move_pool";
 import type { OrderedEvent } from "../../../../../core/event/event_history";
@@ -17,6 +18,7 @@ const GamePage: React.FC = () => {
   const [selfInfo, setSelfInfo] = useState<SideId | null>(null);
   const [turnHistory, setTurnHistory] = useState<OrderedEvent[] | null>(null);
   const [pendingNotices, setPendngNotices] = useState<Notice[] | null>(null);
+
 
   const hasListeners = useRef(false);
 
@@ -187,6 +189,7 @@ const GamePage: React.FC = () => {
     <>
       <h1>WIP - GAME</h1>
       <div>
+        {/* <BattleVisualizer /> */}
         <textarea disabled value={JSON.stringify(turnHistory)} />
         <br />
         {actionPanel()}
