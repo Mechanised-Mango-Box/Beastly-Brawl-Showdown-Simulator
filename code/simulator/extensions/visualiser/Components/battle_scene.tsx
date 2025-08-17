@@ -37,115 +37,34 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex, autoplay, 
   const currentSnapshot = currentTurn ? currentTurn.getSnapshotEvent() : null;
   const parsed = currentSnapshot ? parseSnapshot(currentSnapshot) : [];
 
-  // Building the lookup table for turn: snapshot event index
-  const turnStartIndex = useMemo(() => {
-    const map: Record<number, number> = {};
-    let t = -1;
-    for (let i = 0; i < events.length; i++) {
-      if (events[i].name == "snapshot") {
-        t += 1;
-        map[t] = i; // snapshot event index starting this turn
-      }
+  // Build full log for ALL turns, regardless of selectedTurnIndex
+const gameLog = useMemo(() => {
+  const logEntries: { key: string; text: string }[] = [];
+  if (!turns.length) return logEntries;
+
+  const lastTurnIndex = Math.max(0, turns.length - 1);
+
+  for (let turnNumber = 0; turnNumber <= lastTurnIndex; turnNumber++) {
+    const currentTurn = turns[turnNumber];
+
+    // Start-of-turn marker
+    logEntries.push({
+      key: `turn-${turnNumber}-start`,
+      text: `Turn ${turnNumber + 1} started`,
+    });
+
+    // All events within this turn
+    for (let eventIndex = 0; eventIndex < currentTurn.turnEvents.length; eventIndex++) {
+      const event = currentTurn.turnEvents[eventIndex];
+      logEntries.push({
+        key: `turn-${turnNumber}-event-${eventIndex}`,
+        text: currentTurn.printEventString(event) ?? "Unknown event",
+      });
     }
-    return map;
-  }, [events]);
+  }
 
-  // List for the previous events
-  const preLog = useMemo(() => {
-    const out: { key: string; text: string }[] = [];
-    if (!turns.length || selectedTurnIndex <= 0) return out;
-
-    const last = Math.min(selectedTurnIndex - 1, turns.length - 1);
-    for (let turnNumber = 0; turnNumber <= last; turnNumber++) {
-      const turn = turns[turnNumber];
-      out.push({ key: `pre-t${turnNumber}-snap`, text: `Turn ${turnNumber + 1} started` });
-      for (let eventNumber = 0; eventNumber < turn.turnEvents.length; eventNumber++) {
-        const ev = turn.turnEvents[eventNumber];
-        out.push({
-          key: `pre-t${turnNumber}-e${eventNumber}`,
-          text: turn.printEventString(ev) ?? "Unknown event",
-        });
-      }
-    }
-    return out;
-  }, [turns, selectedTurnIndex]);
-
-  // State of the section of the game log that is rendered live
-  const [liveLog, setLiveLog] = React.useState<{ key: string; text: string }[]>([]);
-
-  // For animations to be put in
-  const nextTick = (ms = 500) => new Promise<void>((r) => setTimeout(r, ms));
-
-  // ChatGPT did this: Something about making sure it doesn't trigger multiple advances
-  const advanceCalledRef = React.useRef(false);
-
-  React.useEffect(() => {
-    advanceCalledRef.current = false;
-  }, [selectedTurnIndex]);
-
-  // Rendering the selected turn
-  React.useEffect(() => {
-    let cancelled = false;
-
-    setLiveLog(preLog); // previous turns printed instantly
-
-    const runSelectedTurn = async () => {
-      if (selectedTurnIndex < 0) return;
-
-      const startIdx = turnStartIndex[selectedTurnIndex];
-      if (startIdx === undefined) return;
-
-      let turnNo = selectedTurnIndex - 1;
-
-      for (let i = startIdx; i < events.length; i++) {
-        if (cancelled) return;
-
-        const ev = events[i];
-
-        if (ev.name == "snapshot") {
-          turnNo += 1;
-          if (turnNo > selectedTurnIndex) break;
-
-          setLiveLog((prev) => [
-            ...prev,
-            { key: `sel-t${turnNo}-snap-${i}`, text: `Turn ${turnNo + 1} started` },
-          ]);
-          // TODO: await animateTurnStart(turnNo);
-          await nextTick();
-          continue;
-        }
-
-        if (turnNo !== selectedTurnIndex) continue;
-
-        const text =
-          turns[turnNo]?.printEventString(ev) ??
-          String((ev as any).name ?? (ev as any).eventName ?? "event");
-
-        setLiveLog((prev) => [...prev, { key: `sel-t${turnNo}-e${i}`, text }]);
-        // TODO: await animateEvent(ev, turnNo);
-        await nextTick();
-      }
-
-      // After the selected turn finishes
-      if (cancelled) return;
-      if (advanceCalledRef.current) return; // prevent double-trigger on re-renders
-      advanceCalledRef.current = true;
-
-      const lastTurnIndex = Math.max(0, turns.length - 1);
-
-      if (selectedTurnIndex < lastTurnIndex) {
-        // If autoplay is on, request the parent to advance to the next turn
-        if (autoplay && onAdvanceTurn) {
-          // Optional: tiny pause between turns (good for future "between-turn" animation)
-          await nextTick(0); // TODO: await animateBetweenTurns(selectedTurnIndex, selectedTurnIndex+1);
-          onAdvanceTurn(selectedTurnIndex + 1);
-        }
-      }
-    };
-
-    runSelectedTurn();
-    return () => { cancelled = true; };
-  }, [events, selectedTurnIndex, turns, preLog, turnStartIndex, autoplay, onAdvanceTurn]);
+  return logEntries;
+}, [turns]);
 
 
   if (parsed.length < 2) {
@@ -194,8 +113,10 @@ const BattleScene: React.FC<BattleSceneProps> = ({ events, turnIndex, autoplay, 
           border: "1px solid black",
         }}
       >
-        {liveLog.length === 0 ? (<p>No events yet.</p>) : 
-        (liveLog.map(({ key, text }) => (
+        {gameLog.length === 0 ? (
+          <p>No events yet.</p>
+        ) : (
+          gameLog.map(({ key, text }) => (
             <p key={key} style={{ margin: "5px 0" }}>{text}</p>
           ))
         )}
