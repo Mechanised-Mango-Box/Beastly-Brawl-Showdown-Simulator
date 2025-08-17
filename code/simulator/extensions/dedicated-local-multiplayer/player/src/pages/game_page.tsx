@@ -151,7 +151,7 @@ const GamePage: React.FC = () => {
           <>
             <div
               style={{
-                backgroundColor: "cornsilk",
+                backgroundColor: "RosyBrown",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
