@@ -1,5 +1,5 @@
 import { Side, SideId } from "./side";
-import { Monster, MonsterTemplate } from "./monster/monster";
+import { MonsterTemplate } from "./monster/monster_template";
 import { ChooseMove as chooseMove } from "./notice/notice";
 import { NoticeBoard } from "./notice/notice_board";
 import { EventHistory } from "./event/event_history";
@@ -7,38 +7,50 @@ import { BattleOverEvent, SnapshotEvent } from "./event/core_events";
 import { commonMovePool } from "../data/common_move_pool";
 import { MoveData, MoveRequest } from "./action/move/move";
 import { EntryID } from "./types";
+import { TargetingData } from "./action/targeting";
+import { PRNG } from "./prng";
+import { MonsterPool, MonsterId } from "./monster/monster_pool";
+import { getIsBlockedFromMove, getStat } from "./monster/monster";
+
 export interface PlayerOptions {
-  name: string;
-  /**
-   * A copy of a template
-   */
-  monsterTemplate: MonsterTemplate; //! Can change to list if needed later
+  monsterId: MonsterId; //! Can change to list if needed later
 }
 
 export type BattleOptions = {
   seed: number;
 
-  playerOptionSet: PlayerOptions[];
+  monsterPool: MonsterPool;
 
-  player_option_timeout: number;
+  playerOptionSet: PlayerOptions[];
 };
 
 export class Battle {
-  readonly seed: number;
+  readonly rng: PRNG;
+  readonly monsterPool: MonsterPool;
+
   readonly sides: Side[];
+
   readonly eventHistory: EventHistory;
 
   readonly noticeBoard: NoticeBoard;
 
-  readonly player_option_timeout: number;
-
   constructor(options: BattleOptions) {
-    this.seed = options.seed;
+    this.rng = new PRNG(options.seed);
+    this.monsterPool = options.monsterPool;
 
     this.sides = options.playerOptionSet.map((playerOptions, idx) => {
+      if (!this.monsterPool.monsters[playerOptions.monsterId]) {
+        throw new RangeError(`Key out of range: [key=${playerOptions.monsterId}] does not exist in the monster pool ${this.monsterPool.name}`);
+      }
+
       const side: Side = {
         id: idx as SideId,
-        monster: new Monster(playerOptions.monsterTemplate),
+        monster: {
+          baseID: playerOptions.monsterId,
+          health: 0,
+          defendActionCharges: 0,
+          components: [],
+        },
         pendingActions: null,
       };
       return side;
@@ -47,8 +59,6 @@ export class Battle {
     this.eventHistory = new EventHistory();
 
     this.noticeBoard = new NoticeBoard(options.playerOptionSet.length);
-
-    this.player_option_timeout = options.player_option_timeout;
   }
 
   // TODO ? make the battle director a swappable component
@@ -81,28 +91,50 @@ export class Battle {
       console.log(`Gather moves: Start`);
       await new Promise<void>((resolve) => {
         this.sides.forEach((side) => {
-          const callback: (moveId: EntryID, target: SideId) => void = (moveId: EntryID, target: SideId): void => {
+          const callback: (moveId: EntryID, target: TargetingData) => void = (moveId: EntryID, targetingData: TargetingData): void => {
             // TODO validate move
-            // TODO allow selecting of other targeting methods
+
+            const chosenMove: MoveData = commonMovePool[moveId];
+            if (chosenMove.targetingMethod != targetingData.targetingMethod) {
+              console.error(`Error: Targeting method mismatch. [moveId=${moveId} ${chosenMove.name}] expects ${chosenMove.targetingMethod} but ${targetingData.targetingMethod} was recieved.`);
+              return;
+            }
+
             side.pendingActions = [
+              /// For now there will only ever be one action per turn.
               {
                 moveId: moveId,
                 source: side.id,
-                targetingData: { targetingMethod: "single-enemy", target: target },
+                targetingData: targetingData,
               },
             ]; /// Save to data
             this.noticeBoard.removeNotice(side.id, "chooseMove");
 
-            /// All if all sides ready -> move to next stage
+            // TODO allow for something else to decide on when to resolve a turn
+            /// All if all sides ready -> ready move to next stage
             if (this.sides.every((side) => side.pendingActions)) {
               resolve();
             }
           };
+          const moveIdOptions: EntryID[] = [];
+
+          const base = this.monsterPool.monsters[side.monster.baseID];
+          if (!base) {
+            throw new RangeError(`Key out of range: [key=${side.monster.baseID}] does not exist in the monster pool ${this.monsterPool.name}`);
+          }
+
+          if (base.attackActionId) {
+            moveIdOptions.push(base.attackActionId);
+          }
+          if (base.defendActionId && side.monster.defendActionCharges > 0) {
+            moveIdOptions.push(base.defendActionId);
+          }
+          if (base.abilityActionId) {
+            moveIdOptions.push(base.abilityActionId);
+          }
           const notice: chooseMove = {
             kind: "chooseMove",
-            data: {
-              moveIdOptions: [side.monster.base.attackActionId, ...(side.monster.defendActionCharges > 0 ? [side.monster.base.defendActionId] : [])],
-            }, // TODO select special attack
+            data: { moveIdOptions },
             callback: callback,
           };
           this.noticeBoard.postNotice(side.id, notice);
@@ -127,7 +159,10 @@ export class Battle {
         }
 
         /// Sort by source monster speed
-        return this.sides[b.source].monster.base.baseStats.speed - this.sides[a.source].monster.base.baseStats.speed; // TODO get speed rather than use base
+        return (
+          getStat("speed", this.sides[b.source].monster, this.monsterPool.monsters[this.sides[b.source].monster.baseID]!) -
+          getStat("speed", this.sides[a.source].monster, this.monsterPool.monsters[this.sides[a.source].monster.baseID]!)
+        );
       });
       console.log(`Acton Queue:\n${JSON.stringify(moveRequestQueue)}`);
 
@@ -137,11 +172,7 @@ export class Battle {
       console.log("Resolve Actions");
       for (const moveRequest of moveRequestQueue) {
         const move: MoveData = commonMovePool[moveRequest.moveId];
-        // if (!actionHandler) {
-        //   throw new Error(`Action of this id=${action.actionId} does not exist.`);
-        // }
-
-        if (this.sides[moveRequest.source].monster.getIsBlockedFromMove()) {
+        if (getIsBlockedFromMove(this.sides[moveRequest.source].monster)) {
           console.log(`Monster could not perform move right now (probs status).`);
           continue;
         }
