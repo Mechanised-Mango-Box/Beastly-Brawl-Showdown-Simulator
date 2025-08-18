@@ -1,7 +1,7 @@
-import { Battle } from "../core/battle";
-import { DodgeChargeComponent, RerollChargeComponent } from "../core/monster/component/core_components";
-import { MonsterPool } from "../core/monster/monster_pool";
-import { SideId } from "../core/side";
+import { Battle } from "@sim/core/battle";
+import { RerollChargeComponent, DodgeChargeComponent } from "@sim/core/monster/component/core_components";
+import { MonsterPool } from "@sim/core/monster/monster_pool";
+import { SideId } from "@sim/core/side";
 
 export const COMMON_MONSTER_POOL: MonsterPool = {
   name: "common_monster_pool",

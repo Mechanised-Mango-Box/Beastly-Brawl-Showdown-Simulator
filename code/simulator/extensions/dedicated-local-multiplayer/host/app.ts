@@ -1,5 +1,5 @@
 import { DefaultEventsMap, Server, Socket } from "socket.io";
-import { MonsterPool } from "../../../data/monster_pool";
+import { MonsterPool } from "@data/monster_pool";
 import { Battle, PlayerOptions } from "../../../core/battle";
 import express from "express";
 import { createServer } from "node:http";

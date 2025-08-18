@@ -1,13 +1,12 @@
-// TODO: make swappable instead of a global
-import { getComponent, getStat, Monster } from "../core/monster/monster";
-import { Battle } from "../core/battle";
-import { BlockedEvent, BuffEvent, DamageEvent, MoveEvadedEvent, MoveFailedEvent, MoveSuccessEvent, RerollEvent, RollEvent, StartMoveEvent } from "../core/event/core_events";
-import { SideId } from "../core/side";
-import { roll } from "../core/roll";
-import { AbilityChargeStunComponent, DefendComponent, DodgeChargeComponent, DodgeStateComponent, RerollChargeComponent, StunnedStateComponent } from "../core/monster/component/core_components";
-import { TargetingData, SingleEnemyTargeting, SelfTargeting } from "../core/action/targeting";
-import { defineMove, getMoveId } from "../core/action/move/move";
-import { MovePool, createMovePool } from "../core/action/move/move_pool";
+import { getComponent, getStat, Monster } from "@sim/core/monster/monster";
+import { Battle } from "@sim/core/battle";
+import { BlockedEvent, BuffEvent, DamageEvent, MoveEvadedEvent, MoveFailedEvent, MoveSuccessEvent, RerollEvent, RollEvent, StartMoveEvent } from "@sim/core/event/core_events";
+import { SideId } from "@sim/core/side";
+import { roll } from "@sim/core/roll";
+import { AbilityChargeStunComponent, DefendComponent, DodgeChargeComponent, DodgeStateComponent, RerollChargeComponent, StunnedStateComponent } from "@sim/core/monster/component/core_components";
+import { TargetingData, SingleEnemyTargeting, SelfTargeting } from "@sim/core/action/targeting";
+import { defineMove, getMoveId } from "@sim/core/action/move/move";
+import { MovePool, createMovePool } from "@sim/core/action/move/move_pool";
 import { COMMON_MONSTER_POOL } from "./common_monster_pool";
 
 export const commonMovePool: MovePool = createMovePool([
