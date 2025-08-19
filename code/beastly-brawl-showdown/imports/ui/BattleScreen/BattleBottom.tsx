@@ -1,28 +1,25 @@
 import React from 'react';
+
 type BattleBottomProps = {
-  onAction: (action: 'attack' | 'defend' | 'ability') => void;
+  onRoll: () => void;
 };
 
-export const BattleBottom: React.FC<BattleBottomProps> = ({ onAction }) => {
+export const BattleBottom: React.FC<BattleBottomProps> = ({ onRoll }) => {
+  const handleRoll = () => {
+    onRoll();
+    //basically just clals whatever function is given to this as a parameter
+  };
+
   return (
     <div className="battleScreenBottom">
-      <button
-        className="battleScreenBottomButton"
-        onClick={() => onAction('attack')}
-      >
-        <img src="/img/sword.png" alt="Sword" className="battleScreenBottomButtonImage" />
+      <button className="battleScreenBottomButton" onClick={handleRoll}>
+        <img className="battleScreenBottomButtonImage" src="/img/sword.png" alt="Sword" />
       </button>
-      <button
-        className="battleScreenBottomButton"
-        onClick={() => onAction('ability')}
-      >
-        <img src="/img/ability.jpg" alt="Ability" className="battleScreenBottomButtonImage" />
+      <button className="battleScreenBottomButton" onClick={handleRoll}>
+        <img className="battleScreenBottomButtonImage" src="/img/ability.jpg" alt="Ability" />
       </button>
-      <button
-        className="battleScreenBottomButton"
-        onClick={() => onAction('defend')}
-      >
-        <img src="/img/shield.png" alt="Shield" className="battleScreenBottomButtonImage" />
+      <button className="battleScreenBottomButton" onClick={handleRoll}>
+        <img className="battleScreenBottomButtonImage" src="/img/shield.png" alt="Shield" />
       </button>
     </div>
   );

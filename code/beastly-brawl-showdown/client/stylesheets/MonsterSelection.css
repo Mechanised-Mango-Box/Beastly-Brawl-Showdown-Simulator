@@ -6,7 +6,9 @@
 
 /* Align text and confirm button to center */
 .monsterSelectionScreen {
-   text-align: center;
+    height: 100vh;
+    text-align: center;
+    overflow-y: auto;
 }
 
 /* Centre monsters in selection box div */

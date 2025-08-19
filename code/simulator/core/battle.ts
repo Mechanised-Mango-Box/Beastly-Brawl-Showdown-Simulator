@@ -4,13 +4,13 @@ import { ChooseMove as chooseMove } from "./notice/notice";
 import { NoticeBoard } from "./notice/notice_board";
 import { EventHistory } from "./event/event_history";
 import { BattleOverEvent, SnapshotEvent } from "./event/core_events";
-import { commonMovePool } from "../data/common_move_pool";
 import { MoveData, MoveRequest } from "./action/move/move";
 import { EntryID } from "./types";
 import { TargetingData } from "./action/targeting";
 import { PRNG } from "./prng";
 import { MonsterPool, MonsterId } from "./monster/monster_pool";
 import { getIsBlockedFromMove, getStat } from "./monster/monster";
+import { MovePool } from "./action/move/move_pool";
 
 export interface PlayerOptions {
   monsterId: MonsterId; //! Can change to list if needed later
@@ -20,6 +20,7 @@ export type BattleOptions = {
   seed: number;
 
   monsterPool: MonsterPool;
+  movePool: MovePool;
 
   playerOptionSet: PlayerOptions[];
 };
@@ -27,6 +28,7 @@ export type BattleOptions = {
 export class Battle {
   readonly rng: PRNG;
   readonly monsterPool: MonsterPool;
+  readonly movePool: MovePool;
 
   readonly sides: Side[];
 
@@ -37,6 +39,7 @@ export class Battle {
   constructor(options: BattleOptions) {
     this.rng = new PRNG(options.seed);
     this.monsterPool = options.monsterPool;
+    this.movePool = options.movePool;
 
     this.sides = options.playerOptionSet.map((playerOptions, idx) => {
       if (!this.monsterPool.monsters[playerOptions.monsterId]) {
@@ -94,7 +97,7 @@ export class Battle {
           const callback: (moveId: EntryID, target: TargetingData) => void = (moveId: EntryID, targetingData: TargetingData): void => {
             // TODO validate move
 
-            const chosenMove: MoveData = commonMovePool[moveId];
+            const chosenMove: MoveData = this.movePool[moveId];
             if (chosenMove.targetingMethod != targetingData.targetingMethod) {
               console.error(`Error: Targeting method mismatch. [moveId=${moveId} ${chosenMove.name}] expects ${chosenMove.targetingMethod} but ${targetingData.targetingMethod} was recieved.`);
               return;
@@ -152,8 +155,8 @@ export class Battle {
       this.sides.forEach((side) => (side.pendingActions = null)); /// Remove from pending
       const moveRequestQueue: MoveRequest[] = allMovesUnsorted.sort((a, b) => {
         /// Sort by move priority class
-        const moveA: MoveData = commonMovePool[a.moveId];
-        const moveB: MoveData = commonMovePool[b.moveId];
+        const moveA: MoveData = this.movePool[a.moveId];
+        const moveB: MoveData = this.movePool[b.moveId];
         if (moveA.priorityClass !== moveB.priorityClass) {
           return moveB.priorityClass - moveA.priorityClass;
         }
@@ -171,7 +174,7 @@ export class Battle {
       //###################
       console.log("Resolve Actions");
       for (const moveRequest of moveRequestQueue) {
-        const move: MoveData = commonMovePool[moveRequest.moveId];
+        const move: MoveData = this.movePool[moveRequest.moveId];
         if (getIsBlockedFromMove(this.sides[moveRequest.source].monster)) {
           console.log(`Monster could not perform move right now (probs status).`);
           continue;
