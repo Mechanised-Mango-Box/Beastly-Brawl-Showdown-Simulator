@@ -59,3 +59,5 @@ export function getStatBonus(statType: MonsterStatType, monster: Monster): numbe
 export function getIsBlockedFromMove(monster: Monster) {
   return monster.components.filter((component) => component.getIsBlockedFromMove !== undefined).some((component) => component.getIsBlockedFromMove!());
 }
+
+export { MonsterTemplate };

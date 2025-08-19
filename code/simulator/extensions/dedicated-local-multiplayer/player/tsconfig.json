@@ -1,8 +1,18 @@
 {
-  "extends":"../tsconfig.json",
+  "extends": "../../../../../.config/tsconfig.extension.json",
   "files": [],
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    {
+      "path": "../../../core"
+    },
+    {
+      "path": "../../../data"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }
