@@ -1,1 +1,5 @@
-code/beastly-brawl-showdown/public/logo.pngZone.Identifier
+# Ignore node_modules (all Node.js packages, nested)
+**/node_modules/
+
+# Ignore macOS system files
+.DS_Store
