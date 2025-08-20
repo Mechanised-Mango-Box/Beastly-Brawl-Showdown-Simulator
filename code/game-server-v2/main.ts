@@ -141,14 +141,21 @@ async function main(config: ServerConfig) {
     });
 
     // #region Start Game
-    socket.on("start-game", async (msg) => {
-      log_event(`Requested to start game: ${msg}`);
+    socket.on("start-game", (msg: { roomId: number }) => {
+      log_event(`Host requested start-game for room ${msg.roomId}`);
 
-      // Notify everyone in this room
-      gameServer.rooms.get(gameServer.hostIdToRoomIdLookup.get(socket.id)!)!.players.forEach((player) => {
-        playerChannel.to(player.socketId).emit("game-started"); // TODO modify as needed
+      const room = gameServer.rooms.get(msg.roomId);
+      if (!room) {
+        socket.emit("error", "Room not found");
+        return;
+      }
+
+      // Relay to all players in this room
+      room.players.forEach((player) => {
+        playerChannel.to(player.socketId).emit("game-started"); // Clients can now start monster selection
       });
-      log_notice("All players informed of start.");
+
+      log_notice(`All players in room ${msg.roomId} have been notified to start the game.`);
     });
   });
 
