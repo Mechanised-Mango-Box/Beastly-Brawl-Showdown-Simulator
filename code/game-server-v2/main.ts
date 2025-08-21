@@ -10,6 +10,9 @@ import { log_attention, log_event, log_notice, log_warning } from "./utils";
 import * as fs from "fs";
 import * as path from "path";
 import { Player } from "./player";
+import { TournamentManager } from "./tournament_manager";
+
+const tournamentManager = new TournamentManager();
 
 type ServerConfig = {
   serverIp: string;
@@ -288,6 +291,22 @@ async function main(config: ServerConfig) {
       }
 
       // TODO: trigger round start
+      const allPlayers: Player[] = [];
+
+      // Loop through every room in the game server
+      for (const room of gameServer.rooms.values()) {
+          // Get an array of Player objects for this room
+          const players = [...room.players.values()];
+          
+          // Add them to the master list
+          allPlayers.push(...players);
+      }
+
+      console.log("All players in all rooms:", allPlayers);
+
+      
+      tournamentManager.startTournament(allPlayers);
+
     });
 
 
