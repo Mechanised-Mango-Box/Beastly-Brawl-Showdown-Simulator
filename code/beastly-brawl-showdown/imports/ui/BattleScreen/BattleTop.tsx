@@ -6,8 +6,7 @@ export const BattleTop: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-  <button onClick={() => navigate('/main')} className="battleScreenTop-btn">
-    {/* <img className="topBackIcon" src="/img/back_line.png" alt="back" /> */}
+  <button onClick={() => navigate('/main')} className="glb-btn" id='battleScreenTop-btn'>
     Surrender
   </button>
 );

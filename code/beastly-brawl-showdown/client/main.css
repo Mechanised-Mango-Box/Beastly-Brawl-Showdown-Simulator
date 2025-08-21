@@ -1120,16 +1120,7 @@ input:focus {
   height: 100vh;
 }
 
-/* .battleScreenTop{
-  position: relative;
-  display: block;
-  background-color: red;
-  width: 100%;
-  height: 8%;
-  top : 0px;
-} */
-
-button.battleScreenTop-btn {
+#battleScreenTop-btn {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1141,7 +1132,6 @@ button.battleScreenTop-btn {
 
   background-color: #694230;
   border: 1px solid #936049;
-  padding: 6px 12px;
   cursor: pointer;
 }
 
