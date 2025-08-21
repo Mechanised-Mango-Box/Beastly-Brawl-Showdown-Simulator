@@ -34,7 +34,7 @@ export default class Monsters {
     special: string,
     type: string,
     imageSelectionURL: string,
-    imageUrl: string
+    imageUrl: string,
   ) {
     this.monsterName = monsterName;
     this.baseHealth = health;
@@ -73,7 +73,7 @@ export default class Monsters {
     const roll = DiceRoller.d20();
     const totalAttack = roll + this.atkBonus;
     console.log(
-      `${this.monsterType} rolls ${roll}... Attack = ${totalAttack}.`
+      `${this.monsterType} rolls ${roll}... Attack = ${totalAttack}.`,
     );
     return totalAttack;
   }
@@ -89,7 +89,7 @@ export default class Monsters {
     if (this.defending === true) {
       if (totalAttack >= this.currentAC) {
         console.log(
-          `${this.monsterType}'s defense fails! ${this.monsterType} takes 5 damage.`
+          `${this.monsterType}'s defense fails! ${this.monsterType} takes 5 damage.`,
         );
         this.currentHealth -= 5;
       } else {
@@ -164,7 +164,7 @@ export default class Monsters {
    *
    * @param _defender The opponent affected by the ability.
    */
-  useAbility(_defender: Monsters): void { }
+  useAbility(_defender: Monsters): void {}
 
   // Getters and setters
   get AC(): number {
@@ -191,11 +191,12 @@ export default class Monsters {
     this.currentHealth = value;
   }
 
-  get type(): string { //TODO CHAGNE THIS
+  get type(): string {
+    //TODO CHAGNE THIS
     return this.monsterType;
   }
 
-  get name(): string{
+  get name(): string {
     return this.monsterName;
   }
 

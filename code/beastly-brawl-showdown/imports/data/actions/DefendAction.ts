@@ -1,5 +1,5 @@
-import Monsters from '../monsters/Monsters';
-import { Server as SocketIOServer } from 'socket.io';
+import Monsters from "../monsters/Monsters";
+import { Server as SocketIOServer } from "socket.io";
 
 /**
  * Represents a defend action taken by a monster.

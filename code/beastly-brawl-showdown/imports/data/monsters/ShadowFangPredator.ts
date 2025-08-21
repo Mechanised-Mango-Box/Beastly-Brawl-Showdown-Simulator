@@ -7,14 +7,14 @@ export default class ShadowFangPredator extends Monsters {
 
   constructor() {
     super(
-      'ShadowFangPredator',
+      "ShadowFangPredator",
       20,
       12,
       4,
       "Critical hit on natural 18-20",
       "Attacker",
       "/img/monster-selection-images/placeholder_monster_2.png",
-      "/img/monster-image/wolfman.png"
+      "/img/monster-image/wolfman.png",
     );
     this.critRoll = 18;
     this.isInvulnerable = false;
@@ -34,7 +34,7 @@ export default class ShadowFangPredator extends Monsters {
     if (roll >= this.critRoll) {
       totalAttack = 2 * roll + this.attackBonus;
       console.log(
-        `${this.type} rolls ${roll}... Critical hit! Attack = ${totalAttack}.`
+        `${this.type} rolls ${roll}... Critical hit! Attack = ${totalAttack}.`,
       );
     } else {
       totalAttack = roll + this.attackBonus;

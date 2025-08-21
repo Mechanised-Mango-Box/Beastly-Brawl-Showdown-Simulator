@@ -1,5 +1,5 @@
-import { Server as SocketIOServer } from 'socket.io';
-import Monsters from '../monsters/Monsters';
+import { Server as SocketIOServer } from "socket.io";
+import Monsters from "../monsters/Monsters";
 
 export default class AttackAction {
   private attacker: Monsters;

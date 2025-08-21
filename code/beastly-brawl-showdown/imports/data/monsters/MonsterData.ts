@@ -1,6 +1,6 @@
-import MysticWyvern from './MysticWyvern';
-import ShadowFangPredator from './ShadowFangPredator';
-import StoneHideGuardian from './StoneHideGuardian';
+import MysticWyvern from "./MysticWyvern";
+import ShadowFangPredator from "./ShadowFangPredator";
+import StoneHideGuardian from "./StoneHideGuardian";
 
 export const monsterData = {
   MysticWyvern,

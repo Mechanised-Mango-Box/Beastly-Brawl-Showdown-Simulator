@@ -29,14 +29,14 @@ export default class MysticWyvern extends Monsters {
 
   public constructor() {
     super(
-      'MysticWyvern',
+      "MysticWyvern",
       25,
       14,
       2,
       "Reroll once per battle",
       "Balanced",
       "/img/monster-selection-images/placeholder_monster_1.png",
-      "/img/monster-image/dragon.png"
+      "/img/monster-image/dragon.png",
     );
     this.rerollCharge = true;
   }
