@@ -6,7 +6,9 @@ interface MonsterSelectionScreenProps {
   setSelectedMonsterCallback?: (value: string) => void;
 }
 
-export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({ setSelectedMonsterCallback }) => {
+export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({
+  setSelectedMonsterCallback,
+}) => {
   const navigate = useNavigate();
 
   const [selectedMonster, setSelectedMonster] = useState<string>("");
@@ -61,11 +63,28 @@ export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({ 
         Monster!
       </h1>
       <div className="monster-selection-grid">
-        <MonsterContainer name="wolf" type="Attacker" currentlySelectedMonster={highlightAndShowConfirm} />
-        <MonsterContainer name="turtle" type="Defender" currentlySelectedMonster={highlightAndShowConfirm} />
-        <MonsterContainer name="dragon" type="Balanced" currentlySelectedMonster={highlightAndShowConfirm} />
+        <MonsterContainer
+          name="wolf"
+          type="Attacker"
+          currentlySelectedMonster={highlightAndShowConfirm}
+        />
+        <MonsterContainer
+          name="turtle"
+          type="Defender"
+          currentlySelectedMonster={highlightAndShowConfirm}
+        />
+        <MonsterContainer
+          name="dragon"
+          type="Balanced"
+          currentlySelectedMonster={highlightAndShowConfirm}
+        />
 
-        <button className="glb-btn" id="monster-selection-btn" onClick={handleConfirm} disabled={!confirmEnabled}>
+        <button
+          className="glb-btn"
+          id="monster-selection-btn"
+          onClick={handleConfirm}
+          disabled={!confirmEnabled}
+        >
           Confirm
         </button>
       </div>

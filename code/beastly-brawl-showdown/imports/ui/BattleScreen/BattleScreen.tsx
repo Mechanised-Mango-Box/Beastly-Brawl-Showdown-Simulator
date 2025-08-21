@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { BattleTop } from './BattleTop';
-import { BattleMiddle } from './BattleMiddle';
-import { BattleBottom } from './BattleBottom';
+import React, { useState } from "react";
+import { BattleTop } from "./BattleTop";
+import { BattleMiddle } from "./BattleMiddle";
+import { BattleBottom } from "./BattleBottom";
 
 export const BattleScreen: React.FC = () => {
   const [showAnimation, setShowAnimation] = useState<boolean>(false);

@@ -22,8 +22,12 @@ export const MonsterContainer = ({
         {/* All of these are placeholder texts */}
         <div className="monster-name">{name}</div>
         <div className="monster-type">{type}</div>
-        <div className="monster-desc">A fierce dragon-like creature with burning claws</div>
-        <div className="ability-desc">Ability: Ignite - Burns enemies on contact</div>
+        <div className="monster-desc">
+          A fierce dragon-like creature with burning claws
+        </div>
+        <div className="ability-desc">
+          Ability: Ignite - Burns enemies on contact
+        </div>
       </div>
     </div>
   );

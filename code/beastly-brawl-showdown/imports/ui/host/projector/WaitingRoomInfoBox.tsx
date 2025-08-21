@@ -7,7 +7,10 @@ interface WaitingRoomInfoBoxProps {
   joinUrl: string;
 }
 
-export const WaitingRoomInfoBox = ({ joinCode, joinUrl }: WaitingRoomInfoBoxProps) => {
+export const WaitingRoomInfoBox = ({
+  joinCode,
+  joinUrl,
+}: WaitingRoomInfoBoxProps) => {
   return (
     <div className="waiting-room-info-box">
       <div className="game-pin">
