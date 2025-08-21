@@ -202,6 +202,7 @@ async function main(config: ServerConfig) {
     log_notice(`Player auth check result:\n${JSON.stringify(checkResult)}`);
     res.send(checkResult);
   });
+
   playerChannel.use((socket, next) => {
     log_event(`Player attempted to join with ${JSON.stringify(socket.handshake.auth)}`);
     const auth = socket.handshake.auth as PlayerChannelAuth;
@@ -222,8 +223,16 @@ async function main(config: ServerConfig) {
       return;
     }
 
+
     try {
       gameServer.joinRoom(socket.id, roomId, auth.displayName, undefined);
+
+      // 🔥 Attach the actual player instance to the socket
+      const room = gameServer.rooms.get(roomId);
+      const player = room?.getPlayer(auth.displayName);  // or however your Room class exposes players
+      if (player) {
+        socket.data.player = player;
+      }
     } catch (err) {
       if (err instanceof Error) {
         log_warning("Join room failed unexpectedly.\n" + err.message);
@@ -240,7 +249,6 @@ async function main(config: ServerConfig) {
     hostChannel.to(gameServer.rooms.get(roomId)!.hostSocketId).emit("player-set-changed", playerNameList);
     next();
   });
-
   // #region Player Channel
   playerChannel.on("connection", async (socket: Socket) => {
     log_event(`Player connected: ${socket.id}`);
@@ -250,10 +258,11 @@ async function main(config: ServerConfig) {
     });
 
     // #region Select Monster
-    socket.on(RequestSubmitMonster.name, RequestSubmitMonster);
+    socket.on("RequestSubmitMonster", (data: any) => {
+      log_event(`Monster submission signal received: ${JSON.stringify(data)}`);
 
-    function RequestSubmitMonster(data: any): void {
       const player = socket.data.player as Player;
+      log_event(`Player: ${JSON.stringify(player)}`);
       if (!player) {
         socket.emit("error", "This player has not been initiated.");
         return;
@@ -267,7 +276,9 @@ async function main(config: ServerConfig) {
 
       player.setMonster(data.data);
       player.isReady = true;
-      console.log(`Player ${player.displayName} is ready with monster:`, player.monster);
+
+      log_event(`Player ${player.displayName} is ready`);
+      log_event(`Monster selected: ${JSON.stringify(data.data)}`);
 
       // Check if all players are ready
       const allReady = Array.from(room.players.values()).every((p) => p.isReady);
@@ -276,9 +287,9 @@ async function main(config: ServerConfig) {
         return;
       }
 
-      // TODO Now that everyone is ready: generate next round
+      // TODO: trigger round start
+    });
 
-    }
 
     // #region Submit Move
 

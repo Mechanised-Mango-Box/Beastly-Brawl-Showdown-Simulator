@@ -24,4 +24,8 @@ export class Room {
   hasPlayer(displayName: string) {
     return this.players.has(displayName);
   }
+
+  getPlayer(displayName: string): Player | undefined {
+    return this.players.get(displayName);
+  }
 }
