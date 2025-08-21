@@ -4,140 +4,149 @@ import { useNavigate, useParams } from "react-router-dom";
 // import "/imports/ui/global.css";
 
 export const InvalidCodeWarning = ({ enabled }: { enabled: boolean }) => {
-    if (enabled) {
-        return <b>Invalid room code.</b>;
-    } else {
-        return null;
-    }
+  if (enabled) {
+    return <b>Invalid room code.</b>;
+  } else {
+    return null;
+  }
 };
 
 export const JoinForm = () => {
-    const { joinCode: linkParamJoinCode } = useParams();
-    console.log(`Extracted room code from link: <${linkParamJoinCode}>`);
-    const [inputJoinCode, setInputJoinCode] = useState(linkParamJoinCode ?? "");
-    const [isJoinCodeValid, setJoinCodeValid] = useState(false);
-    const [inputDisplayName, setInputDisplayName] = useState(sessionStorage.getItem("displayName") ?? ""); /// Load saved display name as default
-    const [isDisplayNameValid, setDisplayNameValid] = useState(false);
+  const { joinCode: linkParamJoinCode } = useParams();
+  console.log(`Extracted room code from link: <${linkParamJoinCode}>`);
+  const [inputJoinCode, setInputJoinCode] = useState(linkParamJoinCode ?? "");
+  const [isJoinCodeValid, setJoinCodeValid] = useState(false);
+  const [inputDisplayName, setInputDisplayName] = useState(
+    sessionStorage.getItem("displayName") ?? "",
+  ); /// Load saved display name as default
+  const [isDisplayNameValid, setDisplayNameValid] = useState(false);
 
-    const [serverUrl, setServerUrl] = useState<string>();
-    // const [accountId, setAccountId] = useState(); // TODO - always nothing for now
-    // const [roomId, setRoomId] = useState<number>();
+  const [serverUrl, setServerUrl] = useState<string>();
+  // const [accountId, setAccountId] = useState(); // TODO - always nothing for now
+  // const [roomId, setRoomId] = useState<number>();
 
-    const [isInvalidCodeSubmitted] = useState(false);
-    const navigate = useNavigate();
+  const [isInvalidCodeSubmitted] = useState(false);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if (isJoinCodeValid && isDisplayNameValid) {
-            sessionStorage.setItem("joinCode", inputJoinCode);
-            sessionStorage.setItem("displayName", inputDisplayName);
-            sessionStorage.setItem("serverUrl", serverUrl ?? "");
-            console.log("Go to monster select...");
-            navigate(`/select`);
-        }
-    }, [isJoinCodeValid, isDisplayNameValid, inputJoinCode, inputDisplayName, serverUrl, navigate]);
-
-    //#region Startup
-    if (!serverUrl) {
-        /// Try get best server url
-        Meteor.call("getBestServerUrl", (error: any, result: string) => {
-            if (error) {
-                console.error("Error locating room:", error);
-                return;
-            }
-
-            console.log("Server found at:", result);
-            setServerUrl(result);
-        });
-
-        return (
-            <>
-                <p>Connecting to servers...</p>
-            </>
-        );
+  useEffect(() => {
+    if (isJoinCodeValid && isDisplayNameValid) {
+      sessionStorage.setItem("joinCode", inputJoinCode);
+      sessionStorage.setItem("displayName", inputDisplayName);
+      sessionStorage.setItem("serverUrl", serverUrl ?? "");
+      console.log("Go to monster select...");
+      navigate(`/select`);
     }
+  }, [
+    isJoinCodeValid,
+    isDisplayNameValid,
+    inputJoinCode,
+    inputDisplayName,
+    serverUrl,
+    navigate,
+  ]);
 
-    //#region Auth check
-    const handleSubmitAuth = async (e: { preventDefault: () => void }) => {
-        e.preventDefault();
+  //#region Startup
+  if (!serverUrl) {
+    /// Try get best server url
+    Meteor.call("getBestServerUrl", (error: any, result: string) => {
+      if (error) {
+        console.error("Error locating room:", error);
+        return;
+      }
 
-        if (!inputJoinCode) return;
-
-        fetch(serverUrl + "/player-auth-precheck", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                joinCode: inputJoinCode,
-                displayName: inputDisplayName,
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.isJoinCodeValid === true) {
-                    console.log("Join code valid.");
-                    setJoinCodeValid(true);
-                } else {
-                    console.log("Invalid join code:", data);
-                    setJoinCodeValid(false);
-                }
-
-                if (data.isDisplayNameValid === true) {
-                    console.log("Display name valid.");
-                    setDisplayNameValid(true);
-                } else {
-                    console.log("Invalid display name:", data);
-                    setDisplayNameValid(false);
-                }
-            })
-            .catch((error) => console.error("Error:", error));
-    };
-
-    if (!isJoinCodeValid) {
-        /// No code submitted / recieved
-        return (
-            <>
-                <InvalidCodeWarning enabled={isInvalidCodeSubmitted} />
-                <form className="task-form" onSubmit={handleSubmitAuth}>
-                    <input
-                        className="form-textbox"
-                        type="text"
-                        placeholder="Enter Code"
-                        value={inputJoinCode}
-                        onChange={(e) => setInputJoinCode(e.target.value)}
-                    />
-                    <div className="buttons-container">
-                        <button className="glb-btn" type="submit">
-                            Continue
-                        </button>
-                    </div>
-                </form>
-            </>
-        );
-    }
-    if (!isDisplayNameValid) {
-        return (
-            <>
-                <InvalidCodeWarning enabled={isInvalidCodeSubmitted} />
-                <form className="task-form" onSubmit={handleSubmitAuth}>
-                    <input
-                        className="form-textbox"
-                        type="text"
-                        placeholder="Display Name"
-                        value={inputDisplayName}
-                        onChange={(e) => setInputDisplayName(e.target.value)}
-                    />
-                    <div className="buttons-container">
-                        <button className="glb-btn" type="submit">
-                            Go!
-                        </button>
-                    </div>
-                </form>
-            </>
-        );
-    }
+      console.log("Server found at:", result);
+      setServerUrl(result);
+    });
 
     return (
-        <>
-            <p>Starting game...</p>
-        </>
+      <>
+        <p>Connecting to servers...</p>
+      </>
     );
+  }
+
+  //#region Auth check
+  const handleSubmitAuth = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    if (!inputJoinCode) return;
+
+    fetch(serverUrl + "/player-auth-precheck", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        joinCode: inputJoinCode,
+        displayName: inputDisplayName,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.isJoinCodeValid === true) {
+          console.log("Join code valid.");
+          setJoinCodeValid(true);
+        } else {
+          console.log("Invalid join code:", data);
+          setJoinCodeValid(false);
+        }
+
+        if (data.isDisplayNameValid === true) {
+          console.log("Display name valid.");
+          setDisplayNameValid(true);
+        } else {
+          console.log("Invalid display name:", data);
+          setDisplayNameValid(false);
+        }
+      })
+      .catch((error) => console.error("Error:", error));
+  };
+
+  if (!isJoinCodeValid) {
+    /// No code submitted / recieved
+    return (
+      <>
+        <InvalidCodeWarning enabled={isInvalidCodeSubmitted} />
+        <form className="task-form" onSubmit={handleSubmitAuth}>
+          <input
+            className="form-textbox"
+            type="text"
+            placeholder="Enter Code"
+            value={inputJoinCode}
+            onChange={(e) => setInputJoinCode(e.target.value)}
+          />
+          <div className="buttons-container">
+            <button className="glb-btn" type="submit">
+              Continue
+            </button>
+          </div>
+        </form>
+      </>
+    );
+  }
+  if (!isDisplayNameValid) {
+    return (
+      <>
+        <InvalidCodeWarning enabled={isInvalidCodeSubmitted} />
+        <form className="task-form" onSubmit={handleSubmitAuth}>
+          <input
+            className="form-textbox"
+            type="text"
+            placeholder="Display Name"
+            value={inputDisplayName}
+            onChange={(e) => setInputDisplayName(e.target.value)}
+          />
+          <div className="buttons-container">
+            <button className="glb-btn" type="submit">
+              Go!
+            </button>
+          </div>
+        </form>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <p>Starting game...</p>
+    </>
+  );
 };

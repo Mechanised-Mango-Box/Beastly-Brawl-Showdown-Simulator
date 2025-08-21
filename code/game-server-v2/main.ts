@@ -19,7 +19,6 @@ type ServerConfig = {
 };
 
 async function main(config: ServerConfig) {
-
   //#region Startup
   log_notice("Starting server...");
 
@@ -42,20 +41,24 @@ async function main(config: ServerConfig) {
     serverNumber: config.serverNumber,
   });
   if (existingRecordCount > 0) {
-    console.log(`Exsting records found with server number <${config.serverNumber}>: ${existingRecordCount}`);
+    console.log(
+      `Exsting records found with server number <${config.serverNumber}>: ${existingRecordCount}`,
+    );
     if (!config.overrideExistingRecordOnStartup) {
       throw new Error("A record already exists, room could not be registered.");
     }
   }
-  const updatedRecord = await GameServerRegisterModel.findOneAndUpdate<IGameServerRegisterEntry>(
-    { serverNumber: config.serverNumber },
-    {
-      serverNumber: config.serverNumber,
-      serverUrl: config.serverIp.toString() + ":" + config.serverPort.toString(),
-      lastUpdated: new Date(),
-    },
-    { upsert: true, new: true }
-  );
+  const updatedRecord =
+    await GameServerRegisterModel.findOneAndUpdate<IGameServerRegisterEntry>(
+      { serverNumber: config.serverNumber },
+      {
+        serverNumber: config.serverNumber,
+        serverUrl:
+          config.serverIp.toString() + ":" + config.serverPort.toString(),
+        lastUpdated: new Date(),
+      },
+      { upsert: true, new: true },
+    );
   log_notice("New Record:\n" + JSON.stringify(updatedRecord));
   log_notice("Registered to records.");
 
@@ -102,7 +105,9 @@ async function main(config: ServerConfig) {
     // hostName: string;
   };
   hostChannel.use((socket, next) => {
-    log_event(`Host attempted to join with ${JSON.stringify(socket.handshake.auth)}`);
+    log_event(
+      `Host attempted to join with ${JSON.stringify(socket.handshake.auth)}`,
+    );
     const auth = socket.handshake.auth as HostChannelAuth;
     /// for now always accept the host name
     // if (!auth.hostName) {
@@ -125,7 +130,9 @@ async function main(config: ServerConfig) {
       log_event("Room requested.");
       // TODO prevent multiple rooms at the same time
       try {
-        const { roomId: roomId, joinCode: joinCode } = gameServer.createRoom(socket.id);
+        const { roomId: roomId, joinCode: joinCode } = gameServer.createRoom(
+          socket.id,
+        );
 
         socket.emit("request-room_response", {
           roomId: roomId,
@@ -141,9 +148,11 @@ async function main(config: ServerConfig) {
       log_event(`Requested to start game: ${msg}`);
 
       // Notify everyone in this room
-      gameServer.rooms.get(gameServer.hostIdToRoomIdLookup.get(socket.id)!)!.players.forEach((player) => {
-        playerChannel.to(player.socketId).emit("game-started"); // TODO modify as needed
-      });
+      gameServer.rooms
+        .get(gameServer.hostIdToRoomIdLookup.get(socket.id)!)!
+        .players.forEach((player) => {
+          playerChannel.to(player.socketId).emit("game-started"); // TODO modify as needed
+        });
       log_notice("All players informed of start.");
     });
   });
@@ -186,13 +195,17 @@ async function main(config: ServerConfig) {
       res.send(checkResult);
       return;
     }
-    checkResult.isDisplayNameValid = !gameServer.rooms.get(roomId)?.hasPlayer(req.body.displayName);
+    checkResult.isDisplayNameValid = !gameServer.rooms
+      .get(roomId)
+      ?.hasPlayer(req.body.displayName);
 
     log_notice(`Player auth check result:\n${JSON.stringify(checkResult)}`);
     res.send(checkResult);
   });
   playerChannel.use((socket, next) => {
-    log_event(`Player attempted to join with ${JSON.stringify(socket.handshake.auth)}`);
+    log_event(
+      `Player attempted to join with ${JSON.stringify(socket.handshake.auth)}`,
+    );
     const auth = socket.handshake.auth as PlayerChannelAuth;
 
     if (!auth.joinCode) {
@@ -223,10 +236,21 @@ async function main(config: ServerConfig) {
       next(new Error("Invalid credentials"));
     }
 
-    log_event(`Join code <${auth.joinCode}> is valid. From <${auth.displayName}>. Socket id = ${socket.id}`);
-    const playerNameList = [...gameServer.rooms.get(roomId)?.players.values()!].map((player) => player.displayName);
-    console.log("Update player list", playerNameList, "to", gameServer.rooms.get(roomId)!.hostSocketId);
-    hostChannel.to(gameServer.rooms.get(roomId)!.hostSocketId).emit("player-set-changed", playerNameList);
+    log_event(
+      `Join code <${auth.joinCode}> is valid. From <${auth.displayName}>. Socket id = ${socket.id}`,
+    );
+    const playerNameList = [
+      ...gameServer.rooms.get(roomId)?.players.values()!,
+    ].map((player) => player.displayName);
+    console.log(
+      "Update player list",
+      playerNameList,
+      "to",
+      gameServer.rooms.get(roomId)!.hostSocketId,
+    );
+    hostChannel
+      .to(gameServer.rooms.get(roomId)!.hostSocketId)
+      .emit("player-set-changed", playerNameList);
     next();
   });
 
@@ -245,7 +269,9 @@ async function main(config: ServerConfig) {
       // TODO if all users submitted and a turn can be processed
       if (false) {
         const TEMP_playerSocketId = "sdfgrdfgrdgfrdfg";
-        playerChannel.to(TEMP_playerSocketId).emit("turn-result", "PLACEHOLDER RESULT");
+        playerChannel
+          .to(TEMP_playerSocketId)
+          .emit("turn-result", "PLACEHOLDER RESULT");
       }
     });
   });
@@ -254,7 +280,7 @@ async function main(config: ServerConfig) {
     log_notice(
       `Socket.IO server running on ${
         config.serverIp.toString() + ":" + config.serverPort.toString()
-      }. <CTRL+C> to shutdown.`
+      }. <CTRL+C> to shutdown.`,
     );
     //#endregion
 

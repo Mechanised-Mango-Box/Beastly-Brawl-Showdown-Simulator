@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 type BattleBottomProps = {
   onRoll: () => void;
@@ -13,13 +13,25 @@ export const BattleBottom: React.FC<BattleBottomProps> = ({ onRoll }) => {
   return (
     <div className="battleScreenBottom">
       <button className="battleScreenBottomButton" onClick={handleRoll}>
-        <img className="battleScreenBottomButtonImage" src="/img/sword.png" alt="Sword" />
+        <img
+          className="battleScreenBottomButtonImage"
+          src="/img/sword.png"
+          alt="Sword"
+        />
       </button>
       <button className="battleScreenBottomButton" onClick={handleRoll}>
-        <img className="battleScreenBottomButtonImage" src="/img/ability.jpg" alt="Ability" />
+        <img
+          className="battleScreenBottomButtonImage"
+          src="/img/ability.jpg"
+          alt="Ability"
+        />
       </button>
       <button className="battleScreenBottomButton" onClick={handleRoll}>
-        <img className="battleScreenBottomButtonImage" src="/img/shield.png" alt="Shield" />
+        <img
+          className="battleScreenBottomButtonImage"
+          src="/img/shield.png"
+          alt="Shield"
+        />
       </button>
     </div>
   );

@@ -15,6 +15,6 @@ Meteor.startup(() => {
     <BrowserRouter>
       {/* <App /> */}
       <BattleLoadingScreen />
-    </BrowserRouter>
+    </BrowserRouter>,
   );
 });

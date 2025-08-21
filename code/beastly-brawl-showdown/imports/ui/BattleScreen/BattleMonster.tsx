@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 // Define props for the BattleMonster component
 type BattleMonsterProps = {
@@ -7,9 +7,12 @@ type BattleMonsterProps = {
   position: string; // e.g., "monster1" or "monster2"
 };
 
-
 //when making, give it an image, an alt for the blind and which monster position it is in, 1 for left, 2 for right
-export const BattleMonster: React.FC<BattleMonsterProps> = ({ image, alt, position }) => {
+export const BattleMonster: React.FC<BattleMonsterProps> = ({
+  image,
+  alt,
+  position,
+}) => {
   // const [hp, setHp] = useState<number>(100);
   const [hp] = useState<number>(100);
 
@@ -17,7 +20,7 @@ export const BattleMonster: React.FC<BattleMonsterProps> = ({ image, alt, positi
   // const updateHp = (newHp: number): void => {
   //   setHp(newHp);
   // };
-//right now the hp is commented out since its not being used yet
+  //right now the hp is commented out since its not being used yet
   return (
     <div className={position}>
       <div className="progressContainer">
