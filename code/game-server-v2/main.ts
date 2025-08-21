@@ -227,9 +227,9 @@ async function main(config: ServerConfig) {
     try {
       gameServer.joinRoom(socket.id, roomId, auth.displayName, undefined);
 
-      // 🔥 Attach the actual player instance to the socket
+      // Attach the actual player instance to the socket
       const room = gameServer.rooms.get(roomId);
-      const player = room?.getPlayer(auth.displayName);  // or however your Room class exposes players
+      const player = room?.getPlayer(auth.displayName);
       if (player) {
         socket.data.player = player;
       }
