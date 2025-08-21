@@ -1469,7 +1469,7 @@ input[type="range"] {
 }
 
 .ring-fg {
-  stroke: red;
+  stroke: rgb(212, 7, 7);
   transition: stroke-dashoffset 0.3s ease; /* smooth health change */
 }
 
