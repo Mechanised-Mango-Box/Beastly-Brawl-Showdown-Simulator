@@ -65,7 +65,7 @@ export const BattleMiddle: React.FC<BattleMiddleProps> = ({
           imageSrc="/img/dragon.png"
         />
       </div>
-
+{/* 
       {showAnimation && (
         <div className="diceAnimation">
           <img
@@ -75,7 +75,7 @@ export const BattleMiddle: React.FC<BattleMiddleProps> = ({
           />
           <span className="diceResult">{displayedNumber}</span>
         </div>
-      )}
+      )} */}
 
       {/* Player (bottom portrait) */}
       <div className="portrait portrait--bottom">
