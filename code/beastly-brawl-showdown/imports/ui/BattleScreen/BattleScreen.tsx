@@ -23,7 +23,7 @@ export const BattleScreen: React.FC = () => {
   };
 
   return (
-    <div className="battleScreen">
+    <div className="canvas-body" id="battle-screen-body">
       <BattleTop />
       <BattleMiddle
         showAnimation={showAnimation}

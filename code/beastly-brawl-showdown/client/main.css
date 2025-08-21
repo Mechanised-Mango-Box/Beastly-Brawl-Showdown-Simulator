@@ -1114,7 +1114,8 @@ input:focus {
 
 /* ################################################## */
 /* Battle Screen styles */
-.battleScreen {
+#battle-screen-body {
+  background-image: url("/combat-bg.png"); 
   display: flex;
   flex-direction: column;
   height: 100vh;
