@@ -1129,9 +1129,6 @@ input:focus {
   top: 20px;
   left: 20px;
   z-index: 9999;
-
-  background-color: #694230;
-  border: 1px solid #936049;
   cursor: pointer;
 }
 
