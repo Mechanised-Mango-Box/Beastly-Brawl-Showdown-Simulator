@@ -1,5 +1,6 @@
 import { RoomId, JoinCode, AccountId } from "./types";
 import { Player } from "./player";
+import { TournamentManager } from "./tournament_manager";
 
 export class Room {
   readonly hostSocketId: string;
@@ -12,8 +13,10 @@ export class Room {
    */
   readonly joinCode: JoinCode;
 
-  players: Map<string, Player> = new Map<string, Player>();
+  players: Player[] = [];
   gameState: any = undefined;
+
+  tournamentManager: TournamentManager = new TournamentManager()
 
   constructor(hostSocketId: string, roomId: RoomId, joinCode: JoinCode) {
     this.hostSocketId = hostSocketId;
@@ -22,10 +25,19 @@ export class Room {
   }
 
   hasPlayer(displayName: string) {
-    return this.players.has(displayName);
+    this.players.forEach(player => {
+      if (player.displayName == displayName) {
+        return true;
+      }
+    });
+    return false;
   }
 
-  getPlayer(displayName: string): Player | undefined {
-    return this.players.get(displayName);
+  getPlayer(displayName: string): Player | void {
+    this.players.forEach(player => {
+      if (player.displayName == displayName) {
+        return player;
+      }
+    });
   }
 }

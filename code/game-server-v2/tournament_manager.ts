@@ -2,6 +2,7 @@ import { Player } from "./player";
 import { Match } from "./match";
 
 export class TournamentManager {
+  // TODO: Look at whether this is needed or not
   playersByAccountId: Map<string, Player> = new Map();
 
   matches: Match[];

@@ -147,6 +147,6 @@ export class GameServer {
     }
 
     const newPlayer = new Player(roomId, socketId, displayName, linkedAcccountId);
-    room.players.set(displayName, newPlayer);
+    room.players.push(newPlayer);
   }
 }
