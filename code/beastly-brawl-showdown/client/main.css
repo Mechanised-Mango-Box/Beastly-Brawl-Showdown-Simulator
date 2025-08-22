@@ -1450,8 +1450,11 @@ input[type="range"] {
 
 .health-ring-container {
   position: relative;
-  width: 140px;
-  height: 140px;
+  width: 240px; /* Size + Stroke */
+  height: 240px; /* Size + Stroke */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .health-ring {
@@ -1476,10 +1479,10 @@ input[type="range"] {
 
 .monster-img {
   position: absolute;
-  top: 10px;  /* half of stroke width */
-  left: 10px; /* half of stroke width */
-  width: 120px; /* size - stroke */
-  height: 120px; /* size - stroke */
+  top: 20px;  /* half of stroke width */
+  left: 20px; /* half of stroke width */
+  width: 160px; /* size - stroke */
+  height: 160px; /* size - stroke */
   border-radius: 50%;
   object-fit: cover;
   background: white;
@@ -1567,8 +1570,8 @@ input[type="range"] {
   }
 
   /* Move portraits closer together */
-  .portrait--top { top: 14vh; }
-  .portrait--bottom { bottom: 30vh; }
+  .portrait-top { top: 20vh; }
+  .portrait-bottom { bottom: 30vh; }
 
   /* Scale dice position */
   .diceAnimation {
