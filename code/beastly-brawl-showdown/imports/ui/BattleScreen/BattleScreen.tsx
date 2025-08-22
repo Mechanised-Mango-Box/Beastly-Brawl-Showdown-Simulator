@@ -30,6 +30,11 @@ export const BattleScreen: React.FC<BattleScreenProps> = ({
     triggerAnimation();
     const dmg = 15;
     setEnemyHp((hp) => Math.max(0, hp - dmg));
+    const messageEl = document.querySelector(".battle-message");
+    messageEl?.setAttribute("style", "display:block;");
+    setTimeout(() => {
+      messageEl?.setAttribute("style", "display:none;");
+    }, 3000);
   };
 
   return (
