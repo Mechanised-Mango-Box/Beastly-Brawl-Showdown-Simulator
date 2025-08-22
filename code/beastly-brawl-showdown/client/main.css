@@ -1495,24 +1495,13 @@ input[type="range"] {
   place-items: center;  /* centers children */
 }
 
-/* Portrait positions (centered, one up, one down) */
-.portrait {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.portrait--top { top: 14vh; }
-.portrait--bottom { bottom: 18vh; }
-
-/* Optional: remove the old green bg on .battleMiddle */
-.battleMiddle { background: transparent; }
-
 /* Center arena with background */
-.arena {
+.combat-arena {
   position: relative;
-  flex: 1;
+  display: flex;
   display: grid;
-  place-items: center;
+  gap: 15rem;
+  max-height: 60vh;
 }
 
 /* #################################################################### */

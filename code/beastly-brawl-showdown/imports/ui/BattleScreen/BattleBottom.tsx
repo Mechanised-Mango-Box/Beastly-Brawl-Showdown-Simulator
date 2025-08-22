@@ -17,21 +17,21 @@ export const BattleBottom: React.FC<BattleBottomProps> = ({
   // };
   return (
     <div className="battleScreenBottom">
-      <button className="glb-btn" onClick={onAttack}>
+      <button className="glb-btn" id="attack" onClick={onAttack}>
         <img
           className="battleScreenBottomButtonImage"
           src="/img/sword3.png"
           alt="Sword"
         />
       </button>
-      <button className="glb-btn" onClick={onAbility}>
+      <button className="glb-btn" id="ability" onClick={onAbility}>
         <img
           className="battleScreenBottomButtonImage"
           src="/img/ability2.png"
           alt="Ability"
         />
       </button>
-      <button className="glb-btn" onClick={onDefend}>
+      <button className="glb-btn" id="defend" onClick={onDefend}>
         <img
           className="battleScreenBottomButtonImage"
           src="/img/shield2.png"

@@ -56,29 +56,16 @@ export const BattleMiddle: React.FC<BattleMiddleProps> = ({
   // };
 
   return (
-    <div className="arena stage-bg">
-      {/* Enemy (top portrait) */}
-      <div className="portrait portrait--top">
+    <div className="combat-arena">
+      <div className="portrait portrait-top">
         <MonsterHealthRing
           currentHealth={enemyHp}
           maxHealth={100}
           imageSrc="/img/dragon.png"
         />
       </div>
-{/* 
-      {showAnimation && (
-        <div className="diceAnimation">
-          <img
-            src="/img/d20.png"
-            alt="Rolling animation"
-            className="diceAnimation"
-          />
-          <span className="diceResult">{displayedNumber}</span>
-        </div>
-      )} */}
 
-      {/* Player (bottom portrait) */}
-      <div className="portrait portrait--bottom">
+      <div className="portrait portrait-bottom">
         <MonsterHealthRing
           currentHealth={playerHp}
           maxHealth={100}
