@@ -12,7 +12,7 @@ type BattleScreenProps = {
 
 export const BattleScreen: React.FC<BattleScreenProps> = ({
   enemyImageSrc = "/monsters/dragon.png",
-  playerImageSrc = "/monsters/wolf.png", 
+  playerImageSrc = "/monsters/wolf.png",
 }) => {
   const [showAnimation, setShowAnimation] = useState<boolean>(false);
   const [enemyHp, setEnemyHp] = useState(100);

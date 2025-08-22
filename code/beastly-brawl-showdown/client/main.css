@@ -3,7 +3,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Press Start 2P' !important;
+  font-family: "Press Start 2P" !important;
 }
 
 body {
@@ -21,7 +21,7 @@ button {
 
 /* Shared styles */
 .glb-btn {
-  background-color: #8B4513;
+  background-color: #8b4513;
   color: #d4a574;
   border: none;
   padding: 15px 20px;
@@ -32,12 +32,12 @@ button {
   text-transform: capitalize;
   min-width: 12.5rem;
   min-height: 50px;
-  
+
   box-shadow:
-    0 4px 0 #773519,     /* bottom edge */
-    4px 0 0 #773519,     /* right edge */
-    -4px 0 0 #773519,    /* left edge */
-    0 -4px 0 #c26130;    /* top edge */
+    0 4px 0 #773519,
+    /* bottom edge */ 4px 0 0 #773519,
+    /* right edge */ -4px 0 0 #773519,
+    /* left edge */ 0 -4px 0 #c26130; /* top edge */
 }
 
 .glb-btn:active {
@@ -45,15 +45,15 @@ button {
 }
 
 .canvas-body {
-  background-image: url("/homepage/background_3.png"); 
+  background-image: url("/homepage/background_3.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   align-items: center;
   justify-content: center;
   text-align: center;
-  width: 100%;        /* Use 100% instead of 100vw */
-  height: auto;       /* Allow height to be flexible */
+  width: 100%; /* Use 100% instead of 100vw */
+  height: auto; /* Allow height to be flexible */
   min-height: 100vh;
 }
 
@@ -72,7 +72,7 @@ button {
 
 /* For log in page */
 .logo {
-  background-image: url('/homepage/logo.png');
+  background-image: url("/homepage/logo.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -104,15 +104,15 @@ button {
   font-size: 1.1rem;
   font-weight: bold;
   text-align: center;
-  cursor: pointer;  
+  cursor: pointer;
   transition: all 0.3s ease;
   text-transform: capitalize;
 
-  box-shadow: 
-    0 4px 0 #773519,     /* bottom edge */
-    4px 0 0 #773519,     /* right edge */
-    -4px 0 0 #773519,    /* left edge */
-    0 -4px 0 #c26130;    /* top edge */
+  box-shadow:
+    0 4px 0 #773519,
+    /* bottom edge */ 4px 0 0 #773519,
+    /* right edge */ -4px 0 0 #773519,
+    /* left edge */ 0 -4px 0 #c26130; /* top edge */
 }
 
 input:focus {
@@ -122,7 +122,7 @@ input:focus {
 /* Top Row */
 /* Top Right */
 .branding {
-  background-image: url('/design-systems/brandingBackground.png');
+  background-image: url("/design-systems/brandingBackground.png");
   background-size: 100% 100%;
   background-position: center;
   text-shadow: 0 10px black;
@@ -194,77 +194,77 @@ input:focus {
 }
 
 .volume-icon {
-  background-image: url('/icons/volumeIcon.png');
+  background-image: url("/icons/volumeIcon.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
 }
 
 .volume-muted {
-  background-image: url('/icons/volumeMuted.png');
+  background-image: url("/icons/volumeMuted.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
 }
 
 .sfx-icon {
-  background-image: url('/icons/sfxIcon.png');
+  background-image: url("/icons/sfxIcon.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
 }
 
 .sfx-muted {
-  background-image: url('/icons/sfxMuted.png');
+  background-image: url("/icons/sfxMuted.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
 }
 
 .up-icon {
-  background-image: url('/icons/upArrowIcon.png');
+  background-image: url("/icons/upArrowIcon.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
 }
 
 .down-icon {
-  background-image: url('/icons/downArrowIcon.png');
+  background-image: url("/icons/downArrowIcon.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
 }
 
 .left-icon {
-  background-image: url('/icons/leftArrowIcon.png');
+  background-image: url("/icons/leftArrowIcon.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
 }
 
 .right-icon {
-  background-image: url('/icons/rightArrowIcon.png');
+  background-image: url("/icons/rightArrowIcon.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
 }
 
 .settings-icon {
-  background-image: url('/icons/settingsIcon.png');
+  background-image: url("/icons/settingsIcon.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
 }
 
 .home-icon {
-  background-image: url('/icons/homeIcon.png');
+  background-image: url("/icons/homeIcon.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
 }
 
 .money-icon {
-  background-image: url('/icons/moneyIcon.png');
+  background-image: url("/icons/moneyIcon.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -349,7 +349,7 @@ input:focus {
 
 .color-grid {
   padding: 2rem;
-  background-color: #FFC5D3;
+  background-color: #ffc5d3;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(3, 1fr);
@@ -385,21 +385,51 @@ input:focus {
   color: black;
 }
 
-.circle-blue { background-color: #6c8a90; }
-.circle-mid-blue { background-color: #a8b7ba; }
-.circle-light-blue { background-color: #bbd9de; }
-.circle-green { background-color: #b4c2a3; }
-.circle-mid-green { background-color: #cfdebb; }
-.circle-light-green { background-color: #d1d8c9; }
-.circle-orange { background-color: #cd833a; }
-.circle-mid-orange { background-color: #daa677; }
-.circle-light-orange { background-color: #dbc2a0; }
-.circle-white { background-color: #f0f2f0; }
-.circle-redish-brown { background-color: #7e311e; }
-.circle-dark-orange { background-color: #b25034; }
-.circle-dark-brown { background-color: #462c23; }
-.circle-light-brown { background-color: #945b3a; }
-.circle-black { background-color: #312421; }
+.circle-blue {
+  background-color: #6c8a90;
+}
+.circle-mid-blue {
+  background-color: #a8b7ba;
+}
+.circle-light-blue {
+  background-color: #bbd9de;
+}
+.circle-green {
+  background-color: #b4c2a3;
+}
+.circle-mid-green {
+  background-color: #cfdebb;
+}
+.circle-light-green {
+  background-color: #d1d8c9;
+}
+.circle-orange {
+  background-color: #cd833a;
+}
+.circle-mid-orange {
+  background-color: #daa677;
+}
+.circle-light-orange {
+  background-color: #dbc2a0;
+}
+.circle-white {
+  background-color: #f0f2f0;
+}
+.circle-redish-brown {
+  background-color: #7e311e;
+}
+.circle-dark-orange {
+  background-color: #b25034;
+}
+.circle-dark-brown {
+  background-color: #462c23;
+}
+.circle-light-brown {
+  background-color: #945b3a;
+}
+.circle-black {
+  background-color: #312421;
+}
 
 /* Bottom Middle */
 .components {
@@ -454,7 +484,7 @@ input:focus {
 }
 
 .btn-dark-brown {
-  background-image: url('/buttons/darkBrownBtn.png');
+  background-image: url("/buttons/darkBrownBtn.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -464,16 +494,16 @@ input:focus {
 }
 
 .btn-dark-brown:hover {
-  background-image: url('/buttons/darkBrownBtnClicked.png');
+  background-image: url("/buttons/darkBrownBtnClicked.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
   background-color: transparent;
-  color: rgb(47, 46, 46)
+  color: rgb(47, 46, 46);
 }
 
 .btn-brown {
-  background-image: url('/buttons/brownBtn.png');
+  background-image: url("/buttons/brownBtn.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -483,7 +513,7 @@ input:focus {
 }
 
 .btn-brown:hover {
-  background-image: url('/buttons/brownBtnClicked.png');
+  background-image: url("/buttons/brownBtnClicked.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -492,7 +522,7 @@ input:focus {
 }
 
 .btn-light-brown {
-  background-image: url('/buttons/lightBrownBtn.png');
+  background-image: url("/buttons/lightBrownBtn.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -501,7 +531,7 @@ input:focus {
 }
 
 .btn-light-brown:hover {
-  background-image: url('/buttons/lightBrownBtnClicked.png');
+  background-image: url("/buttons/lightBrownBtnClicked.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -510,7 +540,7 @@ input:focus {
 }
 
 .btn-default {
-  background-image: url('/buttons/Btn.png');
+  background-image: url("/buttons/Btn.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -519,7 +549,7 @@ input:focus {
 }
 
 .btn-default:hover {
-  background-image: url('/buttons/BtnClicked.png');
+  background-image: url("/buttons/BtnClicked.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -535,7 +565,7 @@ input:focus {
 }
 
 .brown-check {
-  background-image: url('/buttons/brownCheck.png');
+  background-image: url("/buttons/brownCheck.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -543,7 +573,7 @@ input:focus {
 }
 
 .brown-check:hover {
-  background-image: url('/buttons/brownCheckClicked.png');
+  background-image: url("/buttons/brownCheckClicked.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -551,7 +581,7 @@ input:focus {
 }
 
 .brown-cross {
-  background-image: url('/buttons/brownCross.png');
+  background-image: url("/buttons/brownCross.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -559,7 +589,7 @@ input:focus {
 }
 
 .brown-cross:hover {
-  background-image: url('/buttons/brownCrossClicked.png');
+  background-image: url("/buttons/brownCrossClicked.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -569,7 +599,7 @@ input:focus {
 .atk-btn {
   width: 48px;
   height: 58px;
-  background-image: url('/buttons/attackBtn.png');
+  background-image: url("/buttons/attackBtn.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -579,7 +609,7 @@ input:focus {
 .atk-btn:hover {
   width: 48px;
   height: 58px;
-  background-image: url('/buttons/attackBtnClicked.png');
+  background-image: url("/buttons/attackBtnClicked.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -589,7 +619,7 @@ input:focus {
 .shld-btn {
   width: 50px;
   height: 50px;
-  background-image: url('/buttons/shieldButton.png');
+  background-image: url("/buttons/shieldButton.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -597,7 +627,7 @@ input:focus {
 }
 
 .shld-btn:hover {
-  background-image: url('/buttons/shieldButtonClicked.png');
+  background-image: url("/buttons/shieldButtonClicked.png");
   background-size: 100% 100%;
   background-position: center;
   image-rendering: pixelated;
@@ -619,7 +649,7 @@ input:focus {
 .name-board {
   width: 500px; /* 544px */
   height: 200px; /* 432px */
-  background-image: url('/Panel 1.png');
+  background-image: url("/Panel 1.png");
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -632,16 +662,16 @@ input:focus {
   margin: 10px auto;
   padding: 10px 20px; /* Adjust based on where the text should sit */
   font-size: 16px;
-  background-image: url('/Textbox.png');
+  background-image: url("/Textbox.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   background-color: transparent;
-  width: 500px;      /* Adjust to match the size of your PNG */
-  height: 100px;      /* Adjust to match the PNG height */
+  width: 500px; /* Adjust to match the size of your PNG */
+  height: 100px; /* Adjust to match the PNG height */
   border: none;
   outline: none;
-  color: #000;       /* Change if needed */
+  color: #000; /* Change if needed */
   text-align: center; /* Or left/right as you like */
   align-items: center;
   align-content: center;
@@ -652,7 +682,7 @@ input:focus {
 .healthbar {
   width: 276px; /* 544px */
   height: 88px; /* 432px */
-  background-image: url('/healthbar.png');
+  background-image: url("/healthbar.png");
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -663,7 +693,7 @@ input:focus {
 .monster-card {
   width: 150px; /* 544px */
   height: 150px; /* 432px */
-  background-image: url('/MonsterCardBg.png');
+  background-image: url("/MonsterCardBg.png");
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -693,11 +723,11 @@ input:focus {
   border-radius: 1rem;
   height: 65vh;
 
-    box-shadow:
-    0 4px 0 #773519,     /* bottom edge */
-    4px 0 0 #773519,     /* right edge */
-    -4px 0 0 #773519,    /* left edge */
-    0 -4px 0 #c26130;    /* top edge */
+  box-shadow:
+    0 4px 0 #773519,
+    /* bottom edge */ 4px 0 0 #773519,
+    /* right edge */ -4px 0 0 #773519,
+    /* left edge */ 0 -4px 0 #c26130; /* top edge */
 }
 
 #homepage {
@@ -728,11 +758,11 @@ input:focus {
   height: 20vh;
   gap: 1rem;
 
-    box-shadow:
-    0 4px 0 #773519,     /* bottom edge */
-    4px 0 0 #773519,     /* right edge */
-    -4px 0 0 #773519,    /* left edge */
-    0 -4px 0 #c26130;    /* top edge */
+  box-shadow:
+    0 4px 0 #773519,
+    /* bottom edge */ 4px 0 0 #773519,
+    /* right edge */ -4px 0 0 #773519,
+    /* left edge */ 0 -4px 0 #c26130; /* top edge */
 }
 
 #joinpage {
@@ -781,11 +811,11 @@ input:focus {
   max-width: 30vw;
   height: 24.5vh;
 
-    box-shadow:
-    0 4px 0 #773519,     /* bottom edge */
-    4px 0 0 #773519,     /* right edge */
-    -4px 0 0 #773519,    /* left edge */
-    0 -4px 0 #c26130;    /* top edge */
+  box-shadow:
+    0 4px 0 #773519,
+    /* bottom edge */ 4px 0 0 #773519,
+    /* right edge */ -4px 0 0 #773519,
+    /* left edge */ 0 -4px 0 #c26130; /* top edge */
 }
 
 .monster-selection-card.selected {
@@ -855,7 +885,7 @@ input:focus {
 }
 
 #monster-selection-btn {
-  width: 30vw;  
+  width: 30vw;
 }
 
 /* Waiting/Loading Screen for match to start */
@@ -891,23 +921,44 @@ input:focus {
   animation-fill-mode: both;
 }
 
-.bounce-letter:nth-child(1) { animation-delay: 0s; }
-.bounce-letter:nth-child(2) { animation-delay: 0.1s; }
-.bounce-letter:nth-child(3) { animation-delay: 0.2s; }
-.bounce-letter:nth-child(4) { animation-delay: 0.3s; }
-.bounce-letter:nth-child(5) { animation-delay: 0.4s; }
-.bounce-letter:nth-child(6) { animation-delay: 0.5s; }
-.bounce-letter:nth-child(7) { animation-delay: 0.6s; }
-.bounce-letter:nth-child(8) { animation-delay: 0.7s; }
-.bounce-letter:nth-child(9) { animation-delay: 0.8s; }
-.bounce-letter:nth-child(10) { animation-delay: 0.9s; }
+.bounce-letter:nth-child(1) {
+  animation-delay: 0s;
+}
+.bounce-letter:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.bounce-letter:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.bounce-letter:nth-child(4) {
+  animation-delay: 0.3s;
+}
+.bounce-letter:nth-child(5) {
+  animation-delay: 0.4s;
+}
+.bounce-letter:nth-child(6) {
+  animation-delay: 0.5s;
+}
+.bounce-letter:nth-child(7) {
+  animation-delay: 0.6s;
+}
+.bounce-letter:nth-child(8) {
+  animation-delay: 0.7s;
+}
+.bounce-letter:nth-child(9) {
+  animation-delay: 0.8s;
+}
+.bounce-letter:nth-child(10) {
+  animation-delay: 0.9s;
+}
 
 @keyframes bounce {
-  0%, 100% {
-      transform: translateY(0);
+  0%,
+  100% {
+    transform: translateY(0);
   }
   50% {
-      transform: translateY(-15px);
+    transform: translateY(-15px);
   }
 }
 
@@ -917,13 +968,27 @@ input:focus {
 }
 
 @keyframes restart-bounce {
-  0% { opacity: 1; }
-  95% { opacity: 1; }
-  96% { opacity: 0; }
-  97% { opacity: 0; }
-  98% { opacity: 0; }
-  99% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  96% {
+    opacity: 0;
+  }
+  97% {
+    opacity: 0;
+  }
+  98% {
+    opacity: 0;
+  }
+  99% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .bounce-letter {
@@ -932,23 +997,44 @@ input:focus {
   animation-fill-mode: both;
 }
 
-.bounce-letter:nth-child(1) { animation-delay: 0s; }
-.bounce-letter:nth-child(2) { animation-delay: 0.1s; }
-.bounce-letter:nth-child(3) { animation-delay: 0.2s; }
-.bounce-letter:nth-child(4) { animation-delay: 0.3s; }
-.bounce-letter:nth-child(5) { animation-delay: 0.4s; }
-.bounce-letter:nth-child(6) { animation-delay: 0.5s; }
-.bounce-letter:nth-child(7) { animation-delay: 0.6s; }
-.bounce-letter:nth-child(8) { animation-delay: 0.7s; }
-.bounce-letter:nth-child(9) { animation-delay: 0.8s; }
-.bounce-letter:nth-child(10) { animation-delay: 0.9s; }
+.bounce-letter:nth-child(1) {
+  animation-delay: 0s;
+}
+.bounce-letter:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.bounce-letter:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.bounce-letter:nth-child(4) {
+  animation-delay: 0.3s;
+}
+.bounce-letter:nth-child(5) {
+  animation-delay: 0.4s;
+}
+.bounce-letter:nth-child(6) {
+  animation-delay: 0.5s;
+}
+.bounce-letter:nth-child(7) {
+  animation-delay: 0.6s;
+}
+.bounce-letter:nth-child(8) {
+  animation-delay: 0.7s;
+}
+.bounce-letter:nth-child(9) {
+  animation-delay: 0.8s;
+}
+.bounce-letter:nth-child(10) {
+  animation-delay: 0.9s;
+}
 
 @keyframes bounce {
-  0%, 100% {
-      transform: translateY(0);
+  0%,
+  100% {
+    transform: translateY(0);
   }
   50% {
-      transform: translateY(-15px);
+    transform: translateY(-15px);
   }
 }
 
@@ -958,13 +1044,27 @@ input:focus {
 }
 
 @keyframes restart-bounce {
-  0% { opacity: 1; }
-  95% { opacity: 1; }
-  96% { opacity: 0; }
-  97% { opacity: 0; }
-  98% { opacity: 0; }
-  99% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  96% {
+    opacity: 0;
+  }
+  97% {
+    opacity: 0;
+  }
+  98% {
+    opacity: 0;
+  }
+  99% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 /*This shows everything related to the waiting room*/
 .waiting-room-box {
@@ -979,7 +1079,7 @@ input:focus {
   background: white;
   padding: 15px 30px;
   border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   gap: 20px;
@@ -994,7 +1094,7 @@ input:focus {
 }
 
 .join-info {
-  font-size: 1.0rem;
+  font-size: 1rem;
   color: #333;
   font-weight: 500;
   width: 25vw;
@@ -1004,7 +1104,8 @@ input:focus {
   text-align: center;
 }
 
-.pin-label, .code-link {
+.pin-label,
+.code-link {
   font-size: 14px;
   color: #666;
   margin-bottom: 5px;
@@ -1024,7 +1125,7 @@ input:focus {
 }
 
 .waiting-room-logo {
-  posItion: relative;
+  position: relative;
   top: 170px;
   text-align: center;
   margin: 40px 0;
@@ -1049,7 +1150,7 @@ input:focus {
   color: #333;
 }
 
-.qr-box canvas{
+.qr-box canvas {
   width: 100%;
   height: 100%;
 }
@@ -1065,7 +1166,7 @@ input:focus {
   display: block;
 }
 
-.participants-grid{
+.participants-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
@@ -1083,7 +1184,7 @@ input:focus {
 
 /* Small Box that shows participants names */
 .participants-name-box {
-  background-color: #8B4513;
+  background-color: #8b4513;
   color: #d4a574;
   border: none;
   padding: 15px 25px;
@@ -1094,12 +1195,12 @@ input:focus {
   text-transform: capitalize;
   min-width: 12.5rem;
   min-height: 3rem;
-  
+
   box-shadow:
-    0 4px 0 #773519,     /* bottom edge */
-    4px 0 0 #773519,     /* right edge */
-    -4px 0 0 #773519,    /* left edge */
-    0 -4px 0 #c26130;    /* top edge */
+    0 4px 0 #773519,
+    /* bottom edge */ 4px 0 0 #773519,
+    /* right edge */ -4px 0 0 #773519,
+    /* left edge */ 0 -4px 0 #c26130; /* top edge */
 }
 
 .participants-name-box:hover {
@@ -1109,7 +1210,7 @@ input:focus {
 /* ################################################## */
 /* Battle Screen styles */
 #battle-screen-body {
-  background-image: url("/combat-bg.png"); 
+  background-image: url("/combat-bg.png");
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -1144,7 +1245,7 @@ input:focus {
   object-fit: fill;
 }
 
-.battleScreenBottomButton{
+.battleScreenBottomButton {
   width: 40%;
   height: 8rem;
   margin: 1rem;
@@ -1178,7 +1279,7 @@ input:focus {
   height: 100%;
   appearance: none;
   border-radius: 10px;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 progress::-moz-progress-bar {
@@ -1198,14 +1299,13 @@ progress::-moz-progress-bar {
   pointer-events: none;
 }
 
-.battleScreenBottomButtonImage{
+.battleScreenBottomButtonImage {
   width: 5rem;
   height: 5rem;
   object-fit: fill;
 }
 
-
-.topBackIcon{
+.topBackIcon {
   position: absolute;
   height: 1.5rem;
   object-fit: fill;
@@ -1213,7 +1313,7 @@ progress::-moz-progress-bar {
   left: 1rem;
 }
 
-.diceResult{
+.diceResult {
   position: absolute;
   font-size: 3rem;
   z-index: 1000;
@@ -1221,11 +1321,12 @@ progress::-moz-progress-bar {
   top: 14rem;
 }
 
-.diceAnimation{
+.diceAnimation {
   z-index: 900;
   position: absolute;
   left: 20rem;
-}.btn:active {
+}
+.btn:active {
   transform: scale(0.97);
 }
 
@@ -1314,22 +1415,24 @@ progress::-moz-progress-bar {
 }
 
 .dots::after {
-  content: '';
+  content: "";
   animation: dots 1.5s steps(4, end) infinite;
 }
 
 @keyframes dots {
-  0%, 20% {
-      content: '';
+  0%,
+  20% {
+    content: "";
   }
   40% {
-      content: '.';
+    content: ".";
   }
   60% {
-      content: '..';
+    content: "..";
   }
-  80%, 100% {
-      content: '...';
+  80%,
+  100% {
+    content: "...";
   }
 }
 /* Settings page styling */
@@ -1340,7 +1443,7 @@ progress::-moz-progress-bar {
   align-items: center;
 }
 
-.settings-container h1{
+.settings-container h1 {
   margin-bottom: 3rem;
 }
 
@@ -1413,7 +1516,7 @@ input[type="range"] {
   color: white;
 }
 
-.topBackIcon{
+.topBackIcon {
   position: absolute;
   width: 1.5rem;
   height: 1.5rem;
@@ -1437,7 +1540,7 @@ input[type="range"] {
   transform: translate(-50%, -50%); /* center horizontally & vertically */
 }
 
-.diceAnimation img{
+.diceAnimation img {
   width: 240px;
   height: 240px;
 }
@@ -1499,7 +1602,7 @@ input[type="range"] {
   position: absolute;
   top: 10%;
   left: 88%;
-  background-color: #AEC6CF;
+  background-color: #aec6cf;
   color: white;
   border-radius: 50%;
   width: 35px;
@@ -1509,7 +1612,7 @@ input[type="range"] {
   justify-content: center;
   font-size: 12px;
   font-weight: bold;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   z-index: 10000;
   pointer-events: none;
   transform: scale(1);
@@ -1525,7 +1628,7 @@ input[type="range"] {
   transform: translate(-50%, -50%);
   font-size: 1.1rem;
   color: white;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
   z-index: 1000;
   width: 80vw;
   padding: 1rem;
@@ -1533,11 +1636,11 @@ input[type="range"] {
   border: 0.2rem solid #ff9838;
   border-radius: 1rem;
 
-    box-shadow:
-    0 4px 0 #773519,     /* bottom edge */
-    4px 0 0 #773519,     /* right edge */
-    -4px 0 0 #773519,    /* left edge */
-    0 -4px 0 #c26130;    /* top edge */
+  box-shadow:
+    0 4px 0 #773519,
+    /* bottom edge */ 4px 0 0 #773519,
+    /* right edge */ -4px 0 0 #773519,
+    /* left edge */ 0 -4px 0 #c26130; /* top edge */
 }
 
 /* #################################################################### */
@@ -1562,7 +1665,7 @@ input[type="range"] {
   }
 
   .monster-name {
-    font-size: 1.0rem;
+    font-size: 1rem;
   }
 
   .monster-type {

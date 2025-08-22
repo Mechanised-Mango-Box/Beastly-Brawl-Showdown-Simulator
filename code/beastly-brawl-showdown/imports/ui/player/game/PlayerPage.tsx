@@ -46,17 +46,18 @@ export const Player = () => {
 
   //#region Bouncing animation
   const waitingTextRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
     if (!isConnected) return;
 
     const restartAnimation = () => {
       if (waitingTextRef.current) {
-        const letters = waitingTextRef.current.querySelectorAll('.bounce-letter');
+        const letters =
+          waitingTextRef.current.querySelectorAll(".bounce-letter");
         letters.forEach((letter, index) => {
           const element = letter as HTMLElement;
           // Remove animation
-          element.style.animation = 'none';
+          element.style.animation = "none";
           // Force reflow
           requestAnimationFrame(() => {
             element.style.animation = `bounce 0.6s ease-in-out ${index * 0.1}s both`;
@@ -67,7 +68,7 @@ export const Player = () => {
 
     // Start first animation after a brief delay
     const initialTimeout = setTimeout(restartAnimation, 100);
-    
+
     // Loop every 2 seconds
     const interval = setInterval(restartAnimation, 2000);
 

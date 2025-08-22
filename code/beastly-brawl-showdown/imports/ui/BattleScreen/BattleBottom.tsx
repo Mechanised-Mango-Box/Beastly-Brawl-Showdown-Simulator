@@ -40,9 +40,7 @@ export const BattleBottom: React.FC<BattleBottomProps> = ({
           alt="Shield"
         />
       </button>
-      <div className="shield-uses">
-          {shieldUsesLeft}
-        </div>
+      <div className="shield-uses">{shieldUsesLeft}</div>
     </div>
   );
 };
