@@ -1570,8 +1570,19 @@ input[type="range"] {
   }
 
   /* Move portraits closer together */
-  .portrait-top { top: 20vh; }
-  .portrait-bottom { bottom: 30vh; }
+.portrait-top {
+  position: absolute;
+  top: 4rem;   /* adjust distance from top */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.portrait-bottom {
+  position: absolute;
+  bottom: 5rem;   /* raise the bottom monster above buttons */
+  left: 50%;
+  transform: translateX(-50%);
+}
 
   /* Scale dice position */
   .diceAnimation {
