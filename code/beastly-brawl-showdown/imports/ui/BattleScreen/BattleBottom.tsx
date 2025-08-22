@@ -1,38 +1,46 @@
 import React from "react";
 
 type BattleBottomProps = {
-  onRoll: () => void;
+  onAttack: () => void;
+  onAbility: () => void;
+  onDefend: () => void;
+  shieldUsesLeft?: number;
 };
 
-export const BattleBottom: React.FC<BattleBottomProps> = ({ onRoll }) => {
-  const handleRoll = () => {
-    onRoll();
-    //basically just clals whatever function is given to this as a parameter
-  };
-
+export const BattleBottom: React.FC<BattleBottomProps> = ({
+  onAttack,
+  onAbility,
+  onDefend,
+  shieldUsesLeft = 3,
+}) => {
+  // const handleRoll = () => {
+  //   onRoll();
+  //   //basically just clals whatever function is given to this as a parameter
+  // };
   return (
     <div className="battleScreenBottom">
-      <button className="battleScreenBottomButton" onClick={handleRoll}>
+      <button className="glb-btn" id="attack" onClick={onAttack}>
         <img
           className="battleScreenBottomButtonImage"
-          src="/img/sword.png"
+          src="/img/sword3.png"
           alt="Sword"
         />
       </button>
-      <button className="battleScreenBottomButton" onClick={handleRoll}>
+      <button className="glb-btn" id="ability" onClick={onAbility}>
         <img
           className="battleScreenBottomButtonImage"
-          src="/img/ability.jpg"
+          src="/img/ability2.png"
           alt="Ability"
         />
       </button>
-      <button className="battleScreenBottomButton" onClick={handleRoll}>
+      <button className="glb-btn" id="defend" onClick={onDefend}>
         <img
           className="battleScreenBottomButtonImage"
-          src="/img/shield.png"
+          src="/img/shield2.png"
           alt="Shield"
         />
       </button>
+      <div className="shield-uses">{shieldUsesLeft}</div>
     </div>
   );
 };
