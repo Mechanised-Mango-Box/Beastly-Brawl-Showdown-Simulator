@@ -4,12 +4,14 @@ type BattleBottomProps = {
   onAttack: () => void;
   onAbility: () => void;
   onDefend: () => void;
+  shieldUsesLeft?: number;
 };
 
 export const BattleBottom: React.FC<BattleBottomProps> = ({
   onAttack,
   onAbility,
   onDefend,
+  shieldUsesLeft = 3,
 }) => {
   // const handleRoll = () => {
   //   onRoll();
@@ -37,6 +39,10 @@ export const BattleBottom: React.FC<BattleBottomProps> = ({
           src="/img/shield2.png"
           alt="Shield"
         />
+
+        <div className="shield-uses">
+          {shieldUsesLeft}
+        </div>
       </button>
     </div>
   );

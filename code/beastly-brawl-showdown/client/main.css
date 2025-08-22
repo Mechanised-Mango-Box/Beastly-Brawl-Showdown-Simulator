@@ -1488,16 +1488,6 @@ input[type="range"] {
   object-fit: cover;
 }
 
-/* Stage background */
-.stage-bg {
-  position: relative;
-  background: url("/homepage/background_3.png") center/cover no-repeat;
-  image-rendering: pixelated;
-  flex: 1;              /* fills the space between top and bottom bars */
-  display: grid;
-  place-items: center;  /* centers children */
-}
-
 /* Center arena with background */
 .combat-arena {
   position: relative;
@@ -1505,6 +1495,28 @@ input[type="range"] {
   place-items: center;
   align-content: center;
   row-gap: 15vh;
+}
+
+#defend {
+  display: inline-block;
+}
+
+.shield-uses {
+  position: absolute;
+  top: 10%;
+  left: 88%;
+  background-color: #AEC6CF;
+  color: white;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  z-index: 10000;
 }
 
 .battle-message {
