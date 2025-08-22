@@ -1010,6 +1010,50 @@ input:focus {
   height: 100%;
 }
 
+/* Winners Screen */
+#winner-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.winner-screen {
+  background-color: #ffcc9c;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  border: 0.2rem solid #ff9838;
+  border-radius: 1rem;
+  width: 40vw;
+  height: 30vh;
+  line-height: 2rem;
+
+  box-shadow:
+    0 4px 0 #773519,
+    /* bottom edge */ 4px 0 0 #773519,
+    /* right edge */ -4px 0 0 #773519,
+    /* left edge */ 0 -4px 0 #c26130; /* top edge */
+}
+
+.winner-screen h1 {
+  font-size: 2.5rem;
+  color: black;
+  text-shadow: 3px 3px 0px #333;
+  margin-bottom: 1rem;
+}
+
+.winner-screen p {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
 /* Participants Grid Styles */
 .participants-display-box {
   position: relative;
@@ -1451,5 +1495,11 @@ input[type="range"] {
 
   .ability-desc {
     font-size: 0.6rem;
+  }
+
+  .winner-screen {
+    width: 90vw;
+    height: auto;
+    padding: 1.2rem;
   }
 }
