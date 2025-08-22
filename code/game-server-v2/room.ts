@@ -24,20 +24,12 @@ export class Room {
     this.joinCode = joinCode;
   }
 
-  hasPlayer(displayName: string) {
-    this.players.forEach(player => {
-      if (player.displayName == displayName) {
-        return true;
-      }
-    });
-    return false;
-  }
+hasPlayer(displayName: string): boolean {
+  return this.players.some(player => player.displayName === displayName);
+}
 
-  getPlayer(displayName: string): Player | void {
-    this.players.forEach(player => {
-      if (player.displayName == displayName) {
-        return player;
-      }
-    });
-  }
+getPlayer(displayName: string): Player | undefined {
+  return this.players.find(player => player.displayName === displayName);
+}
+
 }

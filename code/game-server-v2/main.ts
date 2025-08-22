@@ -246,11 +246,18 @@ async function main(config: ServerConfig) {
     }
 
     log_event(`Join code <${auth.joinCode}> is valid. From <${auth.displayName}>. Socket id = ${socket.id}`);
-    const playerNameList = [...gameServer.rooms.get(roomId)?.players.values()!].map((player) => player.displayName);
+
+    const playerNameList = gameServer.rooms.get(roomId)?.players.map(
+      (player) => player.displayName
+    ) ?? [];
+
     console.log("Update player list", playerNameList, "to", gameServer.rooms.get(roomId)!.hostSocketId);
+    console.log("Player socket: ", socket.data);
+
     hostChannel.to(gameServer.rooms.get(roomId)!.hostSocketId).emit("player-set-changed", playerNameList);
     next();
   });
+
   // #region Player Channel
   playerChannel.on("connection", async (socket: Socket) => {
     log_event(`Player connected: ${socket.id}`);
@@ -292,8 +299,8 @@ async function main(config: ServerConfig) {
       // TODO: trigger round start
       // Loop through every room in the game server
       for (const room of gameServer.rooms.values()) {
-          // Trigger start from each room's tournament manager
-          room.tournamentManager.startTournament(room.players);
+        // Trigger start from each room's tournament manager
+        room.tournamentManager.startTournament(room.players);
       }
     });
 
