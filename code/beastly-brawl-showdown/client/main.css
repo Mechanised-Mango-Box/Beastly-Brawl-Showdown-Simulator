@@ -1503,7 +1503,7 @@ input[type="range"] {
   position: relative;
   display: flex;
   display: grid;
-  gap: 15rem;
+  gap: 8rem;
   max-height: 60vh;
 }
 
