@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BattleTop } from "./BattleTop";
 import { BattleMiddle } from "./BattleMiddle";
 import { BattleBottom } from "./BattleBottom";
+import BattleMessage from "./BattleMessage";
 
 // Define the props type for BattleScreen
 type BattleScreenProps = {
@@ -46,6 +47,8 @@ export const BattleScreen: React.FC<BattleScreenProps> = ({
         onAbility={triggerAnimation}
         onDefend={triggerAnimation}
       />
+
+      <BattleMessage message="Damage dealt to opponent" />
     </div>
   );
 };
