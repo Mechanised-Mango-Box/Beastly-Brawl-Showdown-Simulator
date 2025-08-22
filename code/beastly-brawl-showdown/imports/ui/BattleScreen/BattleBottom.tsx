@@ -39,11 +39,10 @@ export const BattleBottom: React.FC<BattleBottomProps> = ({
           src="/img/shield2.png"
           alt="Shield"
         />
-
-        <div className="shield-uses">
+      </button>
+      <div className="shield-uses">
           {shieldUsesLeft}
         </div>
-      </button>
     </div>
   );
 };
