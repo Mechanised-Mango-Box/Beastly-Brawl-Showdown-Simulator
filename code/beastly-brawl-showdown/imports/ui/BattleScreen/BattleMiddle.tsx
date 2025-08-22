@@ -6,12 +6,16 @@ type BattleMiddleProps = {
   showAnimation: boolean;
   enemyHp: number;
   playerHp: number;
+  enemyImgSrc: string;
+  playerImgSrc: string;
 };
 //takes a boolean when initialized
 export const BattleMiddle: React.FC<BattleMiddleProps> = ({
   showAnimation,
   enemyHp,
   playerHp,
+  enemyImgSrc,
+  playerImgSrc,
 }) => {
   const [displayedNumber, setDisplayedNumber] = useState<number | null>(null);
 
@@ -61,7 +65,7 @@ export const BattleMiddle: React.FC<BattleMiddleProps> = ({
         <MonsterHealthRing
           currentHealth={enemyHp}
           maxHealth={100}
-          imageSrc="/img/dragon.png"
+          imageSrc={enemyImgSrc}
         />
       </div>
 
@@ -69,7 +73,7 @@ export const BattleMiddle: React.FC<BattleMiddleProps> = ({
         <MonsterHealthRing
           currentHealth={playerHp}
           maxHealth={100}
-          imageSrc="/img/wolfman.png"
+          imageSrc={playerImgSrc}
         />
       </div>
     </div>

@@ -3,7 +3,16 @@ import { BattleTop } from "./BattleTop";
 import { BattleMiddle } from "./BattleMiddle";
 import { BattleBottom } from "./BattleBottom";
 
-export const BattleScreen: React.FC = () => {
+// Define the props type for BattleScreen
+type BattleScreenProps = {
+  enemyImageSrc?: string;
+  playerImageSrc?: string;
+};
+
+export const BattleScreen: React.FC<BattleScreenProps> = ({
+  enemyImageSrc = "/monsters/dragon.png",
+  playerImageSrc = "/monsters/wolf.png", 
+}) => {
   const [showAnimation, setShowAnimation] = useState<boolean>(false);
   const [enemyHp, setEnemyHp] = useState(100);
   const [playerHp, setPlayerHp] = useState(100);
@@ -29,6 +38,8 @@ export const BattleScreen: React.FC = () => {
         showAnimation={showAnimation}
         enemyHp={enemyHp}
         playerHp={playerHp}
+        enemyImgSrc={enemyImageSrc}
+        playerImgSrc={playerImageSrc}
       />
       <BattleBottom
         onAttack={handleRoll}
