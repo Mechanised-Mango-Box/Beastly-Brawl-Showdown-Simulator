@@ -40,14 +40,8 @@ button {
     0 -4px 0 #c26130;    /* top edge */
 }
 
-.glb-btn:hover {
-  box-shadow:
-    0 2px 0 #773519,
-    2px 0 0 #773519,
-    -2px 0 0 #773519,
-    0 -2px 0 #c26130;
-  
-  transform: translateY(-2px);
+.glb-btn:active {
+  transform: scale(0.95);
 }
 
 .canvas-body {
