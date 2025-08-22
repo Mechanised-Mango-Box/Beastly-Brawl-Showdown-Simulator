@@ -1450,11 +1450,11 @@ input[type="range"] {
 
 .health-ring-container {
   position: relative;
-  width: 240px; /* Size + Stroke */
-  height: 240px; /* Size + Stroke */
+  width: 200px; /* same as size */
+  height: 200px; /* same as size */
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .health-ring {
@@ -1479,13 +1479,13 @@ input[type="range"] {
 
 .monster-img {
   position: absolute;
-  top: 20px;  /* half of stroke width */
-  left: 20px; /* half of stroke width */
-  width: 160px; /* size - stroke */
-  height: 160px; /* size - stroke */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px; /* size - stroke */
+  height: 180px; /* size - stroke */
   border-radius: 50%;
   object-fit: cover;
-  background: white;
 }
 
 /* Stage background */
@@ -1501,10 +1501,10 @@ input[type="range"] {
 /* Center arena with background */
 .combat-arena {
   position: relative;
-  display: flex;
   display: grid;
-  gap: 8rem;
-  max-height: 60vh;
+  place-items: center;
+  align-content: center;
+  row-gap: 10vh;
 }
 
 /* #################################################################### */
@@ -1568,21 +1568,6 @@ input[type="range"] {
     width: 8rem;
     height: 8rem;
   }
-
-  /* Move portraits closer together */
-.portrait-top {
-  position: absolute;
-  top: 4rem;   /* adjust distance from top */
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.portrait-bottom {
-  position: absolute;
-  bottom: 5rem;   /* raise the bottom monster above buttons */
-  left: 50%;
-  transform: translateX(-50%);
-}
 
   /* Scale dice position */
   .diceAnimation {

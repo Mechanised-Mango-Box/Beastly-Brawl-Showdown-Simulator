@@ -58,24 +58,18 @@ export const BattleMiddle: React.FC<BattleMiddleProps> = ({
   //   // Placeholder for future animation logic
   //   console.log("Attack");
   // };
-
   return (
     <div className="combat-arena">
-      <div className="portrait portrait-top">
-        <MonsterHealthRing
-          currentHealth={enemyHp}
-          maxHealth={100}
-          imageSrc={enemyImgSrc}
-        />
-      </div>
-
-      <div className="portrait portrait-bottom">
-        <MonsterHealthRing
-          currentHealth={playerHp}
-          maxHealth={100}
-          imageSrc={playerImgSrc}
-        />
-      </div>
+      <MonsterHealthRing
+        currentHealth={enemyHp}
+        maxHealth={100}
+        imageSrc={enemyImgSrc}
+      />
+      <MonsterHealthRing
+        currentHealth={playerHp}
+        maxHealth={100}
+        imageSrc={playerImgSrc}
+      />
     </div>
   );
 };
