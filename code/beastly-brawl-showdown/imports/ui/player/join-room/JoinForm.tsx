@@ -111,5 +111,9 @@ export const JoinForm = () => {
         );
     }
 
-    return <p>Starting game...</p>;
+  return (
+    <>
+      <p>Starting game...</p>
+    </>
+  );
 };

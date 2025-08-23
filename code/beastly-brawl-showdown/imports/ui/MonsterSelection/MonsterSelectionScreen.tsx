@@ -7,7 +7,9 @@ interface MonsterSelectionScreenProps {
   setSelectedMonsterCallback?: (value: string) => void;
 }
 
-export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({ setSelectedMonsterCallback }) => {
+export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({
+  setSelectedMonsterCallback,
+}) => {
   const navigate = useNavigate();
 
   const [selectedMonster, setSelectedMonster] = useState<string>("");
@@ -68,6 +70,12 @@ export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({ 
           />
         ))}
 
+        <button
+          className="glb-btn"
+          id="monster-selection-btn"
+          onClick={handleConfirm}
+          disabled={!confirmEnabled}
+        >
         <button
           className="glb-btn"
           id="monster-selection-btn"

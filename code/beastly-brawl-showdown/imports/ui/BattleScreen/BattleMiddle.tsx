@@ -23,7 +23,6 @@ export const BattleMiddle: React.FC<BattleMiddleProps> = ({
 }) => {
   const [displayedNumber, setDisplayedNumber] = useState<number | null>(null);
 
-
   //if the showwanimation is true then show thtet animation
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -63,7 +62,6 @@ export const BattleMiddle: React.FC<BattleMiddleProps> = ({
   //   // Placeholder for future animation logic
   //   console.log("Attack");
   // };
-
   return (
     <div className="battleMiddle">
       <BattleMonster

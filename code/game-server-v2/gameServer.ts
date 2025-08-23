@@ -95,7 +95,7 @@ export class GameServer {
     const newRoom: Room = new Room(
       hostSocketId,
       this.peekNextRoomId(),
-      this.sqids.encode([this.serverId, this.peekNextRoomId()])
+      this.sqids.encode([this.serverId, this.peekNextRoomId()]),
     );
 
     if (this.hasRoom(newRoom.roomId)) {
@@ -133,7 +133,7 @@ export class GameServer {
     socketId: string,
     roomId: RoomId,
     displayName: string,
-    linkedAcccountId: AccountId | undefined
+    linkedAcccountId: AccountId | undefined,
   ) {
     //TODO validate input
 
