@@ -15,6 +15,13 @@ export class Match {
     matchType: MatchType;
     matchID: number;
 
+    /**
+     * Constructor.
+     * 
+     * @param player1 A player in the match
+     * @param matchID Unique integer created in tournament_manager
+     * @param player2 Optional second player in the match (the match is a bye if left empty)
+     */
     constructor(player1: Player, matchID: number, player2?: Player) {
         this.player1 = player1;
         this.player2 = player2;
@@ -25,7 +32,7 @@ export class Match {
     /**
      * Called by tournament_manager when all matches are ready to commence.
      * Initialises and runs the battle, then processes the winner and loser after completion.
-     * Winner is stored in winner and winnerId
+     * Winner is stored in winner and loser is added to winner's list of spectators.
      * 
      * @param playersByAccountId Hashmap of players in the tournament
      * @returns None
