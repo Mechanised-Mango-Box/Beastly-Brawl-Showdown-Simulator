@@ -6,4 +6,4 @@ export type MoveId = Lowercase<string>;
 /**
  * A move pool is a collection of moves accessible by ID
  */
-export type MovePool<MOVE_NAMES extends MoveId = MoveId> = LookupTable<MOVE_NAMES, "moveId", MoveData>;
+export type MovePool<MOVE_NAME extends MoveId = MoveId> = Readonly<LookupTable<MOVE_NAME, "moveId", MoveData>>;

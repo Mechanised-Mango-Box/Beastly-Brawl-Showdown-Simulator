@@ -1,12 +1,13 @@
 import { SpawnAction } from "../action/spawn_action";
 import { EntryID } from "../utils";
+import { MonsterId } from "./monster_pool";
 import { MonsterStats } from "./monster_stats";
-
 
 /**
  * A base template for a monster
  */
 export type MonsterTemplate = {
+  templateId: MonsterId;
   //# Flavour
   name: string;
   description: string;

@@ -1,8 +1,10 @@
+import { MoveId } from "../action/move/move_pool";
+import { LookupTable } from "../utils";
 import { MonsterTemplate } from "./monster_template";
 
 export type MonsterId = Lowercase<string>;
 
-export interface MonsterPool {
+export interface MonsterPool<MONSTER_NAME extends MonsterId = MonsterId> {
   name: string;
-  monsters: Readonly<Record<MonsterId, MonsterTemplate>>;
+  monsters: Readonly<LookupTable<MONSTER_NAME, "templateId", MonsterTemplate>>;
 }
