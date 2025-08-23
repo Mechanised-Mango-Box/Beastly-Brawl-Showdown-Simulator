@@ -1,5 +1,5 @@
 import { SpawnAction } from "../action/spawn_action";
-import { EntryID } from "../types";
+import { EntryID } from "../utils";
 import { MonsterStats } from "./monster_stats";
 
 

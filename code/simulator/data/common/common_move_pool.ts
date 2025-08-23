@@ -1,12 +1,12 @@
-import { getComponent, getStat, Monster } from "@sim/core/monster/monster";
+import { MoveData } from "@sim/core/action/move/move";
+import { MovePool } from "@sim/core/action/move/move_pool";
+import { SelfTargeting, SingleEnemyTargeting, TargetingData } from "@sim/core/action/targeting";
 import { Battle } from "@sim/core/battle";
 import { BlockedEvent, BuffEvent, DamageEvent, MoveEvadedEvent, MoveFailedEvent, MoveSuccessEvent, RerollEvent, RollEvent, StartMoveEvent } from "@sim/core/event/core_events";
-import { SideId } from "@sim/core/side";
-import { roll } from "@sim/core/roll";
 import { AbilityChargeStunComponent, DefendComponent, DodgeChargeComponent, DodgeStateComponent, RerollChargeComponent, StunnedStateComponent } from "@sim/core/monster/component/core_components";
-import { TargetingData, SingleEnemyTargeting, SelfTargeting } from "@sim/core/action/targeting";
-import { defineMove, getMoveId, MoveData } from "@sim/core/action/move/move";
-import { MovePool, createMovePool } from "@sim/core/action/move/move_pool";
+import { getComponent, getStat, Monster } from "@sim/core/monster/monster";
+import { roll } from "@sim/core/roll";
+import { SideId } from "@sim/core/side";
 import { COMMON_MONSTER_POOL } from "./common_monster_pool";
 
 async function atk(parentMove: MoveData, battle: Battle, source: SideId, target: SideId) {
@@ -17,7 +17,7 @@ async function atk(parentMove: MoveData, battle: Battle, source: SideId, target:
     name: "startMove",
     source: source,
     target: target,
-    moveId: getMoveId(parentMove),
+    moveId: parentMove.moveId,
   };
   battle.eventHistory.addEvent(startMoveEvent);
 
@@ -28,7 +28,7 @@ async function atk(parentMove: MoveData, battle: Battle, source: SideId, target:
       name: "evaded",
       source: source,
       target: target,
-      moveId: getMoveId(parentMove),
+      moveId: parentMove.moveId,
     };
     battle.eventHistory.addEvent(moveEvadedEvent);
     return;
@@ -95,7 +95,7 @@ async function atk(parentMove: MoveData, battle: Battle, source: SideId, target:
     name: "moveSuccess",
     source: source,
     target: target,
-    moveId: getMoveId(parentMove),
+    moveId: parentMove.moveId,
   };
   battle.eventHistory.addEvent(moveSuccessEvent);
 
@@ -126,8 +126,10 @@ async function atk(parentMove: MoveData, battle: Battle, source: SideId, target:
   battle.eventHistory.addEvent(damageEvent);
 }
 
-export const COMMON_MOVE_POOL: MovePool = createMovePool([
-  defineMove("nothing", {
+type MOVE_NAMES = "nothing" | "attack-normal" | "defend" | "dodge" | "stun";
+export const COMMON_MOVE_POOL: MovePool<MOVE_NAMES> = {
+  nothing: {
+    moveId: "nothing",
     type: "move",
     name: "Do nothing",
     description: "Do nothing...",
@@ -138,9 +140,10 @@ export const COMMON_MOVE_POOL: MovePool = createMovePool([
       throw new Error("This action should not be used EVER.");
     },
     onFail: async function (battle: Battle, source: SideId): Promise<void> {},
-  }),
+  },
 
-  defineMove("attack-normal", {
+  "attack-normal": {
+    moveId: "attack-normal",
     type: "move",
 
     name: "Attack",
@@ -159,9 +162,10 @@ export const COMMON_MOVE_POOL: MovePool = createMovePool([
       // TODO
     },
     onFail: async function (battle: Battle, source: SideId): Promise<void> {},
-  }),
+  },
 
-  defineMove("defend", {
+  defend: {
+    moveId: "defend",
     type: "move",
     name: "Defend",
     description: "Increase your armor class temporarily.",
@@ -177,7 +181,7 @@ export const COMMON_MOVE_POOL: MovePool = createMovePool([
           name: "moveFailed",
           source: source,
           target: source,
-          moveId: getMoveId(this),
+          moveId: this.moveId,
           reason: null,
         };
         battle.eventHistory.addEvent(failedEvent);
@@ -198,9 +202,10 @@ export const COMMON_MOVE_POOL: MovePool = createMovePool([
     onFail: function (battle: Battle, source: SideId): Promise<void> {
       throw new Error("Function not implemented.");
     },
-  }),
+  },
 
-  defineMove("dodge", {
+  dodge: {
+    moveId: "dodge",
     type: "move",
     name: "Dodge",
     description: "Dodge an attack, avoid it completely.",
@@ -215,7 +220,7 @@ export const COMMON_MOVE_POOL: MovePool = createMovePool([
           name: "moveFailed",
           source: source,
           target: source,
-          moveId: getMoveId(this),
+          moveId: this.moveId,
           reason: undefined,
         };
         battle.eventHistory.addEvent(failedEvent);
@@ -232,9 +237,10 @@ export const COMMON_MOVE_POOL: MovePool = createMovePool([
     onFail: function (battle: Battle, source: SideId): Promise<void> {
       throw new Error("Function not implemented.");
     },
-  }),
+  },
 
-  defineMove("stun", {
+  stun: {
+    moveId: "stun",
     type: "move",
     name: "Stun",
     description: "Stun the monster, preventing it from taking actions for one turn.",
@@ -251,7 +257,7 @@ export const COMMON_MOVE_POOL: MovePool = createMovePool([
           name: "moveFailed",
           source: source,
           target: source,
-          moveId: getMoveId(this),
+          moveId: this.moveId,
           reason: undefined,
         };
         battle.eventHistory.addEvent(failedEvent);
@@ -268,5 +274,5 @@ export const COMMON_MOVE_POOL: MovePool = createMovePool([
     onFail: async function (battle: Battle, source: SideId): Promise<void> {
       throw new Error("Function not implemented.");
     },
-  }),
-]);
+  },
+};

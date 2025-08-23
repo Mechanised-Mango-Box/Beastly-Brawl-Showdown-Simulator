@@ -1,18 +1,9 @@
+import { LookupTable } from "@sim/core/utils";
 import { MoveData } from "./move";
-import { EntryID } from "../../types";
+
+export type MoveId = Lowercase<string>;
 
 /**
- * A move pool is a collection of moves accessable by ID
+ * A move pool is a collection of moves accessible by ID
  */
-export type MovePool = Readonly<Record<EntryID, MoveData>>;
-export function createMovePool<T extends readonly [EntryID, MoveData][]>(entries: T): MovePool {
-  return Object.fromEntries(entries) as MovePool;
-}
-
-
-// export type MoveId = Lowercase<string>;
-
-// export interface MovePool {
-//   name: string;
-//   monsters: Readonly<Record<MoveId, MoveData>>;
-// }
+export type MovePool<MOVE_NAMES extends MoveId> = LookupTable<MOVE_NAMES, "moveId", MoveData>;
