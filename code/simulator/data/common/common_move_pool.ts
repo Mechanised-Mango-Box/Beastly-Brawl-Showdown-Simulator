@@ -7,7 +7,6 @@ import { AbilityChargeStunComponent, DefendComponent, DodgeChargeComponent, Dodg
 import { getComponent, getStat, Monster } from "@sim/core/monster/monster";
 import { roll } from "@sim/core/roll";
 import { SideId } from "@sim/core/side";
-import { COMMON_MONSTER_POOL } from "./common_monster_pool";
 
 async function atk(parentMove: MoveData, battle: Battle, source: SideId, target: SideId) {
   const sourceMonster: Monster = battle.sides[source].monster;
@@ -81,7 +80,7 @@ async function atk(parentMove: MoveData, battle: Battle, source: SideId, target:
   }
 
   //# Armour Check
-  if (rollResult <= getStat("armour", targetMonster, COMMON_MONSTER_POOL.monsters[targetMonster.baseID])) {
+  if (rollResult <= getStat("armour", targetMonster, battle.monsterPool.monsters[targetMonster.baseID])) {
     const blockedEvent: BlockedEvent = {
       name: "blocked",
       source: source,
@@ -100,10 +99,10 @@ async function atk(parentMove: MoveData, battle: Battle, source: SideId, target:
   battle.eventHistory.addEvent(moveSuccessEvent);
 
   //# Base damage roll
-  const baseDamage: number = roll(battle.rng, 4) + getStat("attack", sourceMonster, COMMON_MONSTER_POOL.monsters[sourceMonster.baseID]);
+  const baseDamage: number = roll(battle.rng, 4) + getStat("attack", sourceMonster, battle.monsterPool.monsters[sourceMonster.baseID]);
 
   //# Crit Check
-  const critChanceBonus: number = getStat("crit_chance", sourceMonster, COMMON_MONSTER_POOL.monsters[sourceMonster.baseID]);
+  const critChanceBonus: number = getStat("crit_chance", sourceMonster, battle.monsterPool.monsters[sourceMonster.baseID]);
   const critRollResult: number = roll(battle.rng, 20);
   const critRollEvent: RollEvent = {
     name: "roll",
