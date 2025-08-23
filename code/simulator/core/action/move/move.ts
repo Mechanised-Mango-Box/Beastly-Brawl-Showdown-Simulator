@@ -6,6 +6,7 @@ import { TargetingData, TargetingMethod } from "../targeting";
 
 interface MoveEvents {
   perform(battle: Battle, source: SideId, targetingData: TargetingData): Promise<void>;
+  
   onHit?(battle: Battle, source: SideId, reciever: SideId): Promise<void>;
   onFail(battle: Battle, source: SideId): Promise<void>;
 }

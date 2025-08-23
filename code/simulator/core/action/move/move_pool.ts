@@ -8,3 +8,11 @@ export type MovePool = Readonly<Record<EntryID, MoveData>>;
 export function createMovePool<T extends readonly [EntryID, MoveData][]>(entries: T): MovePool {
   return Object.fromEntries(entries) as MovePool;
 }
+
+
+// export type MoveId = Lowercase<string>;
+
+// export interface MovePool {
+//   name: string;
+//   monsters: Readonly<Record<MoveId, MoveData>>;
+// }
