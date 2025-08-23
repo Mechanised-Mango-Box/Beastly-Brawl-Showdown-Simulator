@@ -1,46 +1,33 @@
 import React from "react";
 
+import React from 'react';
 type BattleBottomProps = {
-  onAttack: () => void;
-  onAbility: () => void;
-  onDefend: () => void;
-  shieldUsesLeft?: number;
+  onAction: (action: 'attack' | 'defend' | 'ability') => void;
 };
 
-export const BattleBottom: React.FC<BattleBottomProps> = ({
-  onAttack,
-  onAbility,
-  onDefend,
-  shieldUsesLeft = 3,
-}) => {
-  // const handleRoll = () => {
-  //   onRoll();
-  //   //basically just clals whatever function is given to this as a parameter
-  // };
+export const BattleBottom: React.FC<BattleBottomProps> = ({ onAction }) => {
   return (
     <div className="battleScreenBottom">
-      <button className="glb-btn" id="attack" onClick={onAttack}>
-        <img
-          className="battleScreenBottomButtonImage"
-          src="/img/sword3.png"
-          alt="Sword"
-        />
+      <button
+        className="battleScreenBottomButton"
+        onClick={() => onAction('attack')}
+      >
+        <img src="/img/sword.png" alt="Sword" className="battleScreenBottomButtonImage" />
       </button>
-      <button className="glb-btn" id="ability" onClick={onAbility}>
-        <img
-          className="battleScreenBottomButtonImage"
-          src="/img/ability2.png"
-          alt="Ability"
-        />
+      <button
+        className="battleScreenBottomButton"
+        onClick={() => onAction('ability')}
+      >
+        <img src="/img/ability.jpg" alt="Ability" className="battleScreenBottomButtonImage" />
       </button>
-      <button className="glb-btn" id="defend" onClick={onDefend}>
-        <img
-          className="battleScreenBottomButtonImage"
-          src="/img/shield2.png"
-          alt="Shield"
-        />
+      <button
+        className="battleScreenBottomButton"
+        onClick={() => onAction('defend')}
+      >
+        <img src="/img/shield.png" alt="Shield" className="battleScreenBottomButtonImage" />
       </button>
       <div className="shield-uses">{shieldUsesLeft}</div>
     </div>
   );
 };
+
