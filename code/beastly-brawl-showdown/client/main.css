@@ -1302,7 +1302,6 @@ input:focus {
 }
 
 .battleScreenBottomButton {
-.battleScreenBottomButton {
   width: 40%;
   height: 8rem;
   margin: 1rem;
@@ -1795,11 +1794,11 @@ input[type="range"] {
     transform: translate(-50%, -50%);
     font-size: 2rem;
     top: 50%;
+  }
 
   .winner-screen {
     width: 90vw;
     height: auto;
     padding: 1.2rem;
-
   }
 }

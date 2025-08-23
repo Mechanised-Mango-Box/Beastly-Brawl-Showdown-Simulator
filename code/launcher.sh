@@ -43,7 +43,7 @@ else
 fi
 cd "$BASE_DIR"
 echo "[launcher] Starting Meteor app..."
-(cd "$BASE_DIR/beastly-brawl-showdown" && bash run.sh) &
+(cd "$BASE_DIR./beastly-brawl-showdown" && bash run.sh) &
 
 # Wait for all background processes
 echo "[launcher] All processes started. Press Ctrl+C to stop."

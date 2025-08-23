@@ -76,12 +76,6 @@ export const MonsterSelectionScreen: React.FC<MonsterSelectionScreenProps> = ({
           onClick={handleConfirm}
           disabled={!confirmEnabled}
         >
-        <button
-          className="glb-btn"
-          id="monster-selection-btn"
-          onClick={handleConfirm}
-          disabled={!confirmEnabled}
-        >
           Confirm
         </button>
       </div>

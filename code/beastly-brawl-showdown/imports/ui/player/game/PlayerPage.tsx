@@ -67,13 +67,40 @@ const PlayerContent = () => {
   const [monsterSelected, setMonsterSelected] = useState(false);
   const [allReady, setAllReady] = useState(false);
 
+  // Animation ref
+  const waitingTextRef = useRef<HTMLDivElement>(null);
+
+  // Restart bounce animation loop
+  useEffect(() => {
+    if (!isConnected) return;
+
+    const restartAnimation = () => {
+      if (waitingTextRef.current) {
+        const letters = waitingTextRef.current.querySelectorAll(".bounce-letter");
+        letters.forEach((letter, index) => {
+          const element = letter as HTMLElement;
+          element.style.animation = "none";
+          requestAnimationFrame(() => {
+            element.style.animation = `bounce 0.6s ease-in-out ${index * 0.1}s both`;
+          });
+        });
+      }
+    };
+
+    const initialTimeout = setTimeout(restartAnimation, 100);
+    const interval = setInterval(restartAnimation, 2000);
+
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+    };
+  }, [isConnected]);
+
   useEffect(() => {
     if (!socket) return;
 
-    // Server tells us the game has started → show monster selection
     socket.on("game-started", () => setStartSelection(true));
 
-    // Round starts → server sends our monster and opponent monster
     socket.on("round-start", (data) => {
       if (!data?.myMonster || !data?.enemyMonster) {
         console.warn("Received incomplete round-start data:", data);
@@ -106,50 +133,13 @@ const PlayerContent = () => {
       console.warn("No socket connection available");
     }
   };
-  //#endregion
 
-  // const [isConnected, setIsConnected] = useState(false);
-
-  //#region Bouncing animation
-  const waitingTextRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!isConnected) return;
-
-    const restartAnimation = () => {
-      if (waitingTextRef.current) {
-        const letters =
-          waitingTextRef.current.querySelectorAll(".bounce-letter");
-        letters.forEach((letter, index) => {
-          const element = letter as HTMLElement;
-          // Remove animation
-          element.style.animation = "none";
-          // Force reflow
-          requestAnimationFrame(() => {
-            element.style.animation = `bounce 0.6s ease-in-out ${index * 0.1}s both`;
-          });
-        });
-      }
-    };
-
-    // Start first animation after a brief delay
-    const initialTimeout = setTimeout(restartAnimation, 100);
-
-    // Loop every 2 seconds
-    const interval = setInterval(restartAnimation, 2000);
-
-    return () => {
-      clearTimeout(initialTimeout);
-      clearInterval(interval);
-    };
-  }, [isConnected]);
-  //#endregion
-
+  // GUI flow
   if (!isConnected) {
     return <p>Connecting to server...</p>;
   }
 
-  return (
+  const WaitingScreen = () => (
     <div className="waiting-screen">
       <div className="logo" />
       <div className="waiting-wrapper">
@@ -170,4 +160,27 @@ const PlayerContent = () => {
       </div>
     </div>
   );
+
+  if (!startSelection) {
+    return <WaitingScreen />;
+  }
+
+  if (!monsterSelected) {
+    return <MonsterSelectionScreen setSelectedMonsterCallback={handleMonsterSelection} />;
+  }
+
+  if (!allReady) {
+    return <WaitingScreen />;
+  }
+
+  return <BattleScreen />;
 };
+//#endregion
+
+//#region Exported Component
+export const Player = () => (
+  <PlayerSocketProvider>
+    <PlayerContent />
+  </PlayerSocketProvider>
+);
+//#endregion
