@@ -10,7 +10,6 @@ enum MatchType {
 export class Match {
     player1: Player;
     player2?: Player;
-    winnerId?: AccountId;
     winner?: Player;
     spectators: AccountId[];
     matchType: MatchType;
@@ -23,10 +22,19 @@ export class Match {
         this.matchType = player2 ? MatchType.DUEL : MatchType.BYE;
         this.matchID = matchID;
     }
-
+    /**
+     * Called by tournament_manager when all matches are ready to commence.
+     * Initialises and runs the battle, then processes the winner and loser after completion.
+     * Winner is stored in winner and winnerId
+     * 
+     * @param playersByAccountId Hashmap of players in the tournament
+     * @returns None
+     */
     async runBattle(playersByAccountId: Map<string, Player>): Promise<void> {
         if (this.matchType == MatchType.BYE) {
-            this.winnerId = this.player1.linkedAccountId;
+            if (this.player1.linkedAccountId) {
+                this.winner = playersByAccountId.get(this.player1.linkedAccountId);
+            }
             return;
         }
 
@@ -55,13 +63,13 @@ export class Match {
         const survivingSide = battle.sides.find((side) => side.monster.health > 0);
         const winnerIndex = battle.sides.indexOf(survivingSide!);
         
-        this.winnerId = winnerIndex === 0 
+        const winnerId = winnerIndex === 0 
         ? this.player1.linkedAccountId 
         : this.player2?.linkedAccountId;
-        if (this.winnerId) {
-            this.winner = playersByAccountId.get(this.winnerId);
+        if (winnerId) {
+            this.winner = playersByAccountId.get(winnerId);
         }
-        const loserId = this.player1.linkedAccountId === this.winnerId
+        const loserId = this.player1.linkedAccountId === winnerId
         ? this.player2?.linkedAccountId
         : this.player1.linkedAccountId;
         if (loserId) {
@@ -71,6 +79,6 @@ export class Match {
             }
         }
 
-        console.log(`Match ${this.matchID}: Winner is ${this.winnerId}`);
+        console.log(`Match ${this.matchID}: Winner is ${winnerId}`);
     }
 }

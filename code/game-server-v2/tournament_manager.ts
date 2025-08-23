@@ -39,7 +39,7 @@ export class TournamentManager {
 
   async checkRoundCompletion(): Promise<void> {
     // Check if all matchs in the current round have winners
-    const allCompleted = this.matches.every(match => match.winnerId);
+    const allCompleted = this.matches.every(match => match.winner);
     if (!allCompleted) {
       return;
     }
