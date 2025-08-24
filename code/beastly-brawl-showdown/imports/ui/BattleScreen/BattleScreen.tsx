@@ -1,59 +1,111 @@
-import React, { useState } from "react";
-import { BattleTop } from "./BattleTop";
-import { BattleMiddle } from "./BattleMiddle";
-import { BattleBottom } from "./BattleBottom";
-import BattleMessage from "./BattleMessage";
+import React, { useEffect, useState } from 'react';
+import { BattleTop } from './BattleTop';
+import { BattleMiddle } from './BattleMiddle';
+import { BattleBottom } from './BattleBottom';
+import { usePlayerSocket } from '../player/game/PlayerPage';
+import { Monster, MonsterTemplate } from '/imports/simulator/core/monster/monster';
 
-// Define the props type for BattleScreen
-type BattleScreenProps = {
-  enemyImageSrc?: string;
-  playerImageSrc?: string;
-};
+export const BattleScreen: React.FC = () => {
 
-export const BattleScreen: React.FC<BattleScreenProps> = ({
-  enemyImageSrc = "/monsters/dragon.png",
-  playerImageSrc = "/monsters/wolf.png",
-}) => {
-  const [showAnimation, setShowAnimation] = useState<boolean>(false);
-  const [enemyHp, setEnemyHp] = useState(100);
-  const [playerHp, setPlayerHp] = useState(100);
+  // #region Variable initialisation
+  // Establish connection to existing socket
+  const { socket } = usePlayerSocket();
 
-  // Function to trigger the rolling animation
-  const triggerAnimation = (): void => {
-    if (!showAnimation) {
-      setShowAnimation(true);
-      setTimeout(() => setShowAnimation(false), 3000);
-    }
+  // Initialise the 2 monsters with the monsterdata class 
+  const [myMonster, setMyMonster] = useState<Monster>();
+  const [enemyMonster, setEnemyMonster] = useState<Monster>();
+
+  // State to trigger animation showing or not
+  const [showAnimation] = useState(false);
+  // #endregion
+
+  // #region Socket Methods
+  // Socket methods to communicate with server (main.ts) go here
+  useEffect(() => {
+    // Error checking for null socket
+    if (!socket) return;
+
+
+    const handleMatchStarted = (data: { myMonster: MonsterTemplate; enemyMonster: MonsterTemplate }) => {
+      console.log("Match started:", data);
+
+      setMyMonster(new Monster(data.myMonster));
+      setEnemyMonster(new Monster(data.enemyMonster));
+    };
+
+    socket.on("match-started", handleMatchStarted);
+
+    //#region RECEIVE DICE AND ATTACK ANIMATIONS
+    //     let interval: NodeJS.Timeout;
+    // let timeout: NodeJS.Timeout;
+
+    // if (showAnimation) {
+    //   let i = 0;
+    //   const rollDuration = 1000; // total roll duration in ms
+    //   const intervalSpeed = 100; // time between number updates
+
+    //   const finalResult = 20; // eventually will replace with dice roll utility
+    //   const totalSteps = rollDuration / intervalSpeed; //get the ammount of times it gets swaped out
+
+    //   interval = setInterval(() => {
+    //     if (i < totalSteps) {
+    //       setDisplayedNumber(Math.floor(Math.random() * 20) + 1); // roll 1-20
+    //       i++;
+    //     } else {
+    //       clearInterval(interval);
+    //       setDisplayedNumber(finalResult);
+
+    //       timeout = setTimeout(() => {
+    //         console.log("Final result displayed for 3 seconds");
+    //       }, 3000);
+    //     }
+    //   }, intervalSpeed);
+    // }
+    //#endregion
+  });
+  //#endregion
+
+  //#region Actions
+  // const triggerAnimation = () => {
+  //   if (!showAnimation) {
+  //     setShowAnimation(true);
+  //     setTimeout(() => setShowAnimation(false), 3000);
+  //   }
+  // };
+
+  const handleAction = (action: 'attack' | 'defend' | 'ability') => {
+    if (!socket) return;
+
+    socket.emit('playerAction', {
+      playerSocket: usePlayerSocket,
+      action,
+    });
+
+    // triggerAnimation();
   };
+  //#endregion
+  if (!myMonster || !enemyMonster) {
+    return <div>Loading battle...</div>;
+  }
 
-  const handleRoll = () => {
-    triggerAnimation();
-    const dmg = 15;
-    setEnemyHp((hp) => Math.max(0, hp - dmg));
-    const messageEl = document.querySelector(".battle-message");
-    messageEl?.setAttribute("style", "display:block;");
-    setTimeout(() => {
-      messageEl?.setAttribute("style", "display:none;");
-    }, 3000);
-  };
+
+  // HTML to show each monster and the animations
+  if (!myMonster || !enemyMonster) {
+    return <div>Loading battle...</div>;
+  }
 
   return (
     <div className="canvas-body" id="battle-screen-body">
       <BattleTop />
       <BattleMiddle
         showAnimation={showAnimation}
-        enemyHp={enemyHp}
-        playerHp={playerHp}
-        enemyImgSrc={enemyImageSrc}
-        playerImgSrc={playerImageSrc}
+        player1Monster={myMonster}
+        player2Monster={enemyMonster}
+        playerId1="player1-id"
+        playerId2="player2-id"
       />
-      <BattleBottom
-        onAttack={handleRoll}
-        onAbility={triggerAnimation}
-        onDefend={triggerAnimation}
-      />
-
-      <BattleMessage message="Damage dealt to opponent" />
+      <BattleBottom onAction={handleAction} />
     </div>
   );
+
 };

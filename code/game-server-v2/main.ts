@@ -1,4 +1,4 @@
-import { GameServer } from "./GameServer";
+import { GameServer } from "./gameServer";
 import * as readline from "readline";
 import cors from "cors";
 import express from "express";
@@ -9,6 +9,9 @@ import { GameServerRegisterModel, IGameServerRegisterEntry } from "./db/models";
 import { log_attention, log_event, log_notice, log_warning } from "./utils";
 import * as fs from "fs";
 import * as path from "path";
+import { Player } from "./player";
+import { TournamentManager } from "./tournament_manager";
+
 
 type ServerConfig = {
   serverIp: string;
@@ -101,6 +104,7 @@ async function main(config: ServerConfig) {
     */
   });
 
+  // #region Host Channel
   type HostChannelAuth = {
     // hostName: string;
   };
@@ -126,6 +130,7 @@ async function main(config: ServerConfig) {
       log_event("Host disconnected.");
     });
 
+    // #region New Room
     socket.on("request-room", async () => {
       log_event("Room requested.");
       // TODO prevent multiple rooms at the same time
@@ -144,16 +149,22 @@ async function main(config: ServerConfig) {
       }
     });
 
-    socket.on("start-game", async (msg) => {
-      log_event(`Requested to start game: ${msg}`);
+    // #region Start Game
+    socket.on("start-game", (msg: { roomId: number }) => {
+      log_event(`Host requested start-game for room ${msg.roomId}`);
 
-      // Notify everyone in this room
-      gameServer.rooms
-        .get(gameServer.hostIdToRoomIdLookup.get(socket.id)!)!
-        .players.forEach((player) => {
-          playerChannel.to(player.socketId).emit("game-started"); // TODO modify as needed
-        });
-      log_notice("All players informed of start.");
+      const room = gameServer.rooms.get(msg.roomId);
+      if (!room) {
+        socket.emit("error", "Room not found");
+        return;
+      }
+
+      // Relay to all players in this room
+      room.players.forEach((player) => {
+        playerChannel.to(player.socketId).emit("game-started"); // Clients can now start monster selection
+      });
+
+      log_notice(`All players in room ${msg.roomId} have been notified to start the game.`);
     });
   });
 
@@ -202,6 +213,7 @@ async function main(config: ServerConfig) {
     log_notice(`Player auth check result:\n${JSON.stringify(checkResult)}`);
     res.send(checkResult);
   });
+
   playerChannel.use((socket, next) => {
     log_event(
       `Player attempted to join with ${JSON.stringify(socket.handshake.auth)}`,
@@ -224,8 +236,16 @@ async function main(config: ServerConfig) {
       return;
     }
 
+
     try {
       gameServer.joinRoom(socket.id, roomId, auth.displayName, undefined);
+
+      // Attach the actual player instance to the socket
+      const room = gameServer.rooms.get(roomId);
+      const player = room?.getPlayer(auth.displayName);
+      if (player) {
+        socket.data.player = player;
+      }
     } catch (err) {
       if (err instanceof Error) {
         log_warning("Join room failed unexpectedly.\n" + err.message);
@@ -236,30 +256,67 @@ async function main(config: ServerConfig) {
       next(new Error("Invalid credentials"));
     }
 
-    log_event(
-      `Join code <${auth.joinCode}> is valid. From <${auth.displayName}>. Socket id = ${socket.id}`,
-    );
-    const playerNameList = [
-      ...gameServer.rooms.get(roomId)?.players.values()!,
-    ].map((player) => player.displayName);
-    console.log(
-      "Update player list",
-      playerNameList,
-      "to",
-      gameServer.rooms.get(roomId)!.hostSocketId,
-    );
-    hostChannel
-      .to(gameServer.rooms.get(roomId)!.hostSocketId)
-      .emit("player-set-changed", playerNameList);
+    log_event(`Join code <${auth.joinCode}> is valid. From <${auth.displayName}>. Socket id = ${socket.id}`);
+
+    const playerNameList = gameServer.rooms.get(roomId)?.players.map(
+      (player) => player.displayName
+    ) ?? [];
+
+    console.log("Update player list", playerNameList, "to", gameServer.rooms.get(roomId)!.hostSocketId);
+    console.log("Player socket: ", socket.data);
+
+    hostChannel.to(gameServer.rooms.get(roomId)!.hostSocketId).emit("player-set-changed", playerNameList);
     next();
   });
 
+  // #region Player Channel
   playerChannel.on("connection", async (socket: Socket) => {
     log_event(`Player connected: ${socket.id}`);
 
     socket.on("disconnect", () => {
       log_event("Player disconnected.");
     });
+
+    // #region Select Monster
+    socket.on("RequestSubmitMonster", (data: any) => {
+      log_event(`Monster submission signal received: ${JSON.stringify(data)}`);
+
+      const player = socket.data.player as Player;
+      log_event(`Player: ${JSON.stringify(player)}`);
+      if (!player) {
+        socket.emit("error", "This player has not been initiated.");
+        return;
+      }
+
+      const room = gameServer.rooms.get(player.roomId);
+      if (!room) {
+        socket.emit("error", "500 Internal Server Error");
+        return;
+      }
+
+      player.setMonster(data.data);
+      player.isReady = true;
+
+      log_event(`Player ${player.displayName} is ready`);
+      log_event(`Monster selected: ${JSON.stringify(data.data)}`);
+
+      // Check if all players are ready
+      const allReady = Array.from(room.players.values()).every((p) => p.isReady);
+      if (!allReady) {
+        log_notice("Waiting for all players to submit their monsters...");
+        return;
+      }
+
+      // TODO: trigger round start
+      // Loop through every room in the game server
+      for (const room of gameServer.rooms.values()) {
+        // Trigger start from each room's tournament manager
+        room.tournamentManager.startTournament(room.players);
+      }
+    });
+
+
+    // #region Submit Move
 
     socket.on("submit-move", async (msg) => {
       console.log("Move submitted: ", JSON.stringify(msg));
@@ -278,9 +335,8 @@ async function main(config: ServerConfig) {
 
   httpServer.listen(config.serverPort, () => {
     log_notice(
-      `Socket.IO server running on ${
-        config.serverIp.toString() + ":" + config.serverPort.toString()
-      }. <CTRL+C> to shutdown.`,
+      `Socket.IO server running on ${config.serverIp.toString() + ":" + config.serverPort.toString()
+      }. <CTRL+C> to shutdown.`
     );
     //#endregion
 
