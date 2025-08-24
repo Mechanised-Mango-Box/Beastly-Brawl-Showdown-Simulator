@@ -11,6 +11,7 @@ interface MoveEvents {
   onHit?(battle: Battle, source: SideId, reciever: SideId): Promise<void>;
   onFail(battle: Battle, source: SideId): Promise<void>;
 }
+
 /**
  * A move is a specific type of action
  */
