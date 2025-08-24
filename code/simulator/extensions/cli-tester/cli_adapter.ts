@@ -4,7 +4,7 @@ import { NoticeBoard } from "@sim/core/notice/notice_board";
 import { SideId } from "@sim/core/side";
 import { EventHistory } from "@sim/core/event/event_history";
 import { EntryID } from "@sim/core/types";
-import { commonMovePool } from "@sim/data/common/common_move_pool";
+import { COMMON_MOVE_POOL } from "@sim/data/common/common_move_pool";
 
 export class CliAdapter {
   noticeBoard: NoticeBoard;
@@ -62,7 +62,7 @@ export class CliAdapter {
               break;
             }
 
-            switch (commonMovePool[args[0].toLowerCase() as EntryID].targetingMethod) {
+            switch (COMMON_MOVE_POOL[args[0].toLowerCase() as EntryID].targetingMethod) {
               case "self": {
                 notice.callback(args[0].toLowerCase() as EntryID, {
                   targetingMethod: "self",

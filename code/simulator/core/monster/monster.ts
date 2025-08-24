@@ -1,4 +1,4 @@
-import { EntryID } from "../types";
+import { EntryID } from "../utils";
 import { BaseComponent } from "./component/component";
 import { ComponentKindMap } from "./component/core_components";
 import { MonsterStatType } from "./monster_stats";

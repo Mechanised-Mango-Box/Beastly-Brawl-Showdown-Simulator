@@ -1,16 +1,17 @@
-import { getComponent, getStat, Monster } from "@sim/core/monster/monster";
+import { MoveData } from "@sim/core/action/move/move";
+import { MovePool } from "@sim/core/action/move/move_pool";
+import { default_attack } from "@sim/core/action/move/move_utils";
+import { SelfTargeting, SingleEnemyTargeting, TargetingData } from "@sim/core/action/targeting";
 import { Battle } from "@sim/core/battle";
 import { BlockedEvent, BuffEvent, DamageEvent, MoveEvadedEvent, MoveFailedEvent, MoveSuccessEvent, RerollEvent, RollEvent, StartMoveEvent } from "@sim/core/event/core_events";
-import { SideId } from "@sim/core/side";
-import { roll } from "@sim/core/roll";
 import { AbilityChargeStunComponent, DefendComponent, DodgeChargeComponent, DodgeStateComponent, RerollChargeComponent, StunnedStateComponent } from "@sim/core/monster/component/core_components";
-import { TargetingData, SingleEnemyTargeting, SelfTargeting } from "@sim/core/action/targeting";
-import { defineMove, getMoveId } from "@sim/core/action/move/move";
-import { MovePool, createMovePool } from "@sim/core/action/move/move_pool";
-import { COMMON_MONSTER_POOL } from "./common_monster_pool";
+import { getComponent, getStat, Monster } from "@sim/core/monster/monster";
+import { SideId } from "@sim/core/side";
 
-export const commonMovePool: MovePool = createMovePool([
-  defineMove("nothing", {
+type MOVE_NAMES = "nothing" | "attack-normal" | "defend" | "dodge" | "stun";
+export const COMMON_MOVE_POOL: MovePool<MOVE_NAMES> = {
+  nothing: {
+    moveId: "nothing",
     type: "move",
     name: "Do nothing",
     description: "Do nothing...",
@@ -21,9 +22,10 @@ export const commonMovePool: MovePool = createMovePool([
       throw new Error("This action should not be used EVER.");
     },
     onFail: async function (battle: Battle, source: SideId): Promise<void> {},
-  }),
+  },
 
-  defineMove("attack-normal", {
+  "attack-normal": {
+    moveId: "attack-normal",
     type: "move",
 
     name: "Attack",
@@ -34,129 +36,18 @@ export const commonMovePool: MovePool = createMovePool([
     targetingMethod: "single-enemy",
 
     perform: async function (battle: Battle, source: SideId, targetingData: SingleEnemyTargeting) {
-      const sourceMonster: Monster = battle.sides[source].monster;
       const target: SideId = targetingData.target;
-      const targetMonster: Monster = battle.sides[targetingData.target].monster;
 
-      const startMoveEvent: StartMoveEvent = {
-        name: "startMove",
-        source: source,
-        target: target,
-        moveId: getMoveId(this),
-      };
-      battle.eventHistory.addEvent(startMoveEvent);
-
-      //# Evade check
-      const dodgeState: DodgeStateComponent | null = getComponent(targetMonster, "dodging");
-      if (dodgeState) {
-        const moveEvadedEvent: MoveEvadedEvent = {
-          name: "evaded",
-          source: source,
-          target: target,
-          moveId: getMoveId(this),
-        };
-        battle.eventHistory.addEvent(moveEvadedEvent);
-        return;
-      }
-
-      //# Roll
-      await new Promise<void>((resolve) => {
-        battle.noticeBoard.postNotice(source, {
-          kind: "roll",
-          data: { diceFaces: 20 },
-          callback: function (): void {
-            battle.noticeBoard.removeNotice(source, "roll");
-            resolve();
-          },
-        });
-      });
-      let rollResult: number = roll(battle.rng, 20);
-      const rollEvent: RollEvent = {
-        name: "roll",
-        source: source,
-        faces: 20,
-        result: rollResult,
-      };
-      battle.eventHistory.addEvent(rollEvent);
-
-      // # Reroll
-      const rerollComponent: RerollChargeComponent | null = getComponent(sourceMonster, "reroll");
-      if (rerollComponent && rerollComponent.charges > 0) {
-        await new Promise<void>((resolve) => {
-          battle.noticeBoard.postNotice(source, {
-            kind: "rerollOption",
-            data: { diceFaces: 20 },
-            callback: function (shouldReroll: boolean): void {
-              if (shouldReroll) {
-                rerollComponent.charges--;
-                rollResult = roll(battle.rng, 20);
-                const rerollEvent: RerollEvent = {
-                  name: "reroll",
-                  source: source,
-                  faces: 20,
-                  result: rollResult,
-                };
-                battle.eventHistory.addEvent(rerollEvent);
-              }
-              battle.noticeBoard.removeNotice(source, "rerollOption");
-              resolve();
-            },
-          });
-        });
-      }
-
-      //# Armour Check
-      if (rollResult <= getStat("armour", targetMonster, COMMON_MONSTER_POOL.monsters[targetMonster.baseID])) {
-        const blockedEvent: BlockedEvent = {
-          name: "blocked",
-          source: source,
-          target: target,
-        };
-        battle.eventHistory.addEvent(blockedEvent);
-        return;
-      }
-
-      const moveSuccessEvent: MoveSuccessEvent = {
-        name: "moveSuccess",
-        source: source,
-        target: target,
-        moveId: getMoveId(this),
-      };
-      battle.eventHistory.addEvent(moveSuccessEvent);
-
-      //# Base damage roll
-      const baseDamage: number = roll(battle.rng, 4) + getStat("attack", sourceMonster, COMMON_MONSTER_POOL.monsters[sourceMonster.baseID]);
-
-      //# Crit Check
-      const critChanceBonus: number = getStat("crit_chance", sourceMonster, COMMON_MONSTER_POOL.monsters[sourceMonster.baseID]);
-      const critRollResult: number = roll(battle.rng, 20);
-      const critRollEvent: RollEvent = {
-        name: "roll",
-        source: source,
-        faces: 20,
-        result: critRollResult,
-      };
-      battle.eventHistory.addEvent(critRollEvent);
-      //TODO -> change threshold (15) to something based on action / monster
-      const critDamage: number = critChanceBonus + rollResult > 15 ? baseDamage : 0;
-
-      const damageToTake: number = baseDamage + critDamage;
-      targetMonster.health -= damageToTake;
-      const damageEvent: DamageEvent = {
-        name: "damage",
-        source: source,
-        target: target,
-        amount: damageToTake,
-      };
-      battle.eventHistory.addEvent(damageEvent);
+      default_attack(this, battle, source, target);
     },
     onHit: async function (battle: Battle, source: SideId, target: SideId): Promise<void> {
       // TODO
     },
     onFail: async function (battle: Battle, source: SideId): Promise<void> {},
-  }),
+  },
 
-  defineMove("defend", {
+  defend: {
+    moveId: "defend",
     type: "move",
     name: "Defend",
     description: "Increase your armor class temporarily.",
@@ -172,7 +63,7 @@ export const commonMovePool: MovePool = createMovePool([
           name: "moveFailed",
           source: source,
           target: source,
-          moveId: getMoveId(this),
+          moveId: this.moveId,
           reason: null,
         };
         battle.eventHistory.addEvent(failedEvent);
@@ -193,9 +84,10 @@ export const commonMovePool: MovePool = createMovePool([
     onFail: function (battle: Battle, source: SideId): Promise<void> {
       throw new Error("Function not implemented.");
     },
-  }),
+  },
 
-  defineMove("dodge", {
+  dodge: {
+    moveId: "dodge",
     type: "move",
     name: "Dodge",
     description: "Dodge an attack, avoid it completely.",
@@ -210,7 +102,7 @@ export const commonMovePool: MovePool = createMovePool([
           name: "moveFailed",
           source: source,
           target: source,
-          moveId: getMoveId(this),
+          moveId: this.moveId,
           reason: undefined,
         };
         battle.eventHistory.addEvent(failedEvent);
@@ -227,9 +119,10 @@ export const commonMovePool: MovePool = createMovePool([
     onFail: function (battle: Battle, source: SideId): Promise<void> {
       throw new Error("Function not implemented.");
     },
-  }),
+  },
 
-  defineMove("stun", {
+  stun: {
+    moveId: "stun",
     type: "move",
     name: "Stun",
     description: "Stun the monster, preventing it from taking actions for one turn.",
@@ -246,7 +139,7 @@ export const commonMovePool: MovePool = createMovePool([
           name: "moveFailed",
           source: source,
           target: source,
-          moveId: getMoveId(this),
+          moveId: this.moveId,
           reason: undefined,
         };
         battle.eventHistory.addEvent(failedEvent);
@@ -263,5 +156,5 @@ export const commonMovePool: MovePool = createMovePool([
     onFail: async function (battle: Battle, source: SideId): Promise<void> {
       throw new Error("Function not implemented.");
     },
-  }),
-]);
+  },
+};

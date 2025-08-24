@@ -5,12 +5,12 @@ import { NoticeBoard } from "./notice/notice_board";
 import { EventHistory } from "./event/event_history";
 import { BattleOverEvent, SnapshotEvent } from "./event/core_events";
 import { MoveData, MoveRequest } from "./action/move/move";
-import { EntryID } from "./types";
+import { EntryID } from "./utils";
 import { TargetingData } from "./action/targeting";
 import { PRNG } from "./prng";
 import { MonsterPool, MonsterId } from "./monster/monster_pool";
 import { getIsBlockedFromMove, getStat } from "./monster/monster";
-import { MovePool } from "./action/move/move_pool";
+import { MoveId, MovePool } from "./action/move/move_pool";
 
 export interface PlayerOptions {
   monsterId: MonsterId; //! Can change to list if needed later

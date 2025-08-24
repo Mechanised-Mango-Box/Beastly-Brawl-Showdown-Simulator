@@ -3,10 +3,12 @@ import { RerollChargeComponent, DodgeChargeComponent } from "@sim/core/monster/c
 import { MonsterPool } from "@sim/core/monster/monster_pool";
 import { SideId } from "@sim/core/side";
 
-export const COMMON_MONSTER_POOL: MonsterPool = {
+type MONSTER_IDS = "blank" | "mystic_wryven" | "shadow_fang" | "stone_hide";
+export const COMMON_MONSTER_POOL: MonsterPool<MONSTER_IDS> = {
   name: "common_monster_pool",
   monsters: {
     blank: {
+      templateId: "blank",
       name: "BlankMon",
       description: "Desc for Blank",
       imageUrl: "",
@@ -25,6 +27,7 @@ export const COMMON_MONSTER_POOL: MonsterPool = {
     },
 
     mystic_wryven: {
+      templateId: "mystic_wryven",
       name: "Mystic Wyvern",
       description: "A mystical creature of the skies. A Balanced Monster.",
       imageUrl: "/img/monster-selection-images/placeholder_monster_1.png",
@@ -50,6 +53,7 @@ export const COMMON_MONSTER_POOL: MonsterPool = {
     },
 
     shadow_fang: {
+      templateId: "shadow_fang",
       name: "Shadow Fang Predator",
       description: "A stealthy and cunning beast. An Attack Monster.",
       imageUrl: "/img/monster-selection-images/placeholder_monster_2.png",
@@ -76,6 +80,7 @@ export const COMMON_MONSTER_POOL: MonsterPool = {
     },
 
     stone_hide: {
+      templateId: "stone_hide",
       name: "Stone Hide Guardian",
       description: "A sturdy and resilient protector. A Defense Monster.",
       imageUrl: "/img/monster-selection-images/placeholder_monster_3.png",
