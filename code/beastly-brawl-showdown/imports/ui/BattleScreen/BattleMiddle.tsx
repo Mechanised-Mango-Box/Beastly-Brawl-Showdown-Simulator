@@ -1,14 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { BattleMonster } from './BattleMonster';
+import React, { useState, useEffect } from "react";
+import MonsterHealthRing from "./MonsterHealthRing";
 
 // Define the props type
 type BattleMiddleProps = {
   showAnimation: boolean;
+  enemyHp: number;
+  playerHp: number;
+  enemyImgSrc: string;
+  playerImgSrc: string;
 };
 //takes a boolean when initialized
-export const BattleMiddle: React.FC<BattleMiddleProps> = ({ showAnimation }) => {
+export const BattleMiddle: React.FC<BattleMiddleProps> = ({
+  showAnimation,
+  enemyHp,
+  playerHp,
+  enemyImgSrc,
+  playerImgSrc,
+}) => {
   const [displayedNumber, setDisplayedNumber] = useState<number | null>(null);
-
 
   //if the showwanimation is true then show thtet animation
   useEffect(() => {
@@ -49,20 +58,18 @@ export const BattleMiddle: React.FC<BattleMiddleProps> = ({ showAnimation }) => 
   //   // Placeholder for future animation logic
   //   console.log("Attack");
   // };
-
   return (
-    <div className="battleMiddle">
-      {/* monster 1 */}
-      <BattleMonster image="/img/dragon.png" alt="Monster 1" position="monster1" />
-
-      {showAnimation && (
-        <div className="diceAnimation">
-          <img src="/img/d20.png" alt="Rolling animation" className="diceAnimation" />
-          <span className="diceResult">{displayedNumber}</span>
-        </div>
-      )}
-      {/* monster 2 */}
-      <BattleMonster image="/img/wolfman.png" alt="Monster 2" position="monster2" />
+    <div className="combat-arena">
+      <MonsterHealthRing
+        currentHealth={enemyHp}
+        maxHealth={100}
+        imageSrc={enemyImgSrc}
+      />
+      <MonsterHealthRing
+        currentHealth={playerHp}
+        maxHealth={100}
+        imageSrc={playerImgSrc}
+      />
     </div>
   );
 };

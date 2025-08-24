@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 export const HomePage = () => {
   const navigate = useNavigate();
 
-  const handleGuestHostName = () =>{
-    navigate(`/host/`)
+  const handleGuestHostName = () => {
+    navigate(`/host/`);
   };
 
   return (
@@ -23,4 +23,4 @@ export const HomePage = () => {
       </div>
     </div>
   );
-}
+};
