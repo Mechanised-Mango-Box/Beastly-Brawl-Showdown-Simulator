@@ -22,41 +22,55 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Print location
-        run: ls
-
       - name: Install dependencies
         run: npm install
-        
-      - name: List tsconfig location
-        run: ls -l ./tsconfig.json
 
-      - name: Run TypeScript type check
-        run: npx tsc -p ./tsconfig.json
+      # Build core with project references enabled
+      - name: Build core
+        run: npx tsc --build ./tsconfig.json
+
+      - name: Upload core build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-build
+          path: |
+            code/simulator/core/dist/**
+            code/simulator/core/**/*.d.ts
+          if-no-files-found: error
 
   static-analysis-data:
     runs-on: ubuntu-latest
-    needs: static-analysis-core  # Waits for core to finish
+    needs: static-analysis-core
     defaults:
       run:
         working-directory: "code/simulator/data"
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Download core build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: core-build
+          path: code/simulator/core/dist
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
 
-      - name: Print location
-        run: ls
-
       - name: Install dependencies
         run: npm install
 
-      - name: List tsconfig location
-        run: ls -l ./tsconfig.json
+      - name: Build data
+        run: npx tsc --build ./tsconfig.json
 
-      - name: Run TypeScript type check
-        run: npx tsc -p ./tsconfig.json
+      - name: Upload data build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: data-build
+          path: |
+            code/simulator/data/dist/**
+            code/simulator/data/**/*.d.ts
+          if-no-files-found: error
