@@ -40,14 +40,8 @@ button {
     /* left edge */ 0 -4px 0 #c26130; /* top edge */
 }
 
-.glb-btn:hover {
-  box-shadow:
-    0 2px 0 #773519,
-    2px 0 0 #773519,
-    -2px 0 0 #773519,
-    0 -2px 0 #c26130;
-
-  transform: translateY(-2px);
+.glb-btn:active {
+  transform: scale(0.95);
 }
 
 .canvas-body {
@@ -666,7 +660,8 @@ input:focus {
 .textbox {
   display: block;
   margin: 10px auto;
-  padding: 10px 20px; /* Adjust based on where the text should sit */
+  padding: 10px 20px;
+  /* Adjust based on where the text should sit */
   font-size: 16px;
   background-image: url("/Textbox.png");
   background-size: contain;
@@ -921,7 +916,158 @@ input:focus {
   font-size: 20px;
 }
 
-/* Projector Screen */
+.bounce-letter {
+  display: inline-block;
+  animation: bounce 0.6s ease-in-out;
+  animation-fill-mode: both;
+}
+
+.bounce-letter:nth-child(1) {
+  animation-delay: 0s;
+}
+.bounce-letter:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.bounce-letter:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.bounce-letter:nth-child(4) {
+  animation-delay: 0.3s;
+}
+.bounce-letter:nth-child(5) {
+  animation-delay: 0.4s;
+}
+.bounce-letter:nth-child(6) {
+  animation-delay: 0.5s;
+}
+.bounce-letter:nth-child(7) {
+  animation-delay: 0.6s;
+}
+.bounce-letter:nth-child(8) {
+  animation-delay: 0.7s;
+}
+.bounce-letter:nth-child(9) {
+  animation-delay: 0.8s;
+}
+.bounce-letter:nth-child(10) {
+  animation-delay: 0.9s;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* Continuous loop animation */
+.waiting-text {
+  animation: restart-bounce 2s infinite;
+}
+
+@keyframes restart-bounce {
+  0% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  96% {
+    opacity: 0;
+  }
+  97% {
+    opacity: 0;
+  }
+  98% {
+    opacity: 0;
+  }
+  99% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.bounce-letter {
+  display: inline-block;
+  animation: bounce 0.6s ease-in-out;
+  animation-fill-mode: both;
+}
+
+.bounce-letter:nth-child(1) {
+  animation-delay: 0s;
+}
+.bounce-letter:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.bounce-letter:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.bounce-letter:nth-child(4) {
+  animation-delay: 0.3s;
+}
+.bounce-letter:nth-child(5) {
+  animation-delay: 0.4s;
+}
+.bounce-letter:nth-child(6) {
+  animation-delay: 0.5s;
+}
+.bounce-letter:nth-child(7) {
+  animation-delay: 0.6s;
+}
+.bounce-letter:nth-child(8) {
+  animation-delay: 0.7s;
+}
+.bounce-letter:nth-child(9) {
+  animation-delay: 0.8s;
+}
+.bounce-letter:nth-child(10) {
+  animation-delay: 0.9s;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* Continuous loop animation */
+.waiting-text {
+  animation: restart-bounce 2s infinite;
+}
+
+@keyframes restart-bounce {
+  0% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  96% {
+    opacity: 0;
+  }
+  97% {
+    opacity: 0;
+  }
+  98% {
+    opacity: 0;
+  }
+  99% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+/*This shows everything related to the waiting room*/
 .waiting-room-box {
   width: auto;
 }
@@ -1010,6 +1156,50 @@ input:focus {
   height: 100%;
 }
 
+/* Winners Screen */
+#winner-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.winner-screen {
+  background-color: #ffcc9c;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  border: 0.2rem solid #ff9838;
+  border-radius: 1rem;
+  width: 40vw;
+  height: 30vh;
+  line-height: 2rem;
+
+  box-shadow:
+    0 4px 0 #773519,
+    /* bottom edge */ 4px 0 0 #773519,
+    /* right edge */ -4px 0 0 #773519,
+    /* left edge */ 0 -4px 0 #c26130; /* top edge */
+}
+
+.winner-screen h1 {
+  font-size: 2.5rem;
+  color: black;
+  text-shadow: 3px 3px 0px #333;
+  margin-bottom: 1rem;
+}
+
+.winner-screen p {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
 /* Participants Grid Styles */
 .participants-display-box {
   position: relative;
@@ -1064,7 +1254,8 @@ input:focus {
 
 /* ################################################## */
 /* Battle Screen styles */
-.battleScreen {
+#battle-screen-body {
+  background-image: url("/combat-bg.png");
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -1083,23 +1274,25 @@ input:focus {
   position: relative;
   flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  background-color: lightgreen;
-  padding: 2rem;
-  height: auto;
-  z-index: 800;
+  gap: 8px;
+
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 9999;
+  cursor: pointer;
 }
 
 .battleScreenBottom {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  background-color: red;
+  gap: 20px;
+  padding: 20px;
+  background: transparent;
+  position: absolute;
+  bottom: 0;
   width: 100%;
-  height: 30%;
-  position: relative;
 }
 
 .battleMonsterImg {
@@ -1133,6 +1326,7 @@ input:focus {
   margin: 2rem;
   position: absolute;
   right: 10rem;
+
 }
 
 .monster2 {
@@ -1181,9 +1375,9 @@ progress::-moz-progress-bar {
   object-fit: fill;
 }
 
+
 .topBackIcon {
   position: absolute;
-  width: 1.5rem;
   height: 1.5rem;
   object-fit: fill;
   top: 1.8rem;
@@ -1194,13 +1388,12 @@ progress::-moz-progress-bar {
   position: absolute;
   font-size: 3rem;
   z-index: 1000;
-  left: 35rem;
-  top: 14rem;
+  top: 17rem;
+  left: 77.5rem;
 }
 
 .diceAnimation {
   z-index: 900;
-  position: absolute;
   left: 20rem;
 }
 .btn:active {
@@ -1389,9 +1582,11 @@ input[type="range"] {
 }
 
 .toggle-btn.off {
-  background-color: #e57373; /* Light red */
+  background-color: #e57373;
+  /* Light red */
   color: white;
 }
+
 
 .topBackIcon {
   position: absolute;
@@ -1404,16 +1599,120 @@ input[type="range"] {
 
 .diceResult {
   position: absolute;
-  font-size: 3rem;
-  z-index: 1000;
-  left: 35rem;
-  top: 14rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem; /* change to resize number */
 }
 
 .diceAnimation {
-  z-index: 900;
   position: absolute;
-  left: 20rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* center horizontally & vertically */
+}
+
+.diceAnimation img {
+  width: 240px;
+  height: 240px;
+}
+
+.health-ring-container {
+  position: relative;
+  width: 200px; /* same as size */
+  height: 200px; /* same as size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.health-ring {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg); /* so health starts at top */
+}
+
+.health-ring circle {
+  fill: none;
+  stroke-width: 20px;
+}
+
+.ring-bg {
+  stroke: transparent;
+}
+
+.ring-fg {
+  stroke: rgb(212, 7, 7);
+  transition: stroke-dashoffset 0.3s ease; /* smooth health change */
+}
+
+.monster-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px; /* size - stroke */
+  height: 180px; /* size - stroke */
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Center arena with background */
+.combat-arena {
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  row-gap: 15vh;
+}
+
+#defend {
+  display: inline-block;
+}
+
+.shield-uses {
+  position: absolute;
+  top: 10%;
+  left: 88%;
+  background-color: #aec6cf;
+  color: white;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  pointer-events: none;
+  transform: scale(1);
+  transform-origin: center;
+}
+
+.battle-message {
+  display: none;
+  background-color: #ffcc9c;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.1rem;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  width: 80vw;
+  padding: 1rem;
+
+  border: 0.2rem solid #ff9838;
+  border-radius: 1rem;
+
+  box-shadow:
+    0 4px 0 #773519,
+    /* bottom edge */ 4px 0 0 #773519,
+    /* right edge */ -4px 0 0 #773519,
+    /* left edge */ 0 -4px 0 #c26130; /* top edge */
 }
 
 /* #################################################################### */
@@ -1451,5 +1750,55 @@ input[type="range"] {
 
   .ability-desc {
     font-size: 0.6rem;
+  }
+
+
+  .battleScreenBottom {
+    flex-direction: row;
+    gap: 45px;
+    padding: 30px;
+    background: transparent;
+  }
+
+  .battleScreenBottom .glb-btn {
+    min-width: auto;
+    width: 90px;
+    height: 90px;
+    padding: 5px;
+  }
+
+  .battleScreenBottomButtonImage {
+    width: 80px;
+    height: 80px;
+  }
+
+  /* Reduce monster image sizes */
+  .battleMonsterImg {
+    width: 8rem;
+    height: 8rem;
+  }
+
+  /* Scale dice position */
+  .diceAnimation {
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .diceAnimation img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .diceResult {
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    top: 50%;
+  }
+
+  .winner-screen {
+    width: 90vw;
+    height: auto;
+    padding: 1.2rem;
   }
 }

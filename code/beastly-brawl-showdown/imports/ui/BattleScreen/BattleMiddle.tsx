@@ -1,13 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { BattleMonster } from "./BattleMonster";
+import React, { useState, useEffect } from 'react';
+import { BattleMonster } from './BattleMonster';
+import { Monster } from '/imports/simulator/core/monster/monster';
+
 
 // Define the props type
 type BattleMiddleProps = {
   showAnimation: boolean;
+  player1Monster: Monster;
+  player2Monster: Monster;
+  playerId1: string;
+  playerId2: string;
 };
+
+
 //takes a boolean when initialized
 export const BattleMiddle: React.FC<BattleMiddleProps> = ({
   showAnimation,
+  player1Monster,
+  player2Monster,
+  playerId1,
+  playerId2,
 }) => {
   const [displayedNumber, setDisplayedNumber] = useState<number | null>(null);
 
@@ -22,7 +34,7 @@ export const BattleMiddle: React.FC<BattleMiddleProps> = ({
       const intervalSpeed = 100; // time between number updates
 
       const finalResult = 20; // eventually will replace with dice roll utility
-      const totalSteps = rollDuration / intervalSpeed; //ge the ammount of times it gets swaped out
+      const totalSteps = rollDuration / intervalSpeed; //get the ammount of times it gets swaped out
 
       interval = setInterval(() => {
         if (i < totalSteps) {
@@ -50,32 +62,32 @@ export const BattleMiddle: React.FC<BattleMiddleProps> = ({
   //   // Placeholder for future animation logic
   //   console.log("Attack");
   // };
-
   return (
     <div className="battleMiddle">
-      {/* monster 1 */}
       <BattleMonster
-        image="/img/dragon.png"
-        alt="Monster 1"
+        image={player1Monster.base.imageUrl}
+        alt={player1Monster.base.name}
         position="monster1"
+        playerId={playerId1}
+        initialHp={player1Monster.health}
+        
       />
 
       {showAnimation && (
         <div className="diceAnimation">
-          <img
-            src="/img/d20.png"
-            alt="Rolling animation"
-            className="diceAnimation"
-          />
+          <img src="/img/d20.png" alt="Rolling animation" className="diceAnimation" />
           <span className="diceResult">{displayedNumber}</span>
         </div>
       )}
-      {/* monster 2 */}
+
       <BattleMonster
-        image="/img/wolfman.png"
-        alt="Monster 2"
+        image={player2Monster.base.imageUrl}
+        alt={player2Monster.base.name}
         position="monster2"
+        playerId={playerId2}
+        initialHp={player2Monster.health}
       />
     </div>
   );
+
 };
