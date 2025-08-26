@@ -5,25 +5,16 @@
         "type": "git",
         "url": "https://github.com/Mechanised-Mango-Box/Beastly-Brawl-Showdown-Simulator.git"
     },
-    "type": "module",
-    "exports": {
-        ".": {
-            "types": "./dist/index.d.ts",
-            "import": "./dist/index.js"
-        }
-    },
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "files": [
         "dist"
     ],
     "scripts": {
-        "build": "tsc -p tsconfig.json",
-        "prepare": "npm run build",
-        "clean": "rm -rf dist"
+        "build": "tsc",
+        "prepublishOnly": "npm run build"
     },
     "devDependencies": {
-        "tsc": "^2.0.4",
         "typescript": "^5.9.2"
     }
 }
