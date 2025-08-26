@@ -2,8 +2,10 @@ name: Build & Release Library
 
 on:
   push:
-    # tags:
-    #   - 'v*.*.*' # triggers on semantic version tags
+    branches:
+      - main
+    tags:
+      - 'v*.*.*' # triggers on semantic version tags
 
 jobs:
   build-and-release:
