@@ -4,11 +4,11 @@ on:
   push:
 
 jobs:
-  static-analysis-core:
+  static-analysis:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "src/simulator/core"
+        working-directory: "src/"
 
     steps:
       - name: Checkout Code
@@ -30,80 +30,6 @@ jobs:
         with:
           name: core-build
           path: |
-            src/simulator/core/dist/**
-            src/simulator/core/**/*.d.ts
+            src/dist/**
+            src/**/*.d.ts
           if-no-files-found: error
-
-  static-analysis-data:
-    runs-on: ubuntu-latest
-    needs: static-analysis-core
-    defaults:
-      run:
-        working-directory: "src/simulator/data"
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Download core build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: core-build
-          path: src/simulator/core/dist
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build data
-        run: npx tsc --build ./tsconfig.json
-
-      - name: Upload data build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: data-build
-          path: |
-            src/simulator/data/dist/**
-            src/simulator/data/**/*.d.ts
-          if-no-files-found: error
-
-  # static-analysis-extensions:
-  #   runs-on: ubuntu-latest
-  #   needs: [static-analysis-core, static-analysis-data]
-  #   strategy:
-  #     matrix:
-  #       extension: [cli-tester, visualiser, dedicated-local-multiplayer/host]
-  #   defaults:
-  #     run:
-  #       working-directory: "src/simulator/extensions/${{ matrix.extension }}"
-
-  #   steps:
-  #     - name: Checkout Code
-  #       uses: actions/checkout@v4
-
-  #     - name: Download core build artifacts
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: core-build
-  #         path: code/simulator/core/dist
-
-  #     - name: Download data build artifacts
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: data-build
-  #         path: code/simulator/data/dist
-
-  #     - name: Set up Node.js
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: "22"
-
-  #     - name: Install dependencies
-  #       run: npm install
-
-  #     - name: Build extension ${{ matrix.extension }}
-  #       run: npx tsc --build ./tsconfig.json
