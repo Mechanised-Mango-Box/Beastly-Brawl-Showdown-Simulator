@@ -1,7 +1,7 @@
 {
     "name": "@beastly-brawl-showdown/sim-core",
     "license": "MIT",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "repository": {
         "type": "git",
         "url": "https://registry.npmjs.org"
@@ -25,7 +25,7 @@
         "build": "tsc",
         "prepublishOnly": "npm run build"
     },
-    "devDependencies": {
+    "dependencies": {
         "typescript": "^5.9.2"
     }
 }
