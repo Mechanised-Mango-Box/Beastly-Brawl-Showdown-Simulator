@@ -1,5 +1,5 @@
 {
-  "extends": "../../../../../.config/tsconfig.extension.json",
+  "extends": "../../../../.config/tsconfig.extension.json",
   "references": [
     {
       "path": "../host"

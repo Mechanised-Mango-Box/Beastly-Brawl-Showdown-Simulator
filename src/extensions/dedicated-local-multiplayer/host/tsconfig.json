@@ -2,10 +2,10 @@
   "extends": "../../../../.config/tsconfig.extension.json",
   "references": [
     {
-      "path": "../../core"
+      "path": "../../../core"
     },
     {
-      "path": "../../data"
+      "path": "../../../data"
     }
   ]
 }
