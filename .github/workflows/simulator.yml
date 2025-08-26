@@ -2,9 +2,9 @@ name: Tests for Simulator
 
 on:
   push:
-    paths:
-      - "code/simulator/**"
-      - ".github/**"
+    branches:
+      - "Develop"
+      - "feature-simulator/**"
 
 jobs:
   static-analysis-core:
