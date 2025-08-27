@@ -6,3 +6,4 @@
 
 # Ignore build files
 dist
+tsconfig.tsbuildinfo
