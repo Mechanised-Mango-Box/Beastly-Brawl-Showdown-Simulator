@@ -1,5 +1,4 @@
 import { Side, SideId } from "./side";
-import { MonsterTemplate } from "./monster/monster_template";
 import { ChooseMove as chooseMove } from "./notice/notice";
 import { NoticeBoard } from "./notice/notice_board";
 import { EventHistory } from "./event/event_history";
@@ -10,7 +9,7 @@ import { TargetingData } from "./action/targeting";
 import { PRNG } from "./prng";
 import { MonsterPool, MonsterId } from "./monster/monster_pool";
 import { getIsBlockedFromMove, getStat } from "./monster/monster";
-import { MoveId, MovePool } from "./action/move/move_pool";
+import { MovePool } from "./action/move/move_pool";
 
 export interface PlayerOptions {
   monsterId: MonsterId; //! Can change to list if needed later
