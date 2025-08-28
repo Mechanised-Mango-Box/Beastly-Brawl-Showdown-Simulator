@@ -5,5 +5,5 @@
 .DS_Store
 
 # Ignore build files
-dist
+**/dist
 tsconfig.tsbuildinfo
